@@ -1,0 +1,19 @@
+{
+  "functions": {
+    "api/speech-to-text.ts": {
+      "maxDuration": 60
+    },
+    "api/chat.ts": {
+      "maxDuration": 30
+    },
+    "api/video.ts": {
+      "maxDuration": 30
+    },
+    "api/text-to-speech.ts": {
+      "maxDuration": 30
+    },
+    "api/image.ts": {
+      "maxDuration": 60
+    }
+  }
+}
