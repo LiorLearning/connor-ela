@@ -36,9 +36,9 @@ export function App(): JSX.Element {
   const questions = useMemo(() => {
     if (chapter === 1) {
       return [
-        { id: 'q1', type: 'mc', prompt: 'Where are Connor and his team?', options: ['A snowy mountain', 'Planet Austin with brown grass and green dirt', 'Under the ocean'], correct: 1 },
+        { id: 'q1', type: 'mc', prompt: 'Where are Reese and Oli?', options: ['A snowy mountain', 'Magical Yellowstone with geysers and enchanted forests', 'Under the ocean'], correct: 1 },
         { id: 'q2', type: 'spelling', prompt: 'Fix the word from the story:', target: 'portal', options: ['portel', 'portal', 'protale'], correct: 1 },
-        { id: 'bonus', type: 'micro', prompt: 'Who is Connor\'s floating companion?', options: ['Skeletron', 'Ronark'], correct: 0 }
+        { id: 'bonus', type: 'micro', prompt: 'Who is Reese\'s loyal companion?', options: ['Oli', 'The Midgets'], correct: 0 }
       ] as const;
     }
     return [
@@ -95,7 +95,7 @@ export function App(): JSX.Element {
       setVideoLoading(true);
       void (async () => {
         try {
-          const res = await fetch('/api/video', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt: 'Connor\'s progress through Planet Austin: approaching Ronark\'s fortress, robot guards patrol, team prepares for battle.', durationSeconds: 8, aspectRatio: '16:9' }) });
+          const res = await fetch('/api/video', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt: 'Reese\'s quest through magical Yellowstone: approaching crystal pools, buffalo-dragons stand guard, team searches for geyser crystals.', durationSeconds: 8, aspectRatio: '16:9' }) });
           const data = await res.json();
           setVideoUrl(data?.url ?? null);
         } catch {

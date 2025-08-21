@@ -262,12 +262,12 @@ Give a brief, friendly response that nudges them without giving the answer.`;
 
   // AI hook config (data-driven) with safe fallbacks to preserve current behavior
   const aiCfg = currentRegularQuestion?.aiHook || currentLongAQuestion?.aiHook;
-  const hookTargetWord = aiCfg?.targetWord || (isSecondRegularStep ? 'cave' : (isFirstRegularStep ? 'space' : (currentRegularQuestion?.word || currentLongAQuestion?.word || '')));
+  const hookTargetWord = aiCfg?.targetWord || (isSecondRegularStep ? 'cave' : (isFirstRegularStep ? 'crystal' : (currentRegularQuestion?.word || currentLongAQuestion?.word || '')));
   const hookQuestionLine = aiCfg?.questionLine || (isFirstRegularStep ? 'Listen and type the word' : 'Listen and type the word');
   const hookBaseLine = aiCfg?.baseLine || (isFirstRegularStep
-    ? 'With Earth safe, they drift through the silent dark toward the alien planet.'
+    ? 'With Yellowstone stabilizing, they explore the misty forest toward the crystal pools.'
     : 'The caverns echo with mystery as they continue their mission.');
-  const hookValidationWord = aiCfg?.validationWord || (isSecondRegularStep ? 'cave' : (isFirstRegularStep ? 'space' : (currentLongAQuestion?.word || 'word')));
+  const hookValidationWord = aiCfg?.validationWord || (isSecondRegularStep ? 'cave' : (isFirstRegularStep ? 'crystal' : (currentLongAQuestion?.word || 'word')));
   const hookIntent = aiCfg?.intent || (isFirstRegularStep ? 'spelling' : 'spelling');
 
   // Context helpers (centralized, but preserving existing behavior)
@@ -753,7 +753,7 @@ Strict rules:
         console.error('Error generating Long A passage:', error);
         if (!cancelled && currentLongAQuestion) {
           // Fallback to base line
-          const fallback = currentLongAQuestion.aiHook?.baseLine || 'A shimmering starlight doorway appears in the cavern wall. The baby alien points to the glowing opening.';
+          const fallback = currentLongAQuestion.aiHook?.baseLine || 'A shimmering crystal doorway appears in the cavern wall. The young buffalo-dragon points to the glowing opening.';
           setLongAPassage(fallback);
           setHasGeneratedLongAPassage(true);
           setIsLongAPassageLoading(false);

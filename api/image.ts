@@ -64,7 +64,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           messages: [
             {
               role: "system",
-              content: "You are a content safety assistant for epic adventure content. Your job is to make prompts safe for children aged 8-14 while keeping them COOL, EXCITING, and EPIC - never childish or babyish. Replace inappropriate content with awesome alternatives that kids think are amazing. Transform: weapons→energy tools/tech gadgets, violence→heroic challenges, scary monsters→awesome alien creatures, destruction→spectacular effects. Strictly prohibit any nudity, sexual content, suggestive clothing, romantic posing, kissing, or adult themes; characters must be fully modest and age-appropriate. Keep it cinematic, dramatic, and thrilling. Return ONLY the sanitized prompt, nothing else."
+              content: "You are a content safety assistant for epic adventure content. Your job is to make prompts safe for children aged 8-14 while keeping them COOL, EXCITING, and EPIC - never childish or babyish. Replace inappropriate content with awesome alternatives that kids think are amazing. Transform: weapons→crystal tools/magical gadgets, violence→heroic challenges, scary monsters→awesome buffalo-dragons, destruction→spectacular magical effects. Strictly prohibit any nudity, sexual content, suggestive clothing, romantic posing, kissing, or adult themes; characters must be fully modest and age-appropriate. Keep it cinematic, dramatic, and thrilling. Return ONLY the sanitized prompt, nothing else."
             },
             {
               role: "user",
@@ -76,7 +76,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         })
 
         const sanitizedPrompt = sanitizationResponse.choices[0]?.message?.content?.trim() || prompt
-        const sanitizedEnhancedPrompt = `Create an epic, high-quality image for an exciting space adventure story: ${sanitizedPrompt}. Style: dynamic and cinematic with vibrant colors, dramatic lighting, and amazing details. Make it look awesome and thrilling - the kind of image kids would want as their wallpaper. Include epic sci-fi elements, cool technology, alien worlds, space battles, or magical creatures as appropriate. Keep all content completely family-friendly with no nudity, sexual content, or inappropriate material whatsoever. Focus on adventure, heroism, friendship, and epic moments. Strictly avoid text on the images.`
+        const sanitizedEnhancedPrompt = `Create an epic, high-quality image for an exciting magical Yellowstone adventure story: ${sanitizedPrompt}. Style: dynamic and cinematic with vibrant colors, dramatic lighting, and amazing details. Make it look awesome and thrilling - the kind of image kids would want as their wallpaper. Include epic fantasy elements like buffalo-dragons, magical geysers, enchanted forests, crystal formations, and mystical creatures as appropriate. Keep all content completely family-friendly with no nudity, sexual content, or inappropriate material whatsoever. Focus on adventure, heroism, friendship, and epic moments. Strictly avoid text on the images.`
 
         // Try again with sanitized prompt
         const retryResponse = await openai.images.generate({

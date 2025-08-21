@@ -91,7 +91,7 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
     const lowerAI = aiResponse.toLowerCase();
     
     // Check for interest-based adventure selection
-    const interests = ['robots', 'aliens', 'planets', 'battles', 'science', 'space', 'creatures', 'sports', 'movies', 'dinosaurs', 'lasers', 'cyborgs', 'mechs', 'androids'];
+    const interests = ['dragons', 'crystals', 'geysers', 'magic', 'forests', 'creatures', 'sports', 'movies', 'dinosaurs', 'adventures', 'quests', 'treasures'];
     const selectedInterest = interests.find(interest => lowerUser.includes(interest));
     
     if (selectedInterest && adventureState === 'new') {
@@ -421,7 +421,7 @@ Goal: Create fast-paced, mission-oriented adventures with lovable characters, th
 
 Ongoing Adventure: Show excitement, prompt me for what happens next, and occasionally suggest 1–2 creative ideas to spark the next turn.
 
-New Adventure: Ask about my interests (sports, animals, movies, space, etc.). Offer:
+New Adventure: Ask about my interests (sports, animals, movies, magic, etc.). Offer:
 - Interest-based adventure (protagonist + villain + clear goal)
 - Another interest-based adventure
 - "Create-your-own" adventure (I invent the setting, sidekick, and villain)
@@ -473,13 +473,13 @@ Remember: I'm your loyal companion - speak as "I" and refer to the student as "y
         if (loadingIndex !== -1) {
           newMessages[loadingIndex] = {
             role: 'ai',
-            text: 'Wow, that sounds like an exciting adventure! 🚀 Tell me more about what Connor should do next!',
+            text: 'Wow, that sounds like an exciting adventure! 🌋 Tell me more about what Reese should do next!',
             isLoading: false
           } as any;
         }
         return newMessages;
       });
-      appendStoryMessage({ role: 'ai', text: 'Wow, that sounds like an exciting adventure! 🚀 Tell me more about what Connor should do next!' });
+      appendStoryMessage({ role: 'ai', text: 'Wow, that sounds like an exciting adventure! 🌋 Tell me more about what Reese should do next!' });
     }
   };
 
@@ -607,7 +607,7 @@ Remember: I'm your loyal companion - speak as "I" and refer to the student as "y
             {/* Quick adventure options - show when starting new adventure */}
             {adventureState === 'new' && adventureMessages.length <= 2 && (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12, justifyContent: 'center' }}>
-                {['🤖 Robots', '👽 Aliens', '🌍 Planets', '⚔️ Battles', '🔬 Science', '🚀 Space'].map((option) => (
+                {['🐉 Dragons', '💎 Crystals', '🌋 Geysers', '✨ Magic', '🌲 Forests', '🗺️ Quests'].map((option) => (
                   <button key={option} onClick={() => {
                     const interest = option.split(' ')[1]?.toLowerCase() || option.toLowerCase();
                     setAdventureInput(`I love ${interest} adventures!`);
@@ -632,7 +632,7 @@ Remember: I'm your loyal companion - speak as "I" and refer to the student as "y
                   <button onClick={() => {
                     setAdventureState('new');
                     setCurrentAdventure({});
-                    const greeting = "🎉 Hey there, Connor! I'm your loyal sidekick, ready for an epic quest! What kind of adventure gets you excited - robots, alien worlds, space battles, or something totally different? Let's create an amazing story together! 🚀✨";
+                    const greeting = "🎉 Hey there, Reese! I'm your loyal sidekick, ready for an epic quest! What kind of adventure gets you excited - buffalo-dragons, magical crystals, geyser quests, or something totally different? Let's create an amazing story together! 🌋✨";
                     updateAdventureMessages(prev => [...prev, { role: 'ai', text: greeting }]);
                     appendStoryMessage({ role: 'ai', text: greeting });
                   }} aria-label="New Adventure" style={{ width: 32, height: 32, borderRadius: 16, border: '2px solid rgba(245,158,11,0.3)', background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }} title="Start a new adventure">🎪</button>
