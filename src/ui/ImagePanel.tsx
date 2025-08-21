@@ -14,7 +14,7 @@ type Props = {
 };
 
 export function ImagePanel({ imageUrl, loading, error, progress = 0, headerText, headerAvatar = '🗨️', onListen, footerCard, centerCard, overlay }: Props): JSX.Element {
-  const segmentIcons = ['🌀','🤖'];
+  const segmentIcons = ['🌋','🐉'];
 
   return (
     <div style={{ position: 'relative', height: '100%', background: '#0f172a' }}>
@@ -70,7 +70,7 @@ export function ImagePanel({ imageUrl, loading, error, progress = 0, headerText,
       {!centerCard && (
         <div style={{ position: 'absolute', left: 16, right: 16, bottom: 16 }}>
           <div style={{ background: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: 16, padding: 14, boxShadow: '0 14px 40px rgba(2,6,23,0.25)' }}>
-            {footerCard ?? <div style={{ color: '#6B7280' }}>Click Create Image to begin.</div>}
+            {footerCard ?? <div style={{ color: '#6B7280' }}>Click Create Image to begin your Yellowstone adventure.</div>}
           </div>
         </div>
       )}

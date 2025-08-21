@@ -350,7 +350,7 @@ Give a brief, friendly response that nudges them without giving the answer.`;
     const base = params.baseLine || '';
     const ask = params.questionLine || '';
     // Keep short; /api/image will wrap with kid-safe epic style
-    return `Clear, unmistakable depiction of the word "${word}" inside our epic sci-fi robot battle adventure. Context: ${context || base}. Hint from tutor: ${ask}. Ensure the subject visually communicates "${word}" at a glance.`;
+    return `Clear, unmistakable depiction of the word "${word}" inside our epic magical Yellowstone buffalo-dragon adventure. Context: ${context || base}. Hint from tutor: ${ask}. Ensure the subject visually communicates "${word}" at a glance.`;
   };
 
   const ensureQuestionImage = async (key: string, explicitPrompt?: string) => {
@@ -666,7 +666,7 @@ Strict rules:
 2) Length: EXACTLY 5 lines; each line 5–6 words; total 25–30 words.
 4) Include these target words exactly: "red", "net", "get".
 5) Keep it lively.
-6) Name usage: You may use "Connor," "Skeletron," and "robot." Avoid other proper names.
+6) Name usage: You may use "Reese," "Oli," "buffalo-dragon," and "geyser." Avoid other proper names.
 8) Clarity: Very short sentences; vary stems (do not repeat the same opening more than twice).
 9) Ending: Finish with a tiny hook / cliffhanger or next step (≤ 6 words), preferably a question.
 10) Output format: Return ONLY the 5 lines separated by newline characters. No titles, labels, or extra text.`
@@ -866,8 +866,8 @@ Strict rules:
         const data = await res.json();
         if (!cancelled) {
           const summary = (data.reply || '').trim() || (isFirstRegularStep
-            ? '"Alert! Robot guards patrol everywhere," whispers Skeletron. "Here\'s a clue, Connor: listen and type what we need for battle," glows Eye of Cthulhu.'
-            : '"The fortress echoes with danger," says Skeletron. "Here\'s a clue, Connor: listen and type the tactical word," glows Eye of Cthulhu.');
+            ? '"Alert! The midgets are stealing crystals everywhere," whispers Oli. "Here\'s a clue, Reese: listen and type what we need for our quest," growls the buffalo-dragon.'
+            : '"The geysers echo with magic," says Oli. "Here\'s a clue, Reese: listen and type the mystical word," growls the buffalo-dragon.');
           setAiSummary(summary);
           try { setHookForStep('3', summary); } catch {}
           setHasGeneratedSummary(true);
@@ -875,8 +875,8 @@ Strict rules:
       } catch {
         if (!cancelled) {
           setAiSummary(isFirstRegularStep
-            ? '"Alert! Robot guards patrol everywhere," whispers Skeletron. "Here\'s a clue, Connor: listen and type what we need for battle," glows Eye of Cthulhu.'
-            : '"The fortress echoes with danger," says Skeletron. "Here\'s a clue, Connor: listen and type the tactical word," glows Eye of Cthulhu.');
+            ? '"Alert! The midgets are stealing crystals everywhere," whispers Oli. "Here\'s a clue, Reese: listen and type what we need for our quest," growls the buffalo-dragon.'
+            : '"The geysers echo with magic," says Oli. "Here\'s a clue, Reese: listen and type the mystical word," growls the buffalo-dragon.');
           setHasGeneratedSummary(true);
         }
       } finally {
@@ -1051,7 +1051,7 @@ Strict rules:
     try {
       const targetWord = hookValidationWord;
       const messages = [
-        { role: 'system', content: `You are Connor's fun AI companion helping kids write their epic sci-fi robot battle adventure story. Your job is to check if they used the target word "${targetWord}" in their sentence and respond naturally like a friendly narrator. 
+        { role: 'system', content: `You are Reese's fun AI companion helping kids write their epic magical Yellowstone buffalo-dragon adventure story. Your job is to check if they used the target word "${targetWord}" in their sentence and respond naturally like a friendly narrator. 
 
 Respond as minified JSON: {"status":"valid|invalid|help","message":"<your response>"}
 
@@ -1061,7 +1061,7 @@ RULES:
 - "help": If they ask for help or seem stuck, give a creative prompt about what ${targetWord} could do in the adventure.
 
 Be conversational, not scripted. Acknowledge what they actually wrote. Keep responses under 25 words.` },
-        { role: 'user', content: `Sentence: ${text}\n\nCurrent story context: ${storyContext.join(' ')}\n\nHelp the child continue Connor's epic sci-fi robot battle adventure using the word "${targetWord}".` }
+        { role: 'user', content: `Sentence: ${text}\n\nCurrent story context: ${storyContext.join(' ')}\n\nHelp the child continue Reese's epic magical Yellowstone buffalo-dragon adventure using the word "${targetWord}".` }
       ];
       const res = await fetch('/api/chat', {
         method: 'POST',
@@ -1078,7 +1078,7 @@ Be conversational, not scripted. Acknowledge what they actually wrote. Keep resp
         return { status: 'valid', message: 'Great!' };
       }
       if (/help|hint|example|idk|don\'?t know/i.test(text)) {
-        return { status: 'help', message: `No worries! What if Connor's ${targetWord} could help him battle the robots on Planet Austin? How might he use it?` };
+        return { status: 'help', message: `No worries! What if Reese's ${targetWord} could help them find geyser crystals in Yellowstone? How might they use it?` };
       }
       return { status: 'invalid', message: `Use the word "${targetWord}" in your sentence.` };
     } catch {
@@ -1125,7 +1125,7 @@ Be conversational, not scripted. Acknowledge what they actually wrote. Keep resp
       setValidationMessage(result.message || 'Try again');
       void playElevenTTS(result.message || 'Try again');
     } else {
-      const msg = result.message || `No worries! What if Connor\'s ${hookTargetWord} could help him battle the robots on Planet Austin? How might he use it?`;
+      const msg = result.message || `No worries! What if Reese\'s ${hookTargetWord} could help them find geyser crystals in Yellowstone? How might they use it?`;
       setValidationMessage(msg);
       setContinuationHeader(msg);
       void playElevenTTS(msg);
@@ -2980,7 +2980,7 @@ Be conversational, not scripted. Acknowledge what they actually wrote. Keep resp
                     <textarea
                       value={speechContinuationInput}
                       onChange={(e) => setSpeechContinuationInput(e.target.value)}
-                      placeholder="What happens next in Connor's adventure?"
+                      placeholder="What happens next in Reese's adventure?"
                       rows={2}
                       style={{
                         width: '100%',
@@ -3132,7 +3132,7 @@ Be conversational, not scripted. Acknowledge what they actually wrote. Keep resp
                   color: '#1f2937',
                   marginBottom: '4.8px'
                 }}>
-                  🎧 Listen to Connor's word!
+                  🎧 Listen to Reese's word!
                 </div>
                 <div style={{ fontSize: '13px', color: '#6b7280', fontWeight: '500' }}>
                   Type the word you hear.
@@ -3406,7 +3406,7 @@ Be conversational, not scripted. Acknowledge what they actually wrote. Keep resp
                     color: '#1f2937',
                     marginBottom: '4.8px'
                   }}>
-                    🎧 Listen to Connor's word!
+                    🎧 Listen to Reese's word!
                   </div>
                   <div style={{ fontSize: '14.4px', color: '#6b7280', fontWeight: '500' }}>
                     What sound does it start with?

@@ -14,7 +14,7 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
   const { state: storyState, appendMessage: appendStoryMessage, reset: resetStory, consumePendingAdventureChat, setMetadata } = useStory();
   // Use parent-provided messages or default/local persisted
   const defaultMessages: Array<{ role: 'ai' | 'student'; text: string; isImage?: boolean; isLoading?: boolean; imageUrl?: string }> = [
-    { role: 'ai' as const, text: "🚀⚡ Connor! I'm ready to continue our epic adventure on Planet Austin! We just charged up the hill toward Ronark's lair, and the robot guards are getting closer! Should we sneak past them, or face them head-on to rescue that stolen person? 🤖⚔️ What's your move, brave explorer?" }
+    { role: 'ai' as const, text: "🌋⚡ Reese! I'm ready to continue our epic adventure in Yellowstone! The geysers are erupting every 30 seconds and the buffalo-dragons are getting restless! We need to find more geyser crystals before the midgets steal them all! Should we explore the misty forest zone or head to the dragon habitats? 🐉💎 What's your move, brave explorer?" }
   ];
   const [localAdventureMessages, setLocalAdventureMessages] = useState<Array<{ role: 'ai' | 'student'; text: string; isImage?: boolean; isLoading?: boolean; imageUrl?: string }>>(
     (storyState?.adventureMessages?.length ?? 0) > 0
@@ -51,14 +51,14 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
     setting?: string;
     recentEvent?: string;
   }>({
-    type: 'sci-fi alien world adventure with robot battles',
-    protagonist: 'Connor (brave explorer with futuristic outfit, ready for adventure)',
-    sidekick: 'Skeletron (floating skeleton with head and two arms), Eye of Cthulhu (giant green eye with minion eyes)',
-    teammates: 'Brain of Cthulhu (red brain with dark red tentacles), Eater of Worlds (massive purple worm with millions of eyes)',
-    setting: 'Planet Austin - unique world with brown grass, green dirt, and the Electricity Ocean. Connor\'s House is a futuristic dwelling with advanced technology and cozy interior',
-    goal: 'rescue stolen animals and people from Ronark\'s robot army and stop his villainous plans',
-    villain: 'Ronark (half human, half robot with black molten armor, green glowing eyes, and army of robot animals) who steals animals and turns them into robots',
-    recentEvent: 'Connor runs up hill to Ronark\'s lair, guarded by robot guards, to rescue a stolen person. Confronting Ronark and his guards at the heavily fortified lair'
+    type: 'magical Yellowstone adventure with buffalo-dragons and geyser crystals',
+    protagonist: 'Reese (10-year-old brave explorer with jet black hair, intense eyes, bold red cloak, and green-brown buffalo-dragon armor with crystal detector)',
+    sidekick: 'Oli (loyal companion and clever partner, best friend who brings humor and brains to their adventures)',
+    teammates: 'Buffalo-Dragons (fierce, wise guardians with shaggy fur, dragon teeth, giant tails, medium wings, and strong bonds once trust is earned)',
+    setting: 'Fantastical Yellowstone National Park with wild geysers erupting every 30 seconds, misty enchanted forests, secret dragon zones, and bubbling crystal pools surrounded by mountains and green fields',
+    goal: 'find the precious geyser crystals, bond with buffalo-dragons from each zone, and restore the unstable Geyser Egg before all of Yellowstone explodes',
+    villain: 'The Midgets (tiny, sneaky tricksters who lurk in forest shadows and steal geyser crystals, leaving threatening messages for Reese)',
+    recentEvent: 'Reese and Oli discover the ancient secret of the Geyser Egg and must venture deeper into dragon territory to find crystals before the midgets steal them all'
   });
   const ADVENTURE_IMAGE_OVERLAY_OPACITY = 0.45;
   const adventureScrollRef = useRef<HTMLDivElement | null>(null);
@@ -352,8 +352,8 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
     if (!text) return;
     if (text.toLowerCase() === 'image' || text.toLowerCase() === 'create image' || text.toLowerCase().startsWith('create image')) {
       const imagePrompt = text.toLowerCase() === 'image' || text.toLowerCase() === 'create image'
-        ? 'Connor in futuristic outfit with Skeletron (floating skeleton) and Eye of Cthulhu (giant green eye) on Planet Austin with brown grass, green dirt, approaching Ronark\'s lair with robot guards, realistic art style with vibrant colors'
-        : text.replace(/^create image\s*/i, '').trim() || 'Connor in futuristic outfit with Skeletron (floating skeleton) and Eye of Cthulhu (giant green eye) on Planet Austin with brown grass, green dirt, approaching Ronark\'s lair with robot guards, realistic art style with vibrant colors';
+        ? 'Reese in red cloak and buffalo-dragon armor with Oli exploring magical Yellowstone with erupting geysers, misty enchanted forest, and majestic buffalo-dragons with fur and wings, realistic art style with vibrant colors'
+        : text.replace(/^create image\s*/i, '').trim() || 'Reese in red cloak and buffalo-dragon armor with Oli exploring magical Yellowstone with erupting geysers, misty enchanted forest, and majestic buffalo-dragons with fur and wings, realistic art style with vibrant colors';
       updateAdventureMessages(prev => [...prev, { role: 'student', text: `🌄 ${text}` }]);
       onAdventureMessage?.(text);
       setAdventureInput('');
@@ -432,11 +432,11 @@ Adventure State: ${adventureState === 'new' ? 'NEW_ADVENTURE' : adventureState =
 
 Current Adventure Context: ${JSON.stringify(currentAdventure)}
 
-Student Profile (Connor): Loves creative storytelling, designing alien worlds, and imagining unique creatures. Prefers realistic art with vibrant colors and detailed features for creatures and landscapes. Enjoys epic sci-fi adventures with robot battles and rescue missions on alien planets.
+Student Profile (Reese): Loves creative storytelling, magical adventures, and imagining unique creatures like buffalo-dragons. Prefers realistic art with vibrant colors and detailed features for creatures and landscapes. Enjoys epic fantasy adventures with magical elements, dragon bonding, and crystal collecting quests in enchanted natural settings.
 
 Character Creation: When creating sidekicks/characters, let me choose names with suggestions, offer trait lists (funny, optimistic, resilient, etc.), and ask me to describe appearance for image creation.
 
-Remember: I'm your loyal companion - speak as "I" and refer to the student as "you" or Connor. Always end with excitement and either a cliffhanger or a single engaging question. Keep responses action-packed and thrilling to match Connor's interests in sci-fi adventures, alien creatures, and robot battles.`
+Remember: I'm your loyal companion - speak as "I" and refer to the student as "you" or Reese. Always end with excitement and either a cliffhanger or a single engaging question. Keep responses action-packed and thrilling to match Reese's interests in magical adventures, buffalo-dragons, and crystal collecting quests.`
         },
         ...currentMessages
           .slice(-30)

@@ -5,8 +5,8 @@ type Props = { onGenerateImage?: (userText: string) => void };
 
 export function ChatPanel({ onGenerateImage }: Props): JSX.Element {
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'system', content: 'You are a friendly story guide for kids. Be conversational and helpful.' },
-    { role: 'assistant', content: "What happens next in Captain Asher's adventure? Type a short line and press Enter." }
+    { role: 'system', content: 'You are a friendly story guide for kids exploring the magical Yellowstone adventure with Reese and Oli. Be conversational and helpful.' },
+    { role: 'assistant', content: "What happens next in Reese's adventure to find the geyser crystals? Type a short line and press Enter." }
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -51,7 +51,7 @@ export function ChatPanel({ onGenerateImage }: Props): JSX.Element {
         <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#10B981' }} />
         <div>
           <div style={{ fontWeight: 700 }}>Chat</div>
-              <div style={{ color: '#6B7280', fontSize: 12 }}>Describe the next moment in the story.</div>
+              <div style={{ color: '#6B7280', fontSize: 12 }}>Describe the next moment in Reese and Oli's Yellowstone adventure.</div>
         </div>
       </div>
 
