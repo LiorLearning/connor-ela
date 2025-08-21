@@ -658,7 +658,7 @@ Inputs you may reference:
 - Story snippets: the recent adventure turns below
 - Most recent event: the event provided below
 - Use simple aliases for complex names:
-  Sir Whiskerfluff → cat; treehouse/platform → deck; crystal cave → den; rocket/spaceship → jet; crystal/treasure → gem
+  Sir Whiskerfluff → cat; treehouse/platform → deck; crystal cave → den; buffalo-dragon → mount; crystal/treasure → gem
 
 Strict rules:
 0) Event anchoring: Build directly on the most recent event; include at least one concrete detail from it. Do not change the location/scene or introduce unrelated new objects.

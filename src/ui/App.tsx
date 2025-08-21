@@ -42,7 +42,7 @@ export function App(): JSX.Element {
       ] as const;
     }
     return [
-      { id: 'q1', type: 'mc', prompt: 'Why does Asher use robot clones?', options: ['To confuse enemies', 'To build a camp', 'To plant trees'], correct: 0 },
+      { id: 'q1', type: 'mc', prompt: 'Why does Reese need the crystal detector?', options: ['To find geyser crystals', 'To build a camp', 'To plant trees'], correct: 0 },
       { id: 'q2', type: 'order', prompt: 'Arrange the sentence:', fragments: ['Shracker scans', 'the portal', 'for clues'], order: [0,1,2] },
       { id: 'bonus', type: 'micro', prompt: 'Which bird-like sidekick helps scan?', options: ['Shracker', 'Clay'], correct: 0 }
     ] as const;
