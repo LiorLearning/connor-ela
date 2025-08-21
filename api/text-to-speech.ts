@@ -16,7 +16,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const { text, voice_id = 'cgSgspJ2msm6clMCkdW9', speed = 1.0 } = req.body // Default to Jessica voice and normal speed
+    const { text, voice_id = 'EiNlNiXeDU1pqqOPrYMO', speed = 1.0 } = req.body // Default to John Doe Deep voice and normal speed
 
     if (!text || typeof text !== 'string') {
       return res.status(400).json({ error: 'Text is required and must be a string' })
@@ -75,9 +75,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const minimal = await callEleven(voice_id, { text: sanitized })
       if (minimal.ok) {
         response = minimal
-      } else if (voice_id !== 'cgSgspJ2msm6clMCkdW9') {
-        // Fallback to Jessica with minimal body
-        const fallback = await callEleven('cgSgspJ2msm6clMCkdW9', { text: sanitized })
+      } else if (voice_id !== 'EiNlNiXeDU1pqqOPrYMO') {
+        // Fallback to John Doe Deep with minimal body
+        const fallback = await callEleven('EiNlNiXeDU1pqqOPrYMO', { text: sanitized })
         if (fallback.ok) {
           response = fallback
         } else {
