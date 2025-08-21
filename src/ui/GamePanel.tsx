@@ -19,12 +19,12 @@ export function GamePanel(): JSX.Element {
       <div style={{ height: '100%', padding: 32, overflow: 'auto' }}>
         <div style={{ maxWidth: 920, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 24 }}>
-            <div style={{ fontSize: 40, fontWeight: 800, color: '#4338CA' }}>Geyser Crystal Collection Quest</div>
+            <div style={{ fontSize: 40, fontWeight: 800, color: '#4338CA' }}>Find the Shiny Rocks!</div>
           </div>
           <div style={{ background: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: 24, padding: 32, boxShadow: '0 10px 30px rgba(17,24,39,0.06)' }}>
-            <div style={{ textAlign: 'center', color: '#6B7280', marginBottom: 16 }}>Join Reese and Oli in their quest:</div>
-            <div style={{ textAlign: 'center', fontSize: 44, fontWeight: 800, color: '#1F2937', marginBottom: 8 }}>🌋 Geyser Egg of Yellowstone 🐉</div>
-            <div style={{ textAlign: 'center', color: '#6B7280', marginBottom: 28 }}>Find crystals, bond with buffalo-dragons, save Yellowstone!</div>
+            <div style={{ textAlign: 'center', color: '#6B7280', marginBottom: 16 }}>Come play with Reese and Oli!</div>
+            <div style={{ textAlign: 'center', fontSize: 44, fontWeight: 800, color: '#1F2937', marginBottom: 8 }}>🌋 Magic Egg Fun 🐉</div>
+            <div style={{ textAlign: 'center', color: '#6B7280', marginBottom: 28 }}>Find shiny rocks, play with fluffy dragons, save the day!</div>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
               <button onClick={() => setStarted(true)} style={{
                 background: '#4F46E5', color: '#fff', border: 'none', borderRadius: 12, padding: '14px 22px',

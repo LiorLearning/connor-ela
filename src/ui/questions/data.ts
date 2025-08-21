@@ -14,10 +14,10 @@ export const speechQuestions: SpeechQuestion[] = [
   {
     id: 1,
     text:
-      "Epic! Reese and Oli just discovered the unstable Geyser Egg in magical Yellowstone! Buffalo-dragons with shaggy fur and wings graze near the steaming geysers. The misty ground trembles under Reese's boots as they approach the crystal pools. A buffalo-dragon stretches its giant tail, ready to help, while another emerges from the enchanted forest. 'We need to get those geyser crystals!' Reese declares bravely. Suddenly, tiny midgets with sneaky grins creep toward the sparkling gems...",
+      "Wow! Reese and Oli found a big magic egg in fun Yellowstone! Cute fluffy dragons with wings play near the hot water that goes whoosh. The ground shakes under Reese's feet as they walk to the shiny pools. A dragon wags its big tail, ready to help, while another comes out of the misty trees. 'We need to get those shiny rocks!' says Reese. Oh no! Tiny sneaky people creep toward the pretty gems...",
     imageUrl: '🌋⚡🐉💎🌲',
     expectedWords: ['red', 'net', 'get'],
-    explanation: 'Fantastic reading! You captured all the exciting silent e words in the magical Yellowstone adventure.',
+    explanation: 'Great job reading! You found all the words with silent e in our fun Yellowstone story.',
   },
 ];
 
@@ -28,14 +28,14 @@ export const longAQuestions: Question[] = [
     imageUrl: '🌧️✨',
     isSpelling: true,
     correctAnswer: 'rain',
-    explanation: 'Magical "rain" falls in Yellowstone during Reese\'s quest - the long a sound with ai!',
+    explanation: 'Pretty "rain" falls in Yellowstone during Reese\'s fun trip - the long a sound with ai!',
     aiHook: {
       targetWord: 'rain',
       intent: 'spelling',
-      baseLine: 'Sparkling droplets fall from the misty sky as Reese and Oli approach the geyser crystal pools.',
-      questionLine: 'Listen and type the long a word for what falls from the sky.',
+      baseLine: 'Pretty water drops fall from the sky as Reese and Oli walk to the shiny pools.',
+      questionLine: 'Listen and spell the word for water that falls from the sky.',
       validationWord: 'rain',
-      imagePrompt: 'Magical RAIN falling in Yellowstone with green fields, Reese and Oli walking toward the crystal pools in the distance; clearly shows rain droplets falling from misty sky.'
+      imagePrompt: 'Pretty RAIN falling in Yellowstone with green grass, Reese and Oli walking toward shiny pools; shows rain drops falling from sky.'
     }
   },
   {
@@ -44,14 +44,14 @@ export const longAQuestions: Question[] = [
     imageUrl: '8️⃣🤖',
     isSpelling: true,
     correctAnswer: 'eight',
-    explanation: '"Eight" buffalo-dragons guard the crystal pools - the long a sound with eigh!',
+    explanation: '"Eight" fluffy dragons watch over the shiny pools - the long a sound with eigh!',
     aiHook: {
       targetWord: 'eight',
       intent: 'spelling',
-      baseLine: 'Buffalo-dragons with shaggy fur and wings stand in formation protecting the geyser crystal pools.',
-      questionLine: 'Listen and type the long a word for how many dragons there are.',
+      baseLine: 'Fluffy dragons with wings stand around the shiny pools to keep them safe.',
+      questionLine: 'Listen and spell the number word for how many dragons there are.',
       validationWord: 'eight',
-      imagePrompt: 'EIGHT buffalo-dragons with fur and wings standing in formation around crystal pools, clearly showing 8 dragons protecting the area; composition highlights the number of guardians.'
+      imagePrompt: 'EIGHT cute fluffy dragons with wings standing around shiny pools, clearly showing 8 dragons keeping the area safe.'
     }
   },
 ];
@@ -63,14 +63,14 @@ export const questions: Question[] = [
     imageUrl: '🚂🤖',
     isSpelling: true,
     correctAnswer: 'train',
-    explanation: 'The buffalo-dragons "train" together to protect the crystals - the long a sound with ai!',
+    explanation: 'The fluffy dragons "train" together to keep the shiny rocks safe - the long a sound with ai!',
     aiHook: {
       targetWord: 'train',
       intent: 'spelling',
-      baseLine: 'A line of buffalo-dragons practice their flying formations through the misty forest toward the crystal pools.',
-      questionLine: 'Listen and type the long a word for practicing together.',
+      baseLine: 'A line of fluffy dragons practice flying together through the misty trees toward the shiny pools.',
+      questionLine: 'Listen and spell the word for practicing together.',
       validationWord: 'train',
-      imagePrompt: 'Buffalo-dragons in TRAIN formation flying through misty Yellowstone forest with green fields, heading toward crystal pools; clearly shows dragons practicing flight patterns.'
+      imagePrompt: 'Cute dragons in TRAIN line flying through misty trees with green grass, going toward shiny pools; shows dragons practicing flying together.'
     }
   },
   {
@@ -79,14 +79,14 @@ export const questions: Question[] = [
     imageUrl: '⚖️✨',
     isSpelling: true,
     correctAnswer: 'weigh',
-    explanation: 'The geyser crystals "weigh" too much for Oli to carry alone - the long a sound with eigh!',
+    explanation: 'The shiny rocks "weigh" too much for Oli to carry alone - the long a sound with eigh!',
     aiHook: {
       targetWord: 'weigh',
       intent: 'spelling',
-      baseLine: 'Oli tries to lift the heavy sparkling geyser crystals from the enchanted crystal pools.',
-      questionLine: 'Listen and type the long a word for how heavy something is.',
+      baseLine: 'Oli tries to pick up the heavy shiny rocks from the pretty pools.',
+      questionLine: 'Listen and spell the word for how heavy something is.',
       validationWord: 'weigh',
-      imagePrompt: 'Oli trying to lift heavy sparkling geyser crystals, showing the weight with glowing scales nearby; clearly depicts the concept of weight measurement with magical crystals.'
+      imagePrompt: 'Oli trying to lift heavy shiny rocks, with a scale nearby showing how heavy they are.'
     }
   },
   {
@@ -95,14 +95,14 @@ export const questions: Question[] = [
     imageUrl: '💥⚡',
     isSpelling: true,
     correctAnswer: 'break',
-    explanation: 'Reese must "break" through the crystal barrier to reach the Geyser Egg - the long a sound with ea!',
+    explanation: 'Reese must "break" through the shiny wall to reach the magic egg - the long a sound with ea!',
     aiHook: {
       targetWord: 'break',
       intent: 'spelling',
-      baseLine: 'Reese charges forward to shatter the glowing crystal barrier protecting the unstable Geyser Egg.',
-      questionLine: 'Listen and type the long a word for smashing through something.',
+      baseLine: 'Reese runs fast to break the shiny wall that is keeping the magic egg safe.',
+      questionLine: 'Listen and spell the word for smashing through something.',
       validationWord: 'break',
-      imagePrompt: 'Reese charging toward a glowing crystal barrier with magical sparks flying as they try to BREAK through it, Geyser Egg visible behind; action shows breaking/shattering motion.'
+      imagePrompt: 'Reese running toward a shiny wall with sparkles flying as they try to BREAK through it, magic egg behind the wall.'
     }
   },
   {
@@ -111,14 +111,14 @@ export const questions: Question[] = [
     imageUrl: '⭐🏆',
     isSpelling: true,
     correctAnswer: 'great',
-    explanation: '"Great" work collecting all the geyser crystals with your team - the long a sound with ea!',
+    explanation: '"Great" job finding all the shiny rocks with your friend - the long a sound with ea!',
     aiHook: {
       targetWord: 'great',
       intent: 'spelling',
-      baseLine: 'Reese and Oli celebrate their victory after collecting all the geyser crystals and saving Yellowstone.',
-      questionLine: 'Listen and type the long a word for excellent or wonderful.',
+      baseLine: 'Reese and Oli are happy after finding all the shiny rocks and saving Yellowstone.',
+      questionLine: 'Listen and spell the word for really good or wonderful.',
       validationWord: 'great',
-      imagePrompt: 'Reese and Oli celebrating victory with sparkling geyser crystals in background, stars and trophy visible showing GREAT success; composition emphasizes celebration and excellence.'
+      imagePrompt: 'Reese and Oli happy and celebrating with shiny rocks behind them, stars and trophy showing GREAT job.'
     }
   },
 ];

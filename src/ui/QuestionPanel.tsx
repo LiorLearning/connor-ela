@@ -265,8 +265,8 @@ Give a brief, friendly response that nudges them without giving the answer.`;
   const hookTargetWord = aiCfg?.targetWord || (isSecondRegularStep ? 'cave' : (isFirstRegularStep ? 'crystal' : (currentRegularQuestion?.word || currentLongAQuestion?.word || '')));
   const hookQuestionLine = aiCfg?.questionLine || (isFirstRegularStep ? 'Listen and type the word' : 'Listen and type the word');
   const hookBaseLine = aiCfg?.baseLine || (isFirstRegularStep
-    ? 'With Yellowstone stabilizing, they explore the misty forest toward the crystal pools.'
-    : 'The caverns echo with mystery as they continue their mission.');
+    ? 'With Yellowstone getting better, they walk through misty trees toward the shiny pools.'
+    : 'The caves are quiet as they keep going on their fun trip.');
   const hookValidationWord = aiCfg?.validationWord || (isSecondRegularStep ? 'cave' : (isFirstRegularStep ? 'crystal' : (currentLongAQuestion?.word || 'word')));
   const hookIntent = aiCfg?.intent || (isFirstRegularStep ? 'spelling' : 'spelling');
 
@@ -753,7 +753,7 @@ Strict rules:
         console.error('Error generating Long A passage:', error);
         if (!cancelled && currentLongAQuestion) {
           // Fallback to base line
-          const fallback = currentLongAQuestion.aiHook?.baseLine || 'A shimmering crystal doorway appears in the cavern wall. The young buffalo-dragon points to the glowing opening.';
+          const fallback = currentLongAQuestion.aiHook?.baseLine || 'A pretty shiny door appears in the cave wall. The young fluffy dragon points to the glowing door.';
           setLongAPassage(fallback);
           setHasGeneratedLongAPassage(true);
           setIsLongAPassageLoading(false);
@@ -1051,17 +1051,17 @@ Strict rules:
     try {
       const targetWord = hookValidationWord;
       const messages = [
-        { role: 'system', content: `You are Reese's fun AI companion helping kids write their epic magical Yellowstone buffalo-dragon adventure story. Your job is to check if they used the target word "${targetWord}" in their sentence and respond naturally like a friendly narrator. 
+        { role: 'system', content: `You are Reese's funny friend Oli helping kids write their fun Yellowstone dragon story. Check if they used the word "${targetWord}" in their sentence and respond like a silly, happy friend. 
 
 Respond as minified JSON: {"status":"valid|invalid|help","message":"<your response>"}
 
 RULES:
-- "valid": Only if the EXACT word "${targetWord}" appears as a standalone word (case-insensitive). Say something encouraging like "Perfect!" or "Great use of ${targetWord}!" 
-- "invalid": If they used a different word or misspelled it, gently point out what they wrote and what you need. Be specific: "I see you wrote '[their word]' but I need the word '${targetWord}'. Try again!"
-- "help": If they ask for help or seem stuck, give a creative prompt about what ${targetWord} could do in the adventure.
+- "valid": Only if the EXACT word "${targetWord}" appears (case-insensitive). Say something happy like "Yay!" or "Great job!" 
+- "invalid": If they used a different word, gently help. Say: "I see you wrote '[their word]' but I need '${targetWord}'. Try again!"
+- "help": If they need help, give a fun idea about what ${targetWord} could do.
 
-Be conversational, not scripted. Acknowledge what they actually wrote. Keep responses under 25 words.` },
-        { role: 'user', content: `Sentence: ${text}\n\nCurrent story context: ${storyContext.join(' ')}\n\nHelp the child continue Reese's epic magical Yellowstone buffalo-dragon adventure using the word "${targetWord}".` }
+Be silly and fun. Use simple words. Keep responses under 15 words.` },
+        { role: 'user', content: `Sentence: ${text}\n\nCurrent story: ${storyContext.join(' ')}\n\nHelp the child continue Reese's fun Yellowstone dragon story using the word "${targetWord}".` }
       ];
       const res = await fetch('/api/chat', {
         method: 'POST',
@@ -1078,7 +1078,7 @@ Be conversational, not scripted. Acknowledge what they actually wrote. Keep resp
         return { status: 'valid', message: 'Great!' };
       }
       if (/help|hint|example|idk|don\'?t know/i.test(text)) {
-        return { status: 'help', message: `No worries! What if Reese's ${targetWord} could help them find geyser crystals in Yellowstone? How might they use it?` };
+        return { status: 'help', message: `No worries! What if Reese's ${targetWord} could help find shiny rocks? How?` };
       }
       return { status: 'invalid', message: `Use the word "${targetWord}" in your sentence.` };
     } catch {
@@ -1125,7 +1125,7 @@ Be conversational, not scripted. Acknowledge what they actually wrote. Keep resp
       setValidationMessage(result.message || 'Try again');
       void playElevenTTS(result.message || 'Try again');
     } else {
-      const msg = result.message || `No worries! What if Reese\'s ${hookTargetWord} could help them find geyser crystals in Yellowstone? How might they use it?`;
+      const msg = result.message || `No worries! What if Reese\'s ${hookTargetWord} could help find shiny rocks? How?`;
       setValidationMessage(msg);
       setContinuationHeader(msg);
       void playElevenTTS(msg);
@@ -2980,7 +2980,7 @@ Be conversational, not scripted. Acknowledge what they actually wrote. Keep resp
                     <textarea
                       value={speechContinuationInput}
                       onChange={(e) => setSpeechContinuationInput(e.target.value)}
-                      placeholder="What happens next in Reese's adventure?"
+                      placeholder="What happens next in Reese's fun trip?"
                       rows={2}
                       style={{
                         width: '100%',
