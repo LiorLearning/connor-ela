@@ -77,13 +77,14 @@ export const questions: Question[] = [
     id: 2,
     word: 'wish',
     imageUrl: '⭐💎',
-    correctAnswer: 2, // sh option (index 2 in ['ch', 'th', 'sh', 'wh', 'ph'])
+    isSpelling: true,
+    correctAnswer: 'wish',
     explanation: 'Great job! SH makes the sound at the end of wish! What did Oli wish for?',
     aiHook: {
       targetWord: 'wish',
-      intent: 'sound',
+      intent: 'spelling',
       baseLine: 'Oli makes a wish on the crystal.',
-      questionLine: 'Listen and pick the letters that make the sound at the end of wi___.',
+      questionLine: 'Listen and spell the word for hoping something will happen.',
       validationWord: 'wish',
       imagePrompt: 'Oli holding glowing crystal up to starry sky, making a WISH.'
     }
@@ -92,13 +93,14 @@ export const questions: Question[] = [
     id: 3,
     word: 'white',
     imageUrl: '☁️🌋',
-    correctAnswer: 3, // wh option (index 3 in ['ch', 'th', 'sh', 'wh', 'ph'])
+    isSpelling: true,
+    correctAnswer: 'white',
     explanation: 'Yay! WH makes the sound at the start of white! The steam looks like fluffy clouds!',
     aiHook: {
       targetWord: 'white',
-      intent: 'sound',
+      intent: 'spelling',
       baseLine: 'White steam rises from the geyser.',
-      questionLine: 'Listen and pick the letters that make the sound at the start of ___ite.',
+      questionLine: 'Listen and spell the word for the color of clouds.',
       validationWord: 'white',
       imagePrompt: 'WHITE steam rising from geysers, looking like puffy white clouds.'
     }
@@ -123,13 +125,14 @@ export const questions: Question[] = [
     id: 5,
     word: 'with',
     imageUrl: '🤝🐉',
-    correctAnswer: 1, // th option (index 1 in ['ch', 'th', 'sh', 'wh', 'ph'])
+    isSpelling: true,
+    correctAnswer: 'with',
     explanation: 'Perfect! TH makes the sound at the end of with! Friends have more fun together!',
     aiHook: {
       targetWord: 'with',
-      intent: 'sound',
+      intent: 'spelling',
       baseLine: 'Reese plays with the dragons.',
-      questionLine: 'Listen and pick the letters that make the sound at the end of wi___.',
+      questionLine: 'Listen and spell the word for being together.',
       validationWord: 'with',
       imagePrompt: 'Reese playing and laughing WITH cute dragons in a meadow.'
     }
@@ -138,13 +141,14 @@ export const questions: Question[] = [
     id: 6,
     word: 'watch',
     imageUrl: '👀👺',
-    correctAnswer: 0, // ch option (index 0 in ['ch', 'th', 'sh', 'wh', 'ph'])
+    isSpelling: true,
+    correctAnswer: 'watch',
     explanation: 'Perfect! CH makes the sound at the end of watch! We caught the sneaky guys!',
     aiHook: {
       targetWord: 'watch',
-      intent: 'sound',
+      intent: 'spelling',
       baseLine: 'Oli and Reese watch the sneaky guys.',
-      questionLine: 'Listen and pick the letters that make the sound at the end of wa___.',
+      questionLine: 'Listen and spell the word for looking carefully.',
       validationWord: 'watch',
       imagePrompt: 'Reese and Oli hiding behind rocks, WATCHING small figures creeping toward crystals.'
     }
