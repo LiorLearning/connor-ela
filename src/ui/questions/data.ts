@@ -32,7 +32,7 @@ export const longAQuestions: Question[] = [
     aiHook: {
       targetWord: 'path',
       intent: 'spelling',
-      baseLine: 'Reese and Oli follow the dragon trail to find shiny rocks!',
+      baseLine: 'Reese follows the dragon path.',
       questionLine: 'Listen and spell the word for the trail the dragons made.',
       validationWord: 'path',
       imagePrompt: 'Dragon footprints and a winding PATH through Yellowstone leading to crystal pools.'
@@ -48,7 +48,7 @@ export const longAQuestions: Question[] = [
     aiHook: {
       targetWord: 'splash',
       intent: 'spelling',
-      baseLine: 'The hot water makes a big splash when it goes WHOOSH!',
+      baseLine: 'The geyser makes a big splash.',
       questionLine: 'Listen and spell the word for what the geyser water does.',
       validationWord: 'splash',
       imagePrompt: 'Geyser erupting with water SPLASHING everywhere in Yellowstone.'
@@ -67,7 +67,7 @@ export const questions: Question[] = [
     aiHook: {
       targetWord: 'catch',
       intent: 'spelling',
-      baseLine: 'Can you catch the falling shiny rocks from the dragon\'s cave?',
+      baseLine: 'Reese tries to catch the falling crystals.',
       questionLine: 'Listen and spell the word for grabbing something that falls.',
       validationWord: 'catch',
       imagePrompt: 'Reese with hands out, trying to CATCH sparkling crystals falling from dragon cave.'
@@ -75,32 +75,32 @@ export const questions: Question[] = [
   },
   {
     id: 2,
-    word: 'whisper',
-    imageUrl: '🤫🐉',
-    correctAnswer: 3, // wh option (index 3 in ['ch', 'th', 'sh', 'wh', 'ph'])
-    explanation: 'Yay! WH makes the sound at the start of whisper! The dragons love secrets!',
+    word: 'wish',
+    imageUrl: '⭐💎',
+    correctAnswer: 2, // sh option (index 2 in ['ch', 'th', 'sh', 'wh', 'ph'])
+    explanation: 'Great job! SH makes the sound at the end of wish! What did Oli wish for?',
     aiHook: {
-      targetWord: 'whisper',
+      targetWord: 'wish',
       intent: 'sound',
-      baseLine: 'Oli likes to whisper secrets to the friendly dragons!',
-      questionLine: 'Listen and pick the letters that make the sound at the start of ___isper.',
-      validationWord: 'whisper',
-      imagePrompt: 'Oli leaning close to fluffy dragon\'s ear, WHISPERING a secret.'
+      baseLine: 'Oli makes a wish on the crystal.',
+      questionLine: 'Listen and pick the letters that make the sound at the end of wi___.',
+      validationWord: 'wish',
+      imagePrompt: 'Oli holding glowing crystal up to starry sky, making a WISH.'
     }
   },
   {
     id: 3,
-    word: 'rush',
-    imageUrl: '🏃🐉',
-    correctAnswer: 2, // sh option (index 2 in ['ch', 'th', 'sh', 'wh', 'ph'])
-    explanation: 'Great job! SH makes the sound at the end of rush! The dragons are fast helpers!',
+    word: 'white',
+    imageUrl: '☁️🌋',
+    correctAnswer: 3, // wh option (index 3 in ['ch', 'th', 'sh', 'wh', 'ph'])
+    explanation: 'Yay! WH makes the sound at the start of white! The steam looks like fluffy clouds!',
     aiHook: {
-      targetWord: 'rush',
+      targetWord: 'white',
       intent: 'sound',
-      baseLine: 'The fluffy dragons rush to help when Reese calls them!',
-      questionLine: 'Listen and pick the letters that make the sound at the end of ru___.',
-      validationWord: 'rush',
-      imagePrompt: 'Cute dragons hurrying and RUSHING toward Reese with big smiles.'
+      baseLine: 'White steam rises from the geyser.',
+      questionLine: 'Listen and pick the letters that make the sound at the start of ___ite.',
+      validationWord: 'white',
+      imagePrompt: 'WHITE steam rising from geysers, looking like puffy white clouds.'
     }
   },
   {
@@ -113,10 +113,70 @@ export const questions: Question[] = [
     aiHook: {
       targetWord: 'touch',
       intent: 'spelling',
-      baseLine: 'The magic egg is safe to touch when it glows blue!',
+      baseLine: 'Reese gently touches the magic egg.',
       questionLine: 'Listen and spell the word for using your hands to feel something.',
       validationWord: 'touch',
       imagePrompt: 'Glowing Geyser Egg with Reese\'s hand gently TOUCHING it.'
+    }
+  },
+  {
+    id: 5,
+    word: 'with',
+    imageUrl: '🤝🐉',
+    correctAnswer: 1, // th option (index 1 in ['ch', 'th', 'sh', 'wh', 'ph'])
+    explanation: 'Perfect! TH makes the sound at the end of with! Friends have more fun together!',
+    aiHook: {
+      targetWord: 'with',
+      intent: 'sound',
+      baseLine: 'Reese plays with the dragons.',
+      questionLine: 'Listen and pick the letters that make the sound at the end of wi___.',
+      validationWord: 'with',
+      imagePrompt: 'Reese playing and laughing WITH cute dragons in a meadow.'
+    }
+  },
+  {
+    id: 6,
+    word: 'watch',
+    imageUrl: '👀👺',
+    correctAnswer: 0, // ch option (index 0 in ['ch', 'th', 'sh', 'wh', 'ph'])
+    explanation: 'Perfect! CH makes the sound at the end of watch! We caught the sneaky guys!',
+    aiHook: {
+      targetWord: 'watch',
+      intent: 'sound',
+      baseLine: 'Oli and Reese watch the sneaky guys.',
+      questionLine: 'Listen and pick the letters that make the sound at the end of wa___.',
+      validationWord: 'watch',
+      imagePrompt: 'Reese and Oli hiding behind rocks, WATCHING small figures creeping toward crystals.'
+    }
+  },
+  {
+    id: 7,
+    word: 'whisper',
+    imageUrl: '🤫🐉',
+    correctAnswer: 3, // wh option (index 3 in ['ch', 'th', 'sh', 'wh', 'ph'])
+    explanation: 'Yay! WH makes the sound at the start of whisper! The dragons love secrets!',
+    aiHook: {
+      targetWord: 'whisper',
+      intent: 'sound',
+      baseLine: 'Oli whispers secrets to the dragon.',
+      questionLine: 'Listen and pick the letters that make the sound at the start of ___isper.',
+      validationWord: 'whisper',
+      imagePrompt: 'Oli leaning close to fluffy dragon\'s ear, WHISPERING a secret.'
+    }
+  },
+  {
+    id: 8,
+    word: 'rush',
+    imageUrl: '🏃🐉',
+    correctAnswer: 2, // sh option (index 2 in ['ch', 'th', 'sh', 'wh', 'ph'])
+    explanation: 'Great job! SH makes the sound at the end of rush! The dragons are fast helpers!',
+    aiHook: {
+      targetWord: 'rush',
+      intent: 'sound',
+      baseLine: 'The dragons rush to help Reese.',
+      questionLine: 'Listen and pick the letters that make the sound at the end of ru___.',
+      validationWord: 'rush',
+      imagePrompt: 'Cute dragons hurrying and RUSHING toward Reese with big smiles.'
     }
   },
 ];
