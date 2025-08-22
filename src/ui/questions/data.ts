@@ -24,34 +24,32 @@ export const speechQuestions: SpeechQuestion[] = [
 export const longAQuestions: Question[] = [
   {
     id: 1,
-    word: 'rain',
-    imageUrl: '🌧️✨',
-    isSpelling: true,
-    correctAnswer: 'rain',
-    explanation: 'Pretty "rain" falls in Yellowstone during Reese\'s fun trip - the long a sound with ai!',
+    word: 'path',
+    imageUrl: '🛤️🐉',
+    correctAnswer: 1, // th option
+    explanation: 'Great job! TH makes the sound in path! Let\'s follow the dragon trail!',
     aiHook: {
-      targetWord: 'rain',
-      intent: 'spelling',
-      baseLine: 'Pretty water drops fall from the sky as Reese and Oli walk to the shiny pools.',
-      questionLine: 'Listen and spell the word for water that falls from the sky.',
-      validationWord: 'rain',
-      imagePrompt: 'Pretty RAIN falling in Yellowstone with green grass, Reese and Oli walking toward shiny pools; shows rain drops falling from sky.'
+      targetWord: 'path',
+      intent: 'sound',
+      baseLine: 'Reese and Oli follow the dragon trail to find shiny rocks!',
+      questionLine: 'Listen and pick the letters that make the sound at the end of pa___.',
+      validationWord: 'path',
+      imagePrompt: 'Dragon footprints and a winding PATH through Yellowstone leading to crystal pools.'
     }
   },
   {
     id: 2,
-    word: 'eight',
-    imageUrl: '8️⃣🤖',
-    isSpelling: true,
-    correctAnswer: 'eight',
-    explanation: '"Eight" fluffy dragons watch over the shiny pools - the long a sound with eigh!',
+    word: 'splash',
+    imageUrl: '🌋💦',
+    correctAnswer: 2, // sh option
+    explanation: 'Awesome! SH makes the sound in splash! The geyser is so fun!',
     aiHook: {
-      targetWord: 'eight',
-      intent: 'spelling',
-      baseLine: 'Fluffy dragons with wings stand around the shiny pools to keep them safe.',
-      questionLine: 'Listen and spell the number word for how many dragons there are.',
-      validationWord: 'eight',
-      imagePrompt: 'EIGHT cute fluffy dragons with wings standing around shiny pools, clearly showing 8 dragons keeping the area safe.'
+      targetWord: 'splash',
+      intent: 'sound',
+      baseLine: 'The hot water makes a big splash when it goes WHOOSH!',
+      questionLine: 'Listen and pick the letters that make the sound at the end of spla___.',
+      validationWord: 'splash',
+      imagePrompt: 'Geyser erupting with water SPLASHING everywhere in Yellowstone.'
     }
   },
 ];
@@ -59,70 +57,124 @@ export const longAQuestions: Question[] = [
 export const questions: Question[] = [
   {
     id: 1,
-    word: 'train',
-    imageUrl: '🚂🤖',
-    isSpelling: true,
-    correctAnswer: 'train',
-    explanation: 'The fluffy dragons "train" together to keep the shiny rocks safe - the long a sound with ai!',
+    word: 'catch',
+    imageUrl: '🤲💎',
+    correctAnswer: 0, // ch option
+    explanation: 'Perfect! CH makes the sound in catch! Reese caught the shiny rocks!',
     aiHook: {
-      targetWord: 'train',
-      intent: 'spelling',
-      baseLine: 'A line of fluffy dragons practice flying together through the misty trees toward the shiny pools.',
-      questionLine: 'Listen and spell the word for practicing together.',
-      validationWord: 'train',
-      imagePrompt: 'Cute dragons in TRAIN line flying through misty trees with green grass, going toward shiny pools; shows dragons practicing flying together.'
+      targetWord: 'catch',
+      intent: 'sound',
+      baseLine: 'Can you catch the falling shiny rocks from the dragon\'s cave?',
+      questionLine: 'Listen and pick the letters that make the sound at the end of ca___.',
+      validationWord: 'catch',
+      imagePrompt: 'Reese with hands out, trying to CATCH sparkling crystals falling from dragon cave.'
     }
   },
   {
     id: 2,
-    word: 'weigh',
-    imageUrl: '⚖️✨',
-    isSpelling: true,
-    correctAnswer: 'weigh',
-    explanation: 'The shiny rocks "weigh" too much for Oli to carry alone - the long a sound with eigh!',
+    word: 'whisper',
+    imageUrl: '🤫🐉',
+    correctAnswer: 3, // wh option
+    explanation: 'Yay! WH makes the sound in whisper! The dragons love secrets!',
     aiHook: {
-      targetWord: 'weigh',
-      intent: 'spelling',
-      baseLine: 'Oli tries to pick up the heavy shiny rocks from the pretty pools.',
-      questionLine: 'Listen and spell the word for how heavy something is.',
-      validationWord: 'weigh',
-      imagePrompt: 'Oli trying to lift heavy shiny rocks, with a scale nearby showing how heavy they are.'
+      targetWord: 'whisper',
+      intent: 'sound',
+      baseLine: 'Oli likes to whisper secrets to the friendly dragons!',
+      questionLine: 'Listen and pick the letters that make the sound at the start of ___isper.',
+      validationWord: 'whisper',
+      imagePrompt: 'Oli leaning close to fluffy dragon\'s ear, WHISPERING a secret.'
     }
   },
   {
     id: 3,
-    word: 'break',
-    imageUrl: '💥⚡',
-    isSpelling: true,
-    correctAnswer: 'break',
-    explanation: 'Reese must "break" through the shiny wall to reach the magic egg - the long a sound with ea!',
+    word: 'rush',
+    imageUrl: '🏃🐉',
+    correctAnswer: 2, // sh option
+    explanation: 'Great job! SH makes the sound in rush! The dragons are fast helpers!',
     aiHook: {
-      targetWord: 'break',
-      intent: 'spelling',
-      baseLine: 'Reese runs fast to break the shiny wall that is keeping the magic egg safe.',
-      questionLine: 'Listen and spell the word for smashing through something.',
-      validationWord: 'break',
-      imagePrompt: 'Reese running toward a shiny wall with sparkles flying as they try to BREAK through it, magic egg behind the wall.'
+      targetWord: 'rush',
+      intent: 'sound',
+      baseLine: 'The fluffy dragons rush to help when Reese calls them!',
+      questionLine: 'Listen and pick the letters that make the sound at the end of ru___.',
+      validationWord: 'rush',
+      imagePrompt: 'Cute dragons hurrying and RUSHING toward Reese with big smiles.'
     }
   },
   {
     id: 4,
-    word: 'great',
-    imageUrl: '⭐🏆',
-    isSpelling: true,
-    correctAnswer: 'great',
-    explanation: '"Great" job finding all the shiny rocks with your friend - the long a sound with ea!',
+    word: 'touch',
+    imageUrl: '✋🥚',
+    correctAnswer: 0, // ch option
+    explanation: 'Awesome! CH makes the sound in touch! The magic egg feels warm!',
     aiHook: {
-      targetWord: 'great',
-      intent: 'spelling',
-      baseLine: 'Reese and Oli are happy after finding all the shiny rocks and saving Yellowstone.',
-      questionLine: 'Listen and spell the word for really good or wonderful.',
-      validationWord: 'great',
-      imagePrompt: 'Reese and Oli happy and celebrating with shiny rocks behind them, stars and trophy showing GREAT job.'
+      targetWord: 'touch',
+      intent: 'sound',
+      baseLine: 'The magic egg is safe to touch when it glows blue!',
+      questionLine: 'Listen and pick the letters that make the sound at the end of tou___.',
+      validationWord: 'touch',
+      imagePrompt: 'Glowing Geyser Egg with Reese\'s hand gently TOUCHING it.'
+    }
+  },
+  {
+    id: 5,
+    word: 'with',
+    imageUrl: '🤝🐉',
+    correctAnswer: 1, // th option
+    explanation: 'Perfect! TH makes the sound in with! Friends have more fun together!',
+    aiHook: {
+      targetWord: 'with',
+      intent: 'sound',
+      baseLine: 'Reese loves to play with the fluffy dragon friends!',
+      questionLine: 'Listen and pick the letters that make the sound at the end of wi___.',
+      validationWord: 'with',
+      imagePrompt: 'Reese playing and laughing WITH cute dragons in a meadow.'
+    }
+  },
+  {
+    id: 6,
+    word: 'white',
+    imageUrl: '☁️🌋',
+    correctAnswer: 3, // wh option
+    explanation: 'Yay! WH makes the sound in white! The steam looks like fluffy clouds!',
+    aiHook: {
+      targetWord: 'white',
+      intent: 'sound',
+      baseLine: 'The steam from the hot water is white and fluffy like clouds!',
+      questionLine: 'Listen and pick the letters that make the sound at the start of ___ite.',
+      validationWord: 'white',
+      imagePrompt: 'WHITE steam rising from geysers, looking like puffy white clouds.'
+    }
+  },
+  {
+    id: 7,
+    word: 'wish',
+    imageUrl: '⭐💎',
+    correctAnswer: 2, // sh option
+    explanation: 'Great job! SH makes the sound in wish! What did Oli wish for?',
+    aiHook: {
+      targetWord: 'wish',
+      intent: 'sound',
+      baseLine: 'Make a wish on the sparkly crystal and it might come true!',
+      questionLine: 'Listen and pick the letters that make the sound at the end of wi___.',
+      validationWord: 'wish',
+      imagePrompt: 'Oli holding glowing crystal up to starry sky, making a WISH.'
+    }
+  },
+  {
+    id: 8,
+    word: 'watch',
+    imageUrl: '👀👺',
+    correctAnswer: 0, // ch option
+    explanation: 'Perfect! CH makes the sound in watch! We caught the sneaky guys!',
+    aiHook: {
+      targetWord: 'watch',
+      intent: 'sound',
+      baseLine: 'Let\'s watch the tiny sneaky guys try to steal our shiny rocks!',
+      questionLine: 'Listen and pick the letters that make the sound at the end of wa___.',
+      validationWord: 'watch',
+      imagePrompt: 'Reese and Oli hiding behind rocks, WATCHING small figures creeping toward crystals.'
     }
   },
 ];
 
-export const options: string[] = ['th', 'ch', 'fr'];
-
-
+export const options: string[] = ['ch', 'th', 'sh', 'wh', 'ph'];
