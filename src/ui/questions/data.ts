@@ -77,14 +77,13 @@ export const questions: Question[] = [
     id: 2,
     word: 'whisper',
     imageUrl: '🤫🐉',
-    isSpelling: true,
-    correctAnswer: 'whisper',
-    explanation: 'Yay! The letters WH make the sound at the start of whisper! The dragons love secrets!',
+    correctAnswer: 3, // wh option (index 3 in ['ch', 'th', 'sh', 'wh', 'ph'])
+    explanation: 'Yay! WH makes the sound at the start of whisper! The dragons love secrets!',
     aiHook: {
       targetWord: 'whisper',
-      intent: 'spelling',
+      intent: 'sound',
       baseLine: 'Oli likes to whisper secrets to the friendly dragons!',
-      questionLine: 'Listen and spell the word for talking very quietly.',
+      questionLine: 'Listen and pick the letters that make the sound at the start of ___isper.',
       validationWord: 'whisper',
       imagePrompt: 'Oli leaning close to fluffy dragon\'s ear, WHISPERING a secret.'
     }
@@ -93,14 +92,13 @@ export const questions: Question[] = [
     id: 3,
     word: 'rush',
     imageUrl: '🏃🐉',
-    isSpelling: true,
-    correctAnswer: 'rush',
-    explanation: 'Great job! The letters SH make the sound at the end of rush! The dragons are fast helpers!',
+    correctAnswer: 2, // sh option (index 2 in ['ch', 'th', 'sh', 'wh', 'ph'])
+    explanation: 'Great job! SH makes the sound at the end of rush! The dragons are fast helpers!',
     aiHook: {
       targetWord: 'rush',
-      intent: 'spelling',
+      intent: 'sound',
       baseLine: 'The fluffy dragons rush to help when Reese calls them!',
-      questionLine: 'Listen and spell the word for moving very fast.',
+      questionLine: 'Listen and pick the letters that make the sound at the end of ru___.',
       validationWord: 'rush',
       imagePrompt: 'Cute dragons hurrying and RUSHING toward Reese with big smiles.'
     }
