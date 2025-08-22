@@ -27,8 +27,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: 'Prompt is required and must be a string' })
     }
 
-    // Create fun, happy images that kids will love while keeping them safe
-    const enhancedPrompt = `Make a fun, pretty picture for a happy Yellowstone story: ${prompt}. Style: bright and colorful with happy colors and cool details. Make it look super fun - the kind of picture kids would love! Include fun things like fluffy dragons, hot water going whoosh, pretty trees, shiny rocks, and cute animals as needed. Keep everything very kid-friendly with no scary or grown-up stuff. Make characters wear normal clothes that kids would wear. Focus on fun, friendship, and happy times. No words on the pictures.`
+    // Create engaging, age-appropriate images that are appealing but not overly childish
+    const enhancedPrompt = `Create a beautiful, engaging illustration for a Yellowstone adventure story: ${prompt}. Style: vibrant and appealing with rich colors and interesting details. Make it visually engaging and well-crafted - suitable for young learners but not cartoonish or overly simplified. Include adventure elements like majestic dragons, geysers, forest landscapes, crystals, and natural settings as appropriate. Keep content completely family-friendly and age-appropriate. Characters should wear practical adventure clothing. Focus on wonder, discovery, and friendship. No text on the images.`
 
     // First, try the original prompt
     try {
@@ -64,11 +64,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           messages: [
             {
               role: "system",
-              content: "You help make picture ideas safe and fun for kids in 1st grade. Make everything happy and silly, not scary. Change: scary things→cute things, fighting→playing, mean monsters→nice fluffy dragons, breaking things→pretty sparkles. No grown-up stuff, keep everyone wearing normal clothes like kids wear to school. Make it fun and silly. Give back ONLY the safe, fun picture idea."
+              content: "You help make picture ideas safe and appropriate for young learners. Make content engaging but not overly childish or cartoonish. Transform: inappropriate content→adventure-appropriate alternatives, violence→heroic challenges, scary elements→majestic creatures like dragons, destruction→magical effects. Keep everything family-friendly with characters in practical adventure gear. Make it engaging and appealing without being overly simplified. Return ONLY the refined picture idea."
             },
             {
               role: "user",
-              content: `Please make this picture idea safe and fun for kids: "${prompt}"`
+              content: `Please make this picture idea safe and appropriate for young learners: "${prompt}"`
             }
           ],
           max_tokens: 200,
@@ -76,7 +76,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         })
 
         const sanitizedPrompt = sanitizationResponse.choices[0]?.message?.content?.trim() || prompt
-        const sanitizedEnhancedPrompt = `Make a fun, pretty picture for a happy Yellowstone story: ${sanitizedPrompt}. Style: bright and colorful with happy colors and cool details. Make it look super fun - the kind of picture kids would love! Include fun things like fluffy dragons, hot water going whoosh, pretty trees, shiny rocks, and cute animals as needed. Keep everything very kid-friendly with no scary or grown-up stuff. Focus on fun, friendship, and happy times. No words on the pictures.`
+        const sanitizedEnhancedPrompt = `Create a beautiful, engaging illustration for a Yellowstone adventure story: ${sanitizedPrompt}. Style: vibrant and appealing with rich colors and interesting details. Make it visually engaging and well-crafted - suitable for young learners but not cartoonish or overly simplified. Include adventure elements like majestic dragons, geysers, forest landscapes, crystals, and natural settings as appropriate. Keep content completely family-friendly and age-appropriate. Focus on wonder, discovery, and friendship. No text on the images.`
 
         // Try again with sanitized prompt
         const retryResponse = await openai.images.generate({
