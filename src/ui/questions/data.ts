@@ -27,34 +27,34 @@ export const longAQuestions: Question[] = [
     word: 'net',
     questionType: 'shortE',
     imageUrl: '🌊🕸️',
-    imagePrompt: 'A red fishing net being used to catch something in water, simple and clear, photorealistic',
+    imagePrompt: 'Reese throwing his red fishing net into a geyser pool to catch magical crystals underwater, with Oli watching nearby in Yellowstone, photorealistic adventure scene',
     correctAnswer: 0,
     options: [
-      'The red net (CVC - short vowel)',
-      'The neat cave (CVCe - long vowel)', 
-      'The team needs (vowel team - long vowel)'
+      'Reese throws his red net into the water',
+      'Oli finds a neat cave behind the waterfall', 
+      'The team needs to work together quickly'
     ],
     targetWord: 'net',
-    followUpPrompt: 'Great job! Can you write a longer sentence using another CVC word with a short vowel sound? (Try words like: cat, dog, run, big, etc.)',
-    explanation: 'Perfect! "Net" follows the CVC pattern (consonant-vowel-consonant) which makes the "e" short!',
-    incorrectFeedback: 'Look for the CVC pattern! CVC words have short vowel sounds.'
+    followUpPrompt: 'Great job! Can you write a longer sentence about Reese and Oli\'s adventure? (Use words like: cat, dog, run, big, etc.)',
+    explanation: 'Perfect! You picked the right sentence about Reese throwing his net!',
+    incorrectFeedback: 'Look at what Reese is doing in the picture. Which sentence matches best?'
   },
   {
     id: 2,
     word: 'cape',
     questionType: 'shortE',
     imageUrl: '🧥✨',
-    imagePrompt: 'A person wearing a bright red cape, simple and clear, photorealistic',
+    imagePrompt: 'Oli wearing his magical glowing red cape while standing next to Reese near geysers in Yellowstone, with dragon friends in the background, photorealistic adventure scene',
     correctAnswer: 1,
     options: [
-      'Oli wears a red cap (CVC - short vowel)',
-      'Oli wears a magic cape (CVCe - long vowel)',
-      'The team helps Oli (vowel team - long vowel)'
+      'Oli puts on his red cap for the adventure',
+      'Oli wears a magic cape that glows bright',
+      'The team helps Oli climb up the rocks'
     ],
     targetWord: 'cape',
-    followUpPrompt: 'Awesome! Can you write a longer sentence using another CVCe word with a long vowel sound? (Try words like: cake, bike, home, cute, etc.)',
-    explanation: 'Excellent! "Cape" follows the CVCe pattern (consonant-vowel-consonant-e) which makes the "a" long!',
-    incorrectFeedback: 'Look for the CVCe pattern! The silent "e" makes the vowel say its name.'
+    followUpPrompt: 'Awesome! Can you write a longer sentence about Reese and Oli\'s adventure? (Use words like: cake, bike, home, cute, etc.)',
+    explanation: 'Excellent! You picked the right sentence about Oli wearing his magic cape!',
+    incorrectFeedback: 'Look at what Oli is wearing in the picture. Which sentence tells his story?'
   },
 ];
 
@@ -72,7 +72,7 @@ export const questions: Question[] = [
       baseLine: 'A bat flies over the crystal cave.',
       questionLine: 'Listen and spell this word.',
       validationWord: 'bat',
-      imagePrompt: 'A bat flying at night, simple and clear, photorealistic'
+      imagePrompt: 'A bat flying over Reese and Oli near the crystal caves at night in Yellowstone, moonlight shining on their adventure, photorealistic'
     }
   },
   {
@@ -88,7 +88,7 @@ export const questions: Question[] = [
       baseLine: 'They bake bread over the geyser fire.',
       questionLine: 'Listen and spell this word.',
       validationWord: 'bake',
-      imagePrompt: 'Someone baking bread in an oven, simple and clear, photorealistic'
+      imagePrompt: 'Reese and Oli baking bread over a warm geyser in their Yellowstone camp, with dragon friends watching curiously, photorealistic adventure scene'
     }
   },
   {
@@ -104,7 +104,7 @@ export const questions: Question[] = [
       baseLine: 'Reese and Oli work as a team.',
       questionLine: 'Listen and spell this word.',
       validationWord: 'team',
-      imagePrompt: 'Two friends working together as a team, simple and clear, photorealistic'
+      imagePrompt: 'Reese and Oli working together as a team gathering magical crystals near geysers, with their dragon allies helping them, photorealistic Yellowstone adventure'
     }
   },
   {
@@ -120,7 +120,7 @@ export const questions: Question[] = [
       baseLine: 'Reese sits by the crystal pool.',
       questionLine: 'Listen and spell this word.',
       validationWord: 'sit',
-      imagePrompt: 'A person sitting on a chair, simple and clear, photorealistic'
+      imagePrompt: 'Reese sitting peacefully by a crystal pool in Yellowstone while Oli and dragon friends rest nearby after their adventure, photorealistic scene'
     }
   },
   {
@@ -136,7 +136,7 @@ export const questions: Question[] = [
       baseLine: 'Oli flies a kite over the geysers.',
       questionLine: 'Listen and spell this word.',
       validationWord: 'kite',
-      imagePrompt: 'A colorful kite flying in the sky, simple and clear, photorealistic'
+      imagePrompt: 'Oli flying a magical colorful kite high above Yellowstone geysers while Reese and dragon friends watch from below, windy adventure day, photorealistic'
     }
   },
   {
@@ -152,7 +152,7 @@ export const questions: Question[] = [
       baseLine: 'They sail a boat on the crystal lake.',
       questionLine: 'Listen and spell this word.',
       validationWord: 'boat',
-      imagePrompt: 'A boat sailing on water, simple and clear, photorealistic'
+      imagePrompt: 'Reese and Oli sailing a magical wooden boat across a crystal-clear lake in Yellowstone, with friendly dragons flying overhead, photorealistic adventure'
     }
   },
   {
@@ -167,7 +167,7 @@ export const questions: Question[] = [
       baseLine: 'Oli cuts some plants for the dragons.',
       questionLine: 'What kind of word is this? Listen: cut.',
       validationWord: 'cut',
-      imagePrompt: 'Scissors cutting paper, simple and clear, photorealistic'
+      imagePrompt: 'Oli carefully cutting magical plants with crystal tools to feed the friendly dragons while Reese watches in their Yellowstone camp, photorealistic adventure'
     }
   },
   {
@@ -182,7 +182,7 @@ export const questions: Question[] = [
       baseLine: 'The baby dragons are very cute.',
       questionLine: 'What kind of word is this? Listen: cute.',
       validationWord: 'cute',
-      imagePrompt: 'A cute puppy or kitten, simple and clear, photorealistic'
+      imagePrompt: 'Adorable baby dragons being very cute while playing around crystal pools with Reese and Oli watching them lovingly in Yellowstone, photorealistic adventure'
     }
   },
 ];

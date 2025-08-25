@@ -3287,7 +3287,7 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
                   marginBottom: '8px',
                   textAlign: 'center'
                 }}>
-                  🔤 Which word pattern matches the picture?
+                  📖 Which sentence matches what Reese is doing?
                 </div>
                 <div style={{ 
                   fontSize: '14px', 
@@ -3295,11 +3295,11 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
                   fontWeight: '500',
                   textAlign: 'center'
                 }}>
-                  Look for CVC (short vowel) or CVCe (long vowel) patterns!
+                  Look at the picture and pick the sentence that tells the story!
                 </div>
                 {/* Audio button for hearing the question */}
                 <button
-                  onClick={() => playElevenTTS('Which word pattern matches the picture? Look for CVC patterns with short vowels or CVCe patterns with long vowels!')}
+                  onClick={() => playElevenTTS('Which sentence matches what Reese is doing? Look at the picture and pick the sentence that tells the story!')}
                   title="Hear the question"
                   style={{
                     position: 'absolute',
