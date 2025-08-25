@@ -662,38 +662,53 @@ Remember: I'm your funny friend Oli - use "I" and call the student "you" or Rees
           <button
             onClick={onStartMission}
             style={{
-              background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+              background: 'linear-gradient(135deg, #FFA526 0%, #FF7A00 100%)',
               color: 'white',
               border: 'none',
-              borderRadius: '12px',
-              padding: '16px 32px',
+              borderRadius: '9999px',
+              padding: '0 24px',
+              height: '52px',
               fontSize: '18px',
-              fontWeight: '700',
+              fontWeight: '600',
               fontFamily: 'Quicksand, sans-serif',
+              letterSpacing: '0.2px',
               cursor: 'pointer',
-              boxShadow: '0 8px 24px rgba(245, 158, 11, 0.3)',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.12)',
               transition: 'all 0.2s ease',
-              textTransform: 'uppercase',
-              letterSpacing: '1px',
-              minWidth: '200px'
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              minHeight: '44px',
+              minWidth: '44px',
+              outline: 'none'
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-2px) scale(1.05)';
-              (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 12px 32px rgba(245, 158, 11, 0.4)';
+              (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-2px)';
+              (e.currentTarget as HTMLButtonElement).style.background = 'linear-gradient(135deg, #FFB347 0%, #FF8B1A 100%)';
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0) scale(1)';
-              (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 8px 24px rgba(245, 158, 11, 0.3)';
+              (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0)';
+              (e.currentTarget as HTMLButtonElement).style.background = 'linear-gradient(135deg, #FFA526 0%, #FF7A00 100%)';
             }}
             onMouseDown={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(1px) scale(0.98)';
+              (e.currentTarget as HTMLButtonElement).style.background = 'linear-gradient(135deg, #E6941F 0%, #E66A00 100%)';
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 2px 6px rgba(0, 0, 0, 0.15)';
             }}
             onMouseUp={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-2px) scale(1.05)';
+              (e.currentTarget as HTMLButtonElement).style.background = 'linear-gradient(135deg, #FFB347 0%, #FF8B1A 100%)';
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.12)';
+            }}
+            onFocus={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.12), 0 0 0 2px #7C3AED, 0 0 0 4px rgba(124, 58, 237, 0.2)';
+            }}
+            onBlur={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.12)';
             }}
             title="Begin your adventure quest"
           >
-            🚀 Start Mission 1
+            <span style={{ fontSize: '18px' }}>🚀</span>
+            Start Mission 1
           </button>
         </div>
       )}
