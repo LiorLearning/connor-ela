@@ -155,36 +155,7 @@ export const questions: Question[] = [
       imagePrompt: 'Reese and Oli sailing a magical wooden boat across a crystal-clear lake in Yellowstone, with friendly dragons flying overhead, photorealistic adventure'
     }
   },
-  {
-    id: 7,
-    word: 'cut',
-    imageUrl: '✂️🌿',
-    correctAnswer: 0, // CVC option (index 0 in pattern sorting)
-    explanation: 'Good job! "Cut" has a short "u" sound!',
-    aiHook: {
-      targetWord: 'cut',
-      intent: 'sound',
-      baseLine: 'Oli cuts some plants for the dragons.',
-      questionLine: 'What kind of word is this? Listen: cut.',
-      validationWord: 'cut',
-      imagePrompt: 'Oli carefully cutting magical plants with crystal tools to feed the friendly dragons while Reese watches in their Yellowstone camp, photorealistic adventure'
-    }
-  },
-  {
-    id: 8,
-    word: 'cute',
-    imageUrl: '🐉😍',
-    correctAnswer: 1, // CVCe option (index 1 in pattern sorting)
-    explanation: 'Perfect! "Cute" has a long "u" sound!',
-    aiHook: {
-      targetWord: 'cute',
-      intent: 'sound',
-      baseLine: 'The baby dragons are very cute.',
-      questionLine: 'What kind of word is this? Listen: cute.',
-      validationWord: 'cute',
-      imagePrompt: 'Adorable baby dragons being very cute while playing around crystal pools with Reese and Oli watching them lovingly in Yellowstone, photorealistic adventure'
-    }
-  },
+
 ];
 
 export const options: string[] = ['CVC (short vowel)', 'CVCe (long vowel)', 'Vowel Team (long vowel)'];

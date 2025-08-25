@@ -3744,6 +3744,8 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
           onStoryUpdate={(storyUpdate: string) => setStoryContext(prev => [...prev, storyUpdate])}
           onStartMission={handleNext}
           isScreen1={isAdventureMode1}
+          isScreen5={isAdventureMode4}
+          isScreen14={isAdventureMode9}
         />
       ) : (
         <>

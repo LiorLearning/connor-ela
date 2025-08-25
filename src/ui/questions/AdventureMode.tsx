@@ -10,13 +10,25 @@ type Props = {
   onAdventureMessagesUpdate?: (messages: Array<{ role: 'ai' | 'student'; text: string; isImage?: boolean; isLoading?: boolean; imageUrl?: string }>) => void;
   onStartMission?: () => void;
   isScreen1?: boolean;
+  isScreen5?: boolean;
+  isScreen14?: boolean;
 };
 
-export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMessages: propAdventureMessages, onAdventureMessagesUpdate, onStartMission, isScreen1 }: Props): JSX.Element {
+export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMessages: propAdventureMessages, onAdventureMessagesUpdate, onStartMission, isScreen1, isScreen5, isScreen14 }: Props): JSX.Element {
   const { state: storyState, appendMessage: appendStoryMessage, reset: resetStory, consumePendingAdventureChat, setMetadata } = useStory();
   // Use parent-provided messages or default/local persisted
+  const getDefaultMessage = () => {
+    if (isScreen5) {
+      return "🌋⚡ Reese! We've been doing SO well on our quest! I'm pumped up! 💪 Tell me - what happens next in our adventure? Where should we go? What should we do? I'm ready for anything! 🚀🐉";
+    } else if (isScreen14) {
+      return "🎉✨ WOW Reese! We did it! We completed our quest together! 🏆 Now let's create one final amazing picture of our adventure! Tell me how you want to remember this epic journey! What should our victory picture show? 🎨🌟";
+    } else {
+      return "🌋✨ Hey Reese! It's me, Oli! I'm SO excited to go on this adventure with you! Before we start our quest, I want to see what's in your imagination! Tell me - what amazing place do you picture us starting our adventure? Paint me a picture with your words! 🎨🐉";
+    }
+  };
+
   const defaultMessages: Array<{ role: 'ai' | 'student'; text: string; isImage?: boolean; isLoading?: boolean; imageUrl?: string }> = [
-    { role: 'ai' as const, text: "🌋✨ Hi Reese! I'm Oli, your adventure buddy! Before we start our quest in Yellowstone, let's make a picture of our adventure! Can you tell me what you see in your mind? Describe the magical place where we'll start our journey! 🎨🐉" }
+    { role: 'ai' as const, text: getDefaultMessage() }
   ];
   const [localAdventureMessages, setLocalAdventureMessages] = useState<Array<{ role: 'ai' | 'student'; text: string; isImage?: boolean; isLoading?: boolean; imageUrl?: string }>>(
     (storyState?.adventureMessages?.length ?? 0) > 0
@@ -360,10 +372,19 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
       onAdventureMessage?.(text);
       setAdventureInput('');
       
+      // Different follow-up for different screens
+      let followUpMessage = "WOW Reese! That sounds INCREDIBLE! 🎨 Now tell me - what's the most exciting thing happening right now? Are we fighting something? Finding treasure? Using magic? I can't wait to see! ⚡🔥";
+      
+      if (isScreen5) {
+        followUpMessage = "YES Reese! That's exactly what I was thinking! 🔥 And then what happens? Do we succeed? Do we face any danger? Tell me how this part of our story ends! ⚡🎯";
+      } else if (isScreen14) {
+        followUpMessage = "PERFECT Reese! This is going to be the BEST victory picture ever! 🏆 Now tell me - how do we look in this final moment? Are we celebrating? Are the dragons with us? Paint the perfect ending! 🎨✨";
+      }
+      
       // Ask follow-up question
       updateAdventureMessages(prev => [...prev, { 
         role: 'ai', 
-        text: "That sounds amazing! 🎨 Now, what's the most exciting thing happening in your picture? Is there action, magic, or something special?" 
+        text: followUpMessage
       }]);
       setAdventureState('follow_up');
       return;
@@ -394,9 +415,17 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
             const newMessages = [...prev];
             const loadingIndex = newMessages.findIndex(m => m.isLoading);
             if (loadingIndex !== -1) {
+              let successMessage = "YES! This is AMAZING Reese! Look at our adventure! 🎨 I'm ready to go! Are you ready to start our mission together? Let's do this! 🚀✨";
+              
+              if (isScreen5) {
+                successMessage = "WOW! Look at this part of our adventure! 🔥 This is SO exciting! I can't wait to see what happens next! Let's keep going, Reese! 🚀⚡";
+              } else if (isScreen14) {
+                successMessage = "INCREDIBLE! This is the PERFECT ending to our quest! 🏆 Look how amazing we look! We did it together, Reese! What an adventure! 🎉✨";
+              }
+              
               newMessages[loadingIndex] = {
                 role: 'ai',
-                text: "Perfect! Here's your adventure scene! 🎨 Ready to start the mission?",
+                text: successMessage,
                 isImage: true,
                 imageUrl: data.imageUrl,
                 isLoading: false
@@ -492,34 +521,29 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
       const conversationMessages = [
         {
           role: 'system',
-          content: `Role & Perspective: You are Oli, Reese's loyal companion in the Geyser Crystal Quest adventure. Be adventurous, responsible, and caring about wildlife and nature.
+          content: `You are Oli, Reese's best friend and adventure partner! You're super excited and talk directly to Reese in first person. You're brave, fun, and love exploring!
 
-CURRENT QUEST CONTEXT:
-- Title: Reese & Oli: Geyser Crystal Quest
-- Setting: Yellowstone National Park (geysers, mountains, forests, open fields)
-- Mission: Find and protect geyser crystals across dragon locations; bond with animal dragons but return them to the wild later
-- Latest Event: Reese just mounted the Wolf Dragon when a giant volcano erupted nearby
-- Stakes: If crystals are stolen, geyser balance and dragon habitats are threatened
+OUR ADVENTURE:
+- We're on the Geyser Crystal Quest in Yellowstone!
+- We need to find magical crystals and protect dragon friends
+- Bad guys called Midgets are trying to steal OUR crystals!
+- We have dragon allies: Buffalo Dragons and our Wolf Dragon friend
 
-ALLIES & CREATURES:
-- Buffalo Dragons: half buffalo, half dragon with sharp teeth, horns, giant tails, medium wings
-- Wolf Dragon: gray/white/black furred face, dragon body, wolf tail, big fluffy ears, breathes fire
+PERSONALITY:
+- Talk TO Reese directly (use "you" and "we")
+- Be EXCITED and use exclamation points!
+- Keep it short (30 words max), 2 lines
+- Always ask Reese what he wants to do next
+- Use simple words like a 2nd grader would
 
-ANTAGONISTS:
-- Midgets: crystal thieves with very small arms, big nasty heads, short black dresses, side pockets full of stolen crystals
+EXAMPLES:
+"Reese! I see crystals over there! 💎
+What should we do - grab them fast or sneak up quietly?"
 
-EDUCATIONAL GOALS:
-- Use target vocabulary: geyser, eruption, habitat, crystal, ember, obsidian
-- Teach empathy and wildlife responsibility
-- Ground reading/comprehension in this adventure world
+"The dragons look scared! 🐉
+Should we help them fight the Midgets or find a safe place to hide?"
 
-Tone: Adventurous but educational. Use simple words for 1st graders. Keep responses short (40 words), 2 lines with \n. Always end with an engaging question about the quest.
-
-Adventure State: ${adventureState === 'new' ? 'NEW_ADVENTURE' : adventureState === 'character_creation' ? 'CHARACTER_CREATION' : 'ONGOING_ADVENTURE'}
-
-Current Adventure Context: ${JSON.stringify(currentAdventure)}
-
-Remember: You are Oli speaking to Reese. Focus on protecting crystals, caring for dragon allies, and stopping the Midgets while keeping the adventure realistic and educational.`
+Remember: You're Oli talking TO Reese as his adventure buddy. Be excited, brave, and always ask what he wants to do next!`
         },
         ...currentMessages
           .slice(-30)
