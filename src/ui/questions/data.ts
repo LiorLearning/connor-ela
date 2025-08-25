@@ -24,35 +24,37 @@ export const speechQuestions: SpeechQuestion[] = [
 export const longAQuestions: Question[] = [
   {
     id: 1,
-    word: 'path',
-    imageUrl: '🛤️✨',
-    isSpelling: true,
-    correctAnswer: 'path',
-    explanation: 'Great job! The letters TH make the sound at the end of path! Let\'s follow the dragon trail!',
-    aiHook: {
-      targetWord: 'path',
-      intent: 'spelling',
-      baseLine: 'Reese follows the dragon path.',
-      questionLine: 'Listen and spell the word for the trail the dragons made.',
-      validationWord: 'path',
-      imagePrompt: 'Dragon footprints and a winding PATH through Yellowstone leading to crystal pools.'
-    }
+    word: 'net',
+    questionType: 'shortE',
+    imageUrl: '🌊🕸️',
+    imagePrompt: 'Reese throwing a bright red fishing net into a crystal-clear geyser pool to catch sparkling magical gems underwater in Yellowstone, photorealistic adventure scene',
+    correctAnswer: 1,
+    options: [
+      'Reese throws a big trap into the water.',
+      'Reese throws a red net to get the gems.',
+      'Reese throws a large tool to find rocks.'
+    ],
+    targetWord: 'net',
+    followUpPrompt: 'Awesome! Now create your own sentence using a word with the "e" sound!',
+    explanation: 'Perfect! Listen for the "eh" sound in "red", "net", and "get"!',
+    incorrectFeedback: 'Listen for the "eh" sound like in "net" and "red". Try again!'
   },
   {
     id: 2,
-    word: 'splash',
-    imageUrl: '🌋💦',
-    isSpelling: true,
-    correctAnswer: 'splash',
-    explanation: 'Awesome! The letters SH make the sound at the end of splash! The geyser is so fun!',
-    aiHook: {
-      targetWord: 'splash',
-      intent: 'spelling',
-      baseLine: 'The geyser makes a big splash.',
-      questionLine: 'Listen and spell the word for what the geyser water does.',
-      validationWord: 'splash',
-      imagePrompt: 'Geyser erupting with water SPLASHING everywhere in Yellowstone.'
-    }
+    word: 'den',
+    questionType: 'shortE',
+    imageUrl: '🏠🐉',
+    imagePrompt: 'Oli gently petting a friendly dragon inside its cozy underground den cave filled with crystal formations in Yellowstone, warm lighting, photorealistic',
+    correctAnswer: 2,
+    options: [
+      'Oli visits the dragon in its big house.',
+      'Oli finds the dragon hiding in a cave.',
+      'Oli pets the dragon in its warm den.'
+    ],
+    targetWord: 'den',
+    followUpPrompt: 'Great job! Now make a sentence with a word that has the "e" sound!',
+    explanation: 'Excellent! You heard the "eh" sound in "den" and "pets"!',
+    incorrectFeedback: 'Listen for the "eh" sound like in "den" and "pet". Which sentence has those sounds?'
   },
 ];
 

@@ -17,6 +17,12 @@ export type Question = {
   correctAnswer: number | string; // index of correct option or correct spelling
   explanation: string;
   isSpelling?: boolean; // Optional flag for spelling questions
+  questionType?: 'shortE'; // Optional type for Short E sentence matching
+  imagePrompt?: string; // For DALL-E image generation
+  options?: string[]; // Multiple choice options for sentence matching
+  targetWord?: string; // Target word for follow-up activity
+  followUpPrompt?: string; // Prompt for follow-up sentence creation
+  incorrectFeedback?: string; // Feedback for wrong answers
   aiHook?: AiHook; // Optional AI hook config for Step 4 methodology
 };
 

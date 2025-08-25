@@ -97,6 +97,10 @@ export function QuestionPanel({ onComplete }: Props): JSX.Element {
   const [isInputMicRecording, setIsInputMicRecording] = useState<boolean>(false);
   const [inputMicRecognition, setInputMicRecognition] = useState<any>(null);
   const [inputMicTranscript, setInputMicTranscript] = useState<string>('');
+
+  // Short E question follow-up state
+  const [showShortEFollowUp, setShowShortEFollowUp] = useState<boolean>(false);
+  const [shortEFollowUpInput, setShortEFollowUpInput] = useState<string>('');
   const [isContinuationAnimating, setIsContinuationAnimating] = useState<boolean>(false);
   const [isContinuationHidden, setIsContinuationHidden] = useState<boolean>(false);
   const [isFeedbackRemoved, setIsFeedbackRemoved] = useState<boolean>(false);
@@ -270,8 +274,9 @@ Give a brief, friendly response that nudges them without giving the answer.`;
 
   // Helper to determine if microphone should be shown for input
   const shouldShowInputMic = (): boolean => {
-    // Screen 2,3: Long A questions - show if there's any spelling input
+    // Screen 2,3: Long A questions - show if there's any spelling input OR Short E questions
     if (isLongAQuestion && currentLongAQuestion?.isSpelling && spellingInput.length > 0) return true;
+    if (isLongAQuestion && currentLongAQuestion?.questionType === 'shortE' && selectedOption !== null) return true;
     
     // Screen 6,7,8,9: Regular questions - show if there's any spelling input
     if (currentRegularQuestion?.isSpelling && spellingInput.length > 0) return true;
@@ -280,6 +285,11 @@ Give a brief, friendly response that nudges them without giving the answer.`;
     if (isContinuationStep && continuationInput.length > 0) return true;
     
     return false;
+  };
+
+  // Helper to check if current question is Short E type
+  const isShortEQuestion = (): boolean => {
+    return isLongAQuestion && currentLongAQuestion?.questionType === 'shortE';
   };
   const hookTargetWord = aiCfg?.targetWord || (isSecondRegularStep ? 'cave' : (isFirstRegularStep ? 'crystal' : (currentRegularQuestion?.word || currentLongAQuestion?.word || '')));
   const hookQuestionLine = aiCfg?.questionLine || (isFirstRegularStep ? 'Listen and type the word' : 'Listen and type the word');
@@ -422,7 +432,7 @@ Give a brief, friendly response that nudges them without giving the answer.`;
     const studentId = String(storyState?.metadata?.protagonist || 'student').toLowerCase().replace(/\s+/g, '-') || 'student';
     const stepKey = isSpeechQuestion ? 'speech' : isLongAQuestion ? 'longA' : (!isBlendingQuestion && !isAdventureMode ? 'regular' : '');
     const questionId = isSpeechQuestion ? currentSpeechQuestion?.id : isLongAQuestion ? currentLongAQuestion?.id : currentRegularQuestion?.id;
-    const aiImagePrompt = aiCfg?.imagePrompt;
+    const aiImagePrompt = aiCfg?.imagePrompt || (isLongAQuestion ? currentLongAQuestion?.imagePrompt : undefined);
     const display = isSpeechQuestion ? currentSpeechQuestion?.imageUrl : isLongAQuestion ? currentLongAQuestion?.imageUrl : currentRegularQuestion?.imageUrl;
     const isEmoji = !!display && !String(display).startsWith('http');
     if (!stepKey || !questionId || !isEmoji) return;
@@ -443,7 +453,7 @@ Give a brief, friendly response that nudges them without giving the answer.`;
         if (!isEmoji) continue;
         const key = `${studentId}:longA:${q.id}`;
         try { if (window.localStorage.getItem(`images:v1:${key}`)) continue; } catch {}
-        items.push({ key, hook: q.aiHook, explicit: q.aiHook?.imagePrompt });
+        items.push({ key, hook: q.aiHook, explicit: q.aiHook?.imagePrompt || q.imagePrompt });
       }
       // Priority 2: Regular
       for (const q of questions) {
@@ -1344,6 +1354,29 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
     }, 2000);
   };
 
+  const handleSubmitShortEFollowUp = async () => {
+    const text = shortEFollowUpInput.trim();
+    if (!text) return;
+
+    // Simple validation - check if the sentence contains words with 'e' sound
+    const shortEWords = ['red', 'net', 'get', 'pet', 'wet', 'hen', 'pen', 'den', 'men', 'gem', 'bell', 'fell', 'shell', 'smell', 'dress', 'fresh', 'chest', 'nest', 'best', 'test', 'rest', 'web', 'bed', 'fed', 'led', 'sled'];
+    const hasShortE = shortEWords.some(word => text.toLowerCase().includes(word));
+
+    if (hasShortE) {
+      // Success - advance to next question
+      setValidationMessage('Perfect! I love your sentence with the "e" sound!');
+      setStoryContext(prev => [...prev, `Reese's sentence: ${text}`]);
+      setTimeout(() => {
+        handleNextQuestion();
+      }, 2000);
+    } else {
+      // Encourage to try again with a hint
+      setValidationMessage('Try adding a word with the "eh" sound like "red", "net", or "pet"!');
+    }
+    
+    setShortEFollowUpInput('');
+  };
+
   // Voice recording handlers for continuation input (no Whisper; live recognition only)
   // Prefer Whisper: record audio and send to STT endpoint; also keep interim Web Speech in case
   const startContinuationRecording = async () => {
@@ -1458,6 +1491,9 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
           if (isContinuationStep) {
             // For continuation input, replace the text
             setContinuationInput(finalText);
+          } else if (showShortEFollowUp) {
+            // For Short E follow-up input, replace the follow-up text
+            setShortEFollowUpInput(finalText);
           } else if ((isLongAQuestion || currentRegularQuestion) && finalText) {
             // For spelling questions, replace the spelling input
             setSpellingInput(finalText);
@@ -1872,7 +1908,26 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
       // For blending questions, always advance (no right/wrong)
       handleNextQuestion();
     } else if (currentLongAQuestion) {
-      if (currentLongAQuestion.isSpelling) {
+      if (currentLongAQuestion.questionType === 'shortE') {
+        // For Short E sentence matching questions
+        if (selectedOption !== null) {
+          const correct = selectedOption === currentLongAQuestion.correctAnswer;
+          setIsCorrect(correct);
+          setShowFeedback(true);
+          
+          if (correct) {
+            // Show follow-up prompt for creating sentence with 'e' sound
+            setShowShortEFollowUp(true);
+            setIncorrectHint('');
+          } else {
+            // Show Short E specific feedback
+            setIncorrectHint(currentLongAQuestion.incorrectFeedback || 'Listen for the "eh" sound. Try again!');
+          }
+          
+          // Ensure feedback is visible
+          try { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); } catch {}
+        }
+      } else if (currentLongAQuestion.isSpelling) {
         // For long A spelling questions, check the input text
         const correct = spellingInput.toLowerCase().trim() === (currentLongAQuestion.correctAnswer as string).toLowerCase();
         setIsCorrect(correct);
@@ -1972,6 +2027,9 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
     setSpeechContinuationInput('');
     setSpeechValidationMessage('');
     setHasAutoplayedSpeechPrompt(false);
+    // Reset Short E follow-up state
+    setShowShortEFollowUp(false);
+    setShortEFollowUpInput('');
   };
 
   // Reset step-level UI state on step change to prevent bleed-through (e.g., green container, old inputs)
@@ -2001,6 +2059,9 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
     setContinuationHeader('');
     setValidationMessage('');
     setContinuationInput('');
+    // Reset Short E follow-up state
+    setShowShortEFollowUp(false);
+    setShortEFollowUpInput('');
     // Do not clear validatedContinuation; it is used to bridge story context when appropriate
   }, [currentQuestionIndex]);
 
@@ -2025,6 +2086,9 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
       // Reset input microphone state
       setIsInputMicRecording(false);
       setInputMicTranscript('');
+      // Reset Short E follow-up state
+      setShowShortEFollowUp(false);
+      setShortEFollowUpInput('');
       // Reset continuation UI state (but keep validatedContinuation for story context)
       setIsContinuationHidden(false);
       setHasAutoplayedContPrompt(false);
@@ -3183,7 +3247,7 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
         </>
       ) : isLongAQuestion && currentLongAQuestion ? (
         <>
-          {/* Question prompt for long A questions - moved above image */}
+          {/* Question prompt - different for Short E vs traditional Long A questions */}
           <div style={{
             marginBottom: '28.8px',
             padding: '12px 16px',
@@ -3194,7 +3258,47 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
             margin: '0 auto 28.8px',
             position: 'relative'
           }}>
-            {isAiHookStep ? (
+            {currentLongAQuestion.questionType === 'shortE' ? (
+              <>
+                <div style={{
+                  fontSize: '18px',
+                  fontWeight: '700',
+                  color: '#1f2937',
+                  marginBottom: '8px',
+                  textAlign: 'center'
+                }}>
+                  📖 Which sentence matches the picture?
+                </div>
+                <div style={{ 
+                  fontSize: '14px', 
+                  color: '#6b7280', 
+                  fontWeight: '500',
+                  textAlign: 'center'
+                }}>
+                  Look at the picture and pick the right sentence!
+                </div>
+                {/* Audio button for hearing the question */}
+                <button
+                  onClick={() => playElevenTTS('Which sentence matches the picture? Look at the picture and pick the right sentence!')}
+                  title="Hear the question"
+                  style={{
+                    position: 'absolute',
+                    right: 12,
+                    bottom: 8,
+                    width: 30,
+                    height: 30,
+                    borderRadius: 12,
+                    border: 'none',
+                    background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                    color: 'white',
+                    cursor: 'pointer',
+                    boxShadow: '0 6px 18px rgba(139, 92, 246, 0.30)'
+                  }}
+                >
+                  🔊
+                </button>
+              </>
+            ) : isAiHookStep ? (
               <>
                 <div style={{
                   color: '#111827',
@@ -3377,77 +3481,244 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
             </div>
           </div>
 
-          {/* Spelling input interface for long A questions */}
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '20px',
-            marginTop: '12px'
-          }}>
-            <div style={{
-              fontSize: '20px',
-              fontWeight: '600',
-              color: '#374151',
-              textAlign: 'center'
-            }}>
-              🎯 Type the word you hear:
-            </div>
+          {/* Answer interface - Short E multiple choice or traditional spelling */}
+          {currentLongAQuestion.questionType === 'shortE' ? (
+            /* Short E multiple choice interface */
             <div style={{
               display: 'flex',
-              gap: '8px',
+              flexDirection: 'column',
               alignItems: 'center',
-              flexWrap: 'wrap',
-              justifyContent: 'center'
+              gap: '24px',
+              marginTop: '20px'
             }}>
-              {Array.from({ length: (currentLongAQuestion.correctAnswer as string).length }).map((_, index) => (
-                <input
-                  key={index}
-                  type="text"
-                  aria-label={`Letter ${index + 1}`}
-                  maxLength={1}
-                  value={spellingInput[index] || ''}
-                  onChange={(e) => {
-                    const newInput = spellingInput.split('');
-                    newInput[index] = e.target.value.toLowerCase();
-                    setSpellingInput(newInput.join(''));
-                    // Auto-focus next input
-                    if (e.target.value && index < (currentLongAQuestion.correctAnswer as string).length - 1) {
-                      const nextInput = e.currentTarget.parentElement?.children[index + 1] as HTMLInputElement;
-                      nextInput?.focus();
-                    }
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Backspace' && !e.currentTarget.value && index > 0) {
-                      const prevInput = e.currentTarget.parentElement?.children[index - 1] as HTMLInputElement;
-                      prevInput?.focus();
-                    }
-                  }}
-                  style={{
-                    width: '48px',
-                    height: '56px',
-                    fontSize: '22px',
-                    fontWeight: '700',
-                    textAlign: 'center',
-                    border: '3px solid #e0e0e0',
-                    borderRadius: '10px',
-                    background: 'white',
-                    color: '#374151',
-                    outline: 'none',
-                    transition: 'all 0.2s ease'
-                  }}
-                  onFocus={(e) => {
-                    e.currentTarget.style.border = '3px solid #8b5cf6';
-                    e.currentTarget.style.boxShadow = '0 0 0 3px rgba(139, 92, 246, 0.1)';
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.border = '3px solid #e0e0e0';
-                    e.currentTarget.style.boxShadow = 'none';
-                  }}
-                />
-              ))}
+              {/* Multiple choice options */}
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '16px',
+                width: '100%',
+                maxWidth: '600px'
+              }}>
+                {currentLongAQuestion.options?.map((option, index) => (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      setSelectedOption(index);
+                      setShowFeedback(false);
+                    }}
+                    style={{
+                      padding: '16px 20px',
+                      fontSize: '18px',
+                      fontWeight: '500',
+                      textAlign: 'left',
+                      background: selectedOption === index 
+                        ? 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)' 
+                        : 'rgba(255, 255, 255, 0.95)',
+                      color: selectedOption === index ? 'white' : '#374151',
+                      border: selectedOption === index 
+                        ? '2px solid #8b5cf6' 
+                        : '2px solid #e5e7eb',
+                      borderRadius: '12px',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      boxShadow: selectedOption === index 
+                        ? '0 4px 16px rgba(139, 92, 246, 0.3)' 
+                        : '0 2px 8px rgba(0,0,0,0.1)',
+                      transform: selectedOption === index ? 'translateY(-1px)' : 'none'
+                    }}
+                    onMouseEnter={(e) => {
+                      if (selectedOption !== index) {
+                        e.currentTarget.style.background = 'rgba(139, 92, 246, 0.05)';
+                        e.currentTarget.style.borderColor = '#c4b5fd';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (selectedOption !== index) {
+                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.95)';
+                        e.currentTarget.style.borderColor = '#e5e7eb';
+                      }
+                    }}
+                  >
+                    <span style={{ marginRight: '12px', fontSize: '20px' }}>
+                      {String.fromCharCode(65 + index)}.
+                    </span>
+                    {option}
+                  </button>
+                ))}
+              </div>
+
+              {/* Follow-up input for correct answers */}
+              {showShortEFollowUp && (
+                <div style={{
+                  width: '100%',
+                  maxWidth: '600px',
+                  padding: '20px',
+                  background: 'rgba(34, 197, 94, 0.1)',
+                  border: '2px solid #22c55e',
+                  borderRadius: '12px',
+                  marginTop: '16px'
+                }}>
+                  <div style={{
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    color: '#166534',
+                    marginBottom: '12px',
+                    textAlign: 'center'
+                  }}>
+                    {currentLongAQuestion.followUpPrompt}
+                  </div>
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr auto auto',
+                    gap: '8px',
+                    alignItems: 'center'
+                  }}>
+                    <textarea
+                      value={shortEFollowUpInput}
+                      onChange={(e) => setShortEFollowUpInput(e.target.value)}
+                      placeholder="Type your sentence here..."
+                      style={{
+                        padding: '12px',
+                        fontSize: '16px',
+                        border: '2px solid #d1d5db',
+                        borderRadius: '8px',
+                        outline: 'none',
+                        resize: 'none',
+                        minHeight: '44px',
+                        fontFamily: 'inherit'
+                      }}
+                      onFocus={(e) => {
+                        e.currentTarget.style.borderColor = '#8b5cf6';
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.borderColor = '#d1d5db';
+                      }}
+                    />
+                    {/* Microphone button for follow-up */}
+                    {shortEFollowUpInput.length > 0 && (
+                      <button
+                        onClick={toggleInputMic}
+                        title={isInputMicRecording ? 'Stop recording' : 'Record with microphone'}
+                        style={{
+                          width: '44px',
+                          height: '44px',
+                          borderRadius: '50%',
+                          background: isInputMicRecording 
+                            ? 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)' 
+                            : 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+                          border: '1px solid rgba(255,255,255,0.6)',
+                          color: 'white',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                          fontSize: '18px'
+                        }}
+                      >
+                        {isInputMicRecording ? '⏹️' : '🎤'}
+                      </button>
+                    )}
+                    {/* Submit follow-up button */}
+                    <button
+                      onClick={handleSubmitShortEFollowUp}
+                      disabled={!shortEFollowUpInput.trim()}
+                      style={{
+                        width: '44px',
+                        height: '44px',
+                        borderRadius: '50%',
+                        background: shortEFollowUpInput.trim() 
+                          ? 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)' 
+                          : '#9ca3af',
+                        border: '1px solid rgba(255,255,255,0.6)',
+                        color: 'white',
+                        cursor: shortEFollowUpInput.trim() ? 'pointer' : 'not-allowed',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                        fontSize: '20px'
+                      }}
+                    >
+                      📤
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
-          </div>
+          ) : (
+            /* Traditional spelling input interface for long A questions */
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '20px',
+              marginTop: '12px'
+            }}>
+              <div style={{
+                fontSize: '20px',
+                fontWeight: '600',
+                color: '#374151',
+                textAlign: 'center'
+              }}>
+                🎯 Type the word you hear:
+              </div>
+              <div style={{
+                display: 'flex',
+                gap: '8px',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                justifyContent: 'center'
+              }}>
+                {Array.from({ length: (currentLongAQuestion.correctAnswer as string).length }).map((_, index) => (
+                  <input
+                    key={index}
+                    type="text"
+                    aria-label={`Letter ${index + 1}`}
+                    maxLength={1}
+                    value={spellingInput[index] || ''}
+                    onChange={(e) => {
+                      const newInput = spellingInput.split('');
+                      newInput[index] = e.target.value.toLowerCase();
+                      setSpellingInput(newInput.join(''));
+                      // Auto-focus next input
+                      if (e.target.value && index < (currentLongAQuestion.correctAnswer as string).length - 1) {
+                        const nextInput = e.currentTarget.parentElement?.children[index + 1] as HTMLInputElement;
+                        nextInput?.focus();
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Backspace' && !e.currentTarget.value && index > 0) {
+                        const prevInput = e.currentTarget.parentElement?.children[index - 1] as HTMLInputElement;
+                        prevInput?.focus();
+                      }
+                    }}
+                    style={{
+                      width: '48px',
+                      height: '56px',
+                      fontSize: '22px',
+                      fontWeight: '700',
+                      textAlign: 'center',
+                      border: '3px solid #e0e0e0',
+                      borderRadius: '10px',
+                      background: 'white',
+                      color: '#374151',
+                      outline: 'none',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onFocus={(e) => {
+                      e.currentTarget.style.border = '3px solid #8b5cf6';
+                      e.currentTarget.style.boxShadow = '0 0 0 3px rgba(139, 92, 246, 0.1)';
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.border = '3px solid #e0e0e0';
+                      e.currentTarget.style.boxShadow = 'none';
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
         </>
       ) : isAdventureMode ? (
         <AdventureMode 
