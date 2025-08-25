@@ -27,7 +27,7 @@ export const longAQuestions: Question[] = [
     word: 'net',
     questionType: 'shortE',
     imageUrl: '🌊🕸️',
-    imagePrompt: 'Reese throwing his red fishing net into a geyser pool to catch magical crystals underwater, with Oli watching nearby in Yellowstone, photorealistic adventure scene',
+    imagePrompt: 'Reese throwing his bright RED fishing net (the net must be clearly red in color) into a geyser pool to catch magical crystals underwater, with Oli watching nearby in Yellowstone, photorealistic adventure scene',
     correctAnswer: 0,
     options: [
       'Reese throws his red net into the water',
@@ -44,7 +44,7 @@ export const longAQuestions: Question[] = [
     word: 'cape',
     questionType: 'shortE',
     imageUrl: '🧥✨',
-    imagePrompt: 'Oli wearing his magical glowing red cape while standing next to Reese near geysers in Yellowstone, with dragon friends in the background, photorealistic adventure scene',
+    imagePrompt: 'Oli wearing his magical bright GLOWING cape (cape must be clearly glowing with magical light) while standing next to Reese near geysers in Yellowstone, with dragon friends in the background, photorealistic adventure scene',
     correctAnswer: 1,
     options: [
       'Oli puts on his red cap for the adventure',

@@ -27,9 +27,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: 'Prompt is required and must be a string' })
     }
 
-    // Create cinematic, photorealistic images for K-5 reading tutor
+    // Create cinematic, photorealistic images for K-5 reading tutor with accurate details
     const enhancedPrompt = `Photorealistic, cinematic film still for K-5 reading content: ${prompt}. 
     
+ACCURACY PRIORITY: Follow ALL specific details exactly as described (colors, objects, actions, materials). If prompt mentions "red net" - ensure the net is clearly RED. If prompt mentions specific objects or colors, they must be visible and accurate.
+
 STYLE: Live-action film quality, never childish or cartoony. Cinematic realism with believable lighting, materials, physics. Professional look with high dynamic range, crisp focus, clean optics, subtle film grain, controlled contrast. Grounded, mature colors with selective accents - avoid oversaturated primaries and baby pastels. Micro-detail textures on all surfaces. Single clear subject, balanced frame, readable silhouette.
 
 TECHNICAL: UHD detail, global illumination, subtle film grain, crisp focus. 35mm/50mm lens equivalent. Motivated lighting sources (window light, practical lamps, overcast daylight, soft bounce). Gentle atmospheric haze allowed.
@@ -72,7 +74,7 @@ AVOID: Cartoon, anime, chibi, kawaii, sticker, emoji, pixel art, low-poly, cel-s
           messages: [
             {
               role: "system",
-              content: "You help create cinematic, photorealistic image prompts for K-5 reading content. Transform unsafe content into PG school-safe alternatives while maintaining live-action film quality. Replace: inappropriate content→adventure-appropriate scenes, violence→heroic challenges, scary elements→majestic creatures, destruction→magical effects. Ensure photorealistic, cinematic style - never childish or cartoony. Characters wear practical, modest attire. Focus on wonder, discovery, friendship in Yellowstone adventure setting. Return ONLY the refined cinematic scene description."
+              content: "You help create cinematic, photorealistic image prompts for K-5 reading content. Transform unsafe content into PG school-safe alternatives while maintaining live-action film quality AND preserving specific details like colors, objects, and materials. Replace: inappropriate content→adventure-appropriate scenes, violence→heroic challenges, scary elements→majestic creatures, destruction→magical effects. PRESERVE: Specific colors (red, blue, etc.), objects (nets, tools, etc.), materials, and key visual details. Ensure photorealistic, cinematic style - never childish or cartoony. Characters wear practical, modest attire. Focus on wonder, discovery, friendship in Yellowstone adventure setting. Return ONLY the refined cinematic scene description with preserved details."
             },
             {
               role: "user",
