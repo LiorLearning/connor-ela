@@ -634,15 +634,7 @@ Remember: You are Oli speaking to Reese. Focus on protecting crystals, caring fo
                 <input value={adventureInput} onChange={(e) => setAdventureInput(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') void sendAdventureMessage(); }} placeholder="Message..."
                   style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#111827', fontSize: 17, fontWeight: 400, fontFamily: 'Quicksand, sans-serif' }} />
                 <button onClick={() => void generateAdventureImage()} aria-label="Generate Image" style={{ width: 32, height: 32, borderRadius: 16, border: '2px solid rgba(16,185,129,0.3)', background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }} title="Generate image from your message">🌄</button>
-                {adventureState !== 'new' && (
-                  <button onClick={() => {
-                    setAdventureState('new');
-                    setCurrentAdventure({});
-                    const greeting = "🌋 Hi Reese! I'm Oli, your adventure companion! The Wolf Dragon is ready and the volcano just erupted! \nShould we protect the geyser crystals from the Midgets or find a safe habitat for the dragons? 🐺💎";
-                    updateAdventureMessages(prev => [...prev, { role: 'ai', text: greeting }]);
-                    appendStoryMessage({ role: 'ai', text: greeting });
-                  }} aria-label="New Adventure" style={{ width: 32, height: 32, borderRadius: 16, border: '2px solid rgba(245,158,11,0.3)', background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }} title="Start a new adventure">🎪</button>
-                )}
+
                 <button onClick={() => void sendAdventureMessage()} aria-label="Send" style={{ width: 32, height: 32, borderRadius: 16, border: '2px solid rgba(139,92,246,0.3)', background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>▲</button>
               </div>
               <button onClick={toggleAdventureMic} aria-label="Record" style={{ width: 48, height: 48, borderRadius: 24, border: 'none', cursor: 'pointer', background: isAdventureRecording ? 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)' : 'linear-gradient(135deg, #10b981 0%, #059669 100%)', boxShadow: isAdventureRecording ? '0 6px 18px rgba(239, 68, 68, 0.3)' : '0 6px 18px rgba(16, 185, 129, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
