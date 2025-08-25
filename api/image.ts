@@ -27,8 +27,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: 'Prompt is required and must be a string' })
     }
 
-    // Create engaging, age-appropriate images that are appealing but not overly childish
-    const enhancedPrompt = `Create a beautiful, engaging illustration for a Yellowstone adventure story: ${prompt}. Style: vibrant and appealing with rich colors and interesting details. Make it visually engaging and well-crafted - suitable for young learners but not cartoonish or overly simplified. Include adventure elements like majestic dragons, geysers, forest landscapes, crystals, and natural settings as appropriate. Keep content completely family-friendly and age-appropriate. Characters should wear practical adventure clothing. Focus on wonder, discovery, and friendship. No text on the images.`
+    // Create cinematic, photorealistic images for K-5 reading tutor
+    const enhancedPrompt = `Photorealistic, cinematic film still for K-5 reading content: ${prompt}. 
+    
+STYLE: Live-action film quality, never childish or cartoony. Cinematic realism with believable lighting, materials, physics. Professional look with high dynamic range, crisp focus, clean optics, subtle film grain, controlled contrast. Grounded, mature colors with selective accents - avoid oversaturated primaries and baby pastels. Micro-detail textures on all surfaces. Single clear subject, balanced frame, readable silhouette.
+
+TECHNICAL: UHD detail, global illumination, subtle film grain, crisp focus. 35mm/50mm lens equivalent. Motivated lighting sources (window light, practical lamps, overcast daylight, soft bounce). Gentle atmospheric haze allowed.
+
+CONTENT: PG school-safe, age-appropriate. Fully clothed characters in modest attire. No gore, graphic injury, drugs, or weapons. Include Yellowstone adventure elements like majestic creatures, geysers, forest landscapes, crystals, natural settings as appropriate. Focus on wonder, discovery, friendship.
+
+AVOID: Cartoon, anime, chibi, kawaii, sticker, emoji, pixel art, low-poly, cel-shade, vector/flat UI, toy-like gloss, kids-app look. No low-res, blurry, over-sharpened, distorted hands/faces. No text on images.`
 
     // First, try the original prompt
     try {
@@ -64,7 +72,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           messages: [
             {
               role: "system",
-              content: "You help make picture ideas safe and appropriate for young learners. Make content engaging but not overly childish or cartoonish. Transform: inappropriate content→adventure-appropriate alternatives, violence→heroic challenges, scary elements→majestic creatures like dragons, destruction→magical effects. Keep everything family-friendly with characters in practical adventure gear. Make it engaging and appealing without being overly simplified. Return ONLY the refined picture idea."
+              content: "You help create cinematic, photorealistic image prompts for K-5 reading content. Transform unsafe content into PG school-safe alternatives while maintaining live-action film quality. Replace: inappropriate content→adventure-appropriate scenes, violence→heroic challenges, scary elements→majestic creatures, destruction→magical effects. Ensure photorealistic, cinematic style - never childish or cartoony. Characters wear practical, modest attire. Focus on wonder, discovery, friendship in Yellowstone adventure setting. Return ONLY the refined cinematic scene description."
             },
             {
               role: "user",
@@ -76,7 +84,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         })
 
         const sanitizedPrompt = sanitizationResponse.choices[0]?.message?.content?.trim() || prompt
-        const sanitizedEnhancedPrompt = `Create a beautiful, engaging illustration for a Yellowstone adventure story: ${sanitizedPrompt}. Style: vibrant and appealing with rich colors and interesting details. Make it visually engaging and well-crafted - suitable for young learners but not cartoonish or overly simplified. Include adventure elements like majestic dragons, geysers, forest landscapes, crystals, and natural settings as appropriate. Keep content completely family-friendly and age-appropriate. Focus on wonder, discovery, and friendship. No text on the images.`
+        const sanitizedEnhancedPrompt = `Photorealistic, cinematic film still for K-5 reading content: ${sanitizedPrompt}. 
+    
+STYLE: Live-action film quality, never childish or cartoony. Cinematic realism with believable lighting, materials, physics. Professional look with high dynamic range, crisp focus, clean optics, subtle film grain, controlled contrast. Grounded, mature colors with selective accents - avoid oversaturated primaries and baby pastels. Micro-detail textures on all surfaces. Single clear subject, balanced frame, readable silhouette.
+
+TECHNICAL: UHD detail, global illumination, subtle film grain, crisp focus. 35mm/50mm lens equivalent. Motivated lighting sources (window light, practical lamps, overcast daylight, soft bounce). Gentle atmospheric haze allowed.
+
+CONTENT: PG school-safe, age-appropriate. Fully clothed characters in modest attire. No gore, graphic injury, drugs, or weapons. Include Yellowstone adventure elements like majestic creatures, geysers, forest landscapes, crystals, natural settings as appropriate. Focus on wonder, discovery, friendship.
+
+AVOID: Cartoon, anime, chibi, kawaii, sticker, emoji, pixel art, low-poly, cel-shade, vector/flat UI, toy-like gloss, kids-app look. No low-res, blurry, over-sharpened, distorted hands/faces. No text on images.`
 
         // Try again with sanitized prompt
         const retryResponse = await openai.images.generate({
