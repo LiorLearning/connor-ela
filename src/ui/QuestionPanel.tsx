@@ -92,6 +92,11 @@ export function QuestionPanel({ onComplete }: Props): JSX.Element {
   const [contRecognition, setContRecognition] = useState<any>(null);
   const [contMediaRecorder, setContMediaRecorder] = useState<MediaRecorder | null>(null);
   const [isContProcessing, setIsContProcessing] = useState<boolean>(false);
+
+  // Microphone for input alternative on screens 2,3,6,7,8,9
+  const [isInputMicRecording, setIsInputMicRecording] = useState<boolean>(false);
+  const [inputMicRecognition, setInputMicRecognition] = useState<any>(null);
+  const [inputMicTranscript, setInputMicTranscript] = useState<string>('');
   const [isContinuationAnimating, setIsContinuationAnimating] = useState<boolean>(false);
   const [isContinuationHidden, setIsContinuationHidden] = useState<boolean>(false);
   const [isFeedbackRemoved, setIsFeedbackRemoved] = useState<boolean>(false);
@@ -262,6 +267,20 @@ Give a brief, friendly response that nudges them without giving the answer.`;
 
   // AI hook config (data-driven) with safe fallbacks to preserve current behavior
   const aiCfg = currentRegularQuestion?.aiHook || currentLongAQuestion?.aiHook;
+
+  // Helper to determine if microphone should be shown for input
+  const shouldShowInputMic = (): boolean => {
+    // Screen 2,3: Long A questions - show if there's any spelling input
+    if (isLongAQuestion && currentLongAQuestion?.isSpelling && spellingInput.length > 0) return true;
+    
+    // Screen 6,7,8,9: Regular questions - show if there's any spelling input
+    if (currentRegularQuestion?.isSpelling && spellingInput.length > 0) return true;
+    
+    // Also show for continuation input (screen 3)
+    if (isContinuationStep && continuationInput.length > 0) return true;
+    
+    return false;
+  };
   const hookTargetWord = aiCfg?.targetWord || (isSecondRegularStep ? 'cave' : (isFirstRegularStep ? 'crystal' : (currentRegularQuestion?.word || currentLongAQuestion?.word || '')));
   const hookQuestionLine = aiCfg?.questionLine || (isFirstRegularStep ? 'Listen and type the word' : 'Listen and type the word');
   const hookBaseLine = aiCfg?.baseLine || (isFirstRegularStep
@@ -1405,6 +1424,81 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
     setIsContRecording(false);
   };
 
+  // Input microphone functions for screens 2,3,6,7,8,9
+  const startInputMicRecording = () => {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      console.warn('Speech recognition not supported in this browser');
+      return;
+    }
+    
+    try {
+      audioManager.stopAll();
+      const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+      
+      recognition.onstart = () => {
+        setIsInputMicRecording(true);
+        setInputMicTranscript('');
+      };
+      
+      recognition.onresult = (event: any) => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        setInputMicTranscript(transcript);
+        
+        // If final result, apply to appropriate input
+        if (event.results[event.results.length - 1].isFinal) {
+          const finalText = transcript.trim().toLowerCase();
+          
+          if (isContinuationStep) {
+            // For continuation input, replace the text
+            setContinuationInput(finalText);
+          } else if ((isLongAQuestion || currentRegularQuestion) && finalText) {
+            // For spelling questions, replace the spelling input
+            setSpellingInput(finalText);
+          }
+        }
+      };
+      
+      recognition.onerror = () => {
+        setIsInputMicRecording(false);
+        setInputMicTranscript('');
+      };
+      
+      recognition.onend = () => {
+        setIsInputMicRecording(false);
+        setInputMicTranscript('');
+      };
+      
+      setInputMicRecognition(recognition);
+      recognition.start();
+    } catch (err) {
+      console.warn('Input mic error:', err);
+      setIsInputMicRecording(false);
+    }
+  };
+
+  const stopInputMicRecording = () => {
+    if (isInputMicRecording && inputMicRecognition) {
+      try { inputMicRecognition.stop(); } catch {}
+    }
+    setIsInputMicRecording(false);
+    setInputMicTranscript('');
+  };
+
+  const toggleInputMic = () => {
+    if (isInputMicRecording) {
+      stopInputMicRecording();
+    } else {
+      startInputMicRecording();
+    }
+  };
+
   const handleOptionClick = (index: number) => {
     setSelectedOption(index);
     setShowFeedback(false); // Reset feedback when selecting new option
@@ -1928,6 +2022,9 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
       setSpeechContinuationInput('');
       setSpeechValidationMessage('');
       setHasAutoplayedSpeechPrompt(false);
+      // Reset input microphone state
+      setIsInputMicRecording(false);
+      setInputMicTranscript('');
       // Reset continuation UI state (but keep validatedContinuation for story context)
       setIsContinuationHidden(false);
       setHasAutoplayedContPrompt(false);
@@ -1949,6 +2046,9 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
     if (isBlendingRecording) {
       stopBlendingRecording();
     }
+    if (isInputMicRecording) {
+      stopInputMicRecording();
+    }
     // Clear transient blending states
     setCurrentPhonemeIndex(-1);
     setBlendingTranscript('');
@@ -1966,6 +2066,9 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
     }
     if (isBlendingRecording) {
       stopBlendingRecording();
+    }
+    if (isInputMicRecording) {
+      stopInputMicRecording();
     }
     setCurrentQuestionIndex(prev => Math.max(prev - 1, 0));
     setSelectedOption(null);
@@ -3690,7 +3793,9 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
         <div style={{
           marginTop: '32px',
           display: 'flex',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '12px'
         }}>
           <button
             onClick={handleSubmit}
@@ -3722,6 +3827,41 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
           >
             Submit
           </button>
+          
+          {/* Microphone button for input alternative */}
+          {shouldShowInputMic() && (
+            <button
+              onClick={toggleInputMic}
+              style={{
+                width: '48px',
+                height: '48px',
+                borderRadius: '50%',
+                background: isInputMicRecording ? 
+                  'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)' : 
+                  'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                border: 'none',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: isInputMicRecording ? 
+                  '0 6px 18px rgba(239, 68, 68, 0.3)' : 
+                  '0 6px 18px rgba(16, 185, 129, 0.3)',
+                transition: 'all 0.2s ease',
+              }}
+              title={isInputMicRecording ? 'Stop recording' : 'Record your answer'}
+              aria-label={isInputMicRecording ? 'Stop recording' : 'Record your answer'}
+            >
+              {isInputMicRecording ? (
+                <div style={{ width: 14, height: 14, background: 'white', borderRadius: 3 }} />
+              ) : (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" fill="white"/>
+                  <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" fill="white"/>
+                </svg>
+              )}
+            </button>
+          )}
         </div>
       )}
 
@@ -3856,7 +3996,7 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
                 marginTop: '12px',
                 width: '100%',
                 display: 'grid',
-                gridTemplateColumns: '1fr 44px 44px',
+                gridTemplateColumns: shouldShowInputMic() ? '1fr 44px 44px 44px' : '1fr 44px 44px',
                 gap: '8px',
                 alignItems: 'center'
               }}>
@@ -3903,6 +4043,41 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
                 >
                   <span role="img" aria-label="Create Image">🌄</span>
                 </button>
+                {/* Microphone button for continuation input */}
+                {shouldShowInputMic() && (
+                  <button
+                    onClick={toggleInputMic}
+                    style={{
+                      width: 44,
+                      height: 44,
+                      borderRadius: '50%',
+                      background: isInputMicRecording ? 
+                        'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)' : 
+                        'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                      border: 'none',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: isInputMicRecording ? 
+                        '0 6px 18px rgba(239, 68, 68, 0.3)' : 
+                        '0 6px 18px rgba(16, 185, 129, 0.3)',
+                      transition: 'all 0.2s ease',
+                    }}
+                    title={isInputMicRecording ? 'Stop recording' : 'Record your answer'}
+                    aria-label={isInputMicRecording ? 'Stop recording' : 'Record your answer'}
+                  >
+                    {isInputMicRecording ? (
+                      <div style={{ width: 14, height: 14, background: 'white', borderRadius: 3 }} />
+                    ) : (
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" fill="white"/>
+                        <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" fill="white"/>
+                      </svg>
+                    )}
+                  </button>
+                )}
+                
                 {/* Icon CTA: Continue story */}
                 <button
                   onClick={handleSubmitContinuation}
