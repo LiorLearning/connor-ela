@@ -1358,20 +1358,36 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
     const text = shortEFollowUpInput.trim();
     if (!text) return;
 
-    // Simple validation - check if the sentence contains words with 'e' sound
-    const shortEWords = ['red', 'net', 'get', 'pet', 'wet', 'hen', 'pen', 'den', 'men', 'gem', 'bell', 'fell', 'shell', 'smell', 'dress', 'fresh', 'chest', 'nest', 'best', 'test', 'rest', 'web', 'bed', 'fed', 'led', 'sled'];
-    const hasShortE = shortEWords.some(word => text.toLowerCase().includes(word));
+    // Validate based on current question's target pattern
+    const currentWord = currentLongAQuestion?.targetWord;
+    let isValid = false;
+    let feedbackMessage = '';
+    let successMessage = '';
 
-    if (hasShortE) {
+    if (currentWord === 'net') {
+      // Looking for CVC words (short vowels)
+      const cvcWords = ['bat', 'cat', 'hat', 'sat', 'mat', 'rat', 'net', 'pet', 'get', 'set', 'wet', 'let', 'sit', 'bit', 'fit', 'hit', 'kit', 'lit', 'dot', 'hot', 'pot', 'got', 'lot', 'not', 'cut', 'but', 'hut', 'nut', 'put'];
+      isValid = cvcWords.some(word => text.toLowerCase().includes(word));
+      successMessage = 'Perfect! I found a CVC word with a short vowel in your sentence!';
+      feedbackMessage = 'Try using a CVC word like "bat", "sit", or "cut" (consonant-vowel-consonant)!';
+    } else if (currentWord === 'cape') {
+      // Looking for CVCe words (long vowels)
+      const cvceWords = ['cape', 'tape', 'bake', 'cake', 'lake', 'make', 'take', 'wake', 'bike', 'like', 'hike', 'kite', 'bite', 'site', 'bone', 'cone', 'home', 'dome', 'tone', 'cute', 'mute', 'tube', 'cube'];
+      isValid = cvceWords.some(word => text.toLowerCase().includes(word));
+      successMessage = 'Excellent! I found a CVCe word with a long vowel in your sentence!';
+      feedbackMessage = 'Try using a CVCe word like "cake", "bike", or "home" (the silent e makes the vowel long)!';
+    }
+
+    if (isValid) {
       // Success - advance to next question
-      setValidationMessage('Perfect! I love your sentence with the "e" sound!');
+      setValidationMessage(successMessage);
       setStoryContext(prev => [...prev, `Reese's sentence: ${text}`]);
       setTimeout(() => {
         handleNextQuestion();
       }, 2000);
     } else {
-      // Encourage to try again with a hint
-      setValidationMessage('Try adding a word with the "eh" sound like "red", "net", or "pet"!');
+      // Encourage to try again with pattern-specific hint
+      setValidationMessage(feedbackMessage);
     }
     
     setShortEFollowUpInput('');
@@ -3267,7 +3283,7 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
                   marginBottom: '8px',
                   textAlign: 'center'
                 }}>
-                  📖 Which sentence matches the picture?
+                  🔤 Which vowel pattern do you see?
                 </div>
                 <div style={{ 
                   fontSize: '14px', 
@@ -3275,11 +3291,11 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
                   fontWeight: '500',
                   textAlign: 'center'
                 }}>
-                  Look at the picture and pick the right sentence!
+                  Look for CVC (short), CVCe (long), or vowel teams (long)!
                 </div>
                 {/* Audio button for hearing the question */}
                 <button
-                  onClick={() => playElevenTTS('Which sentence matches the picture? Look at the picture and pick the right sentence!')}
+                  onClick={() => playElevenTTS('Which vowel pattern do you see? Look for CVC with short vowels, CVCe with long vowels, or vowel teams with long vowels!')}
                   title="Hear the question"
                   style={{
                     position: 'absolute',

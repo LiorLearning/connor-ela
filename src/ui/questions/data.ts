@@ -28,163 +28,163 @@ export const longAQuestions: Question[] = [
     questionType: 'shortE',
     imageUrl: '🌊🕸️',
     imagePrompt: 'Reese throwing a bright red fishing net into a crystal-clear geyser pool to catch sparkling magical gems underwater in Yellowstone, photorealistic adventure scene',
-    correctAnswer: 1,
+    correctAnswer: 0,
     options: [
-      'Reese throws a big trap into the water.',
-      'Reese throws a red net to get the gems.',
-      'Reese throws a large tool to find rocks.'
+      'The red net (CVC - short vowel)',
+      'The neat cave (CVCe - long vowel)', 
+      'The team needs (vowel team - long vowel)'
     ],
     targetWord: 'net',
-    followUpPrompt: 'Awesome! Now create your own sentence using a word with the "e" sound!',
-    explanation: 'Perfect! Listen for the "eh" sound in "red", "net", and "get"!',
-    incorrectFeedback: 'Listen for the "eh" sound like in "net" and "red". Try again!'
+    followUpPrompt: 'Awesome! Now write a sentence using another CVC word (short vowel)!',
+    explanation: 'Perfect! "Net" follows the CVC pattern (consonant-vowel-consonant) which makes the "e" short!',
+    incorrectFeedback: 'Look for the CVC pattern! Net = n-e-t (consonant-vowel-consonant) = short vowel sound.'
   },
   {
     id: 2,
-    word: 'den',
+    word: 'cape',
     questionType: 'shortE',
-    imageUrl: '🏠🐉',
-    imagePrompt: 'Oli gently petting a friendly dragon inside its cozy underground den cave filled with crystal formations in Yellowstone, warm lighting, photorealistic',
-    correctAnswer: 2,
+    imageUrl: '🧥✨',
+    imagePrompt: 'Oli wearing a magical red cape that glows with crystal energy, standing proudly next to a geyser in Yellowstone, photorealistic adventure scene',
+    correctAnswer: 1,
     options: [
-      'Oli visits the dragon in its big house.',
-      'Oli finds the dragon hiding in a cave.',
-      'Oli pets the dragon in its warm den.'
+      'Oli wears a red cap (CVC - short vowel)',
+      'Oli wears a magic cape (CVCe - long vowel)',
+      'The team helps Oli (vowel team - long vowel)'
     ],
-    targetWord: 'den',
-    followUpPrompt: 'Great job! Now make a sentence with a word that has the "e" sound!',
-    explanation: 'Excellent! You heard the "eh" sound in "den" and "pets"!',
-    incorrectFeedback: 'Listen for the "eh" sound like in "den" and "pet". Which sentence has those sounds?'
+    targetWord: 'cape',
+    followUpPrompt: 'Excellent! Now write a sentence using another CVCe word (long vowel)!',
+    explanation: 'Yes! "Cape" follows the CVCe pattern (consonant-vowel-consonant-e) which makes the "a" long!',
+    incorrectFeedback: 'Look for the CVCe pattern! Cape = c-a-p-e (the silent e makes the a say its name).'
   },
 ];
 
 export const questions: Question[] = [
   {
     id: 1,
-    word: 'catch',
-    imageUrl: '🤲💎',
+    word: 'bat',
+    imageUrl: '🦇🌙',
     isSpelling: true,
-    correctAnswer: 'catch',
-    explanation: 'Perfect! The letters CH make the sound at the end of catch! Reese caught the shiny rocks!',
+    correctAnswer: 'bat',
+    explanation: 'Perfect! "Bat" follows the CVC pattern (b-a-t) which makes the "a" short!',
     aiHook: {
-      targetWord: 'catch',
+      targetWord: 'bat',
       intent: 'spelling',
-      baseLine: 'Reese tries to catch the falling crystals.',
-      questionLine: 'Listen and spell the word for grabbing something that falls.',
-      validationWord: 'catch',
-      imagePrompt: 'Reese with hands out, trying to CATCH sparkling crystals falling from dragon cave.'
+      baseLine: 'A bat flies over the crystal cave.',
+      questionLine: 'Listen and spell this CVC word with a short vowel sound.',
+      validationWord: 'bat',
+      imagePrompt: 'A BAT flying over crystal caves at night in Yellowstone, moonlight illuminating the scene.'
     }
   },
   {
     id: 2,
-    word: 'wish',
-    imageUrl: '⭐💎',
+    word: 'bake',
+    imageUrl: '🔥🍞',
     isSpelling: true,
-    correctAnswer: 'wish',
-    explanation: 'Great job! SH makes the sound at the end of wish! What did Oli wish for?',
+    correctAnswer: 'bake',
+    explanation: 'Great job! "Bake" follows the CVCe pattern (b-a-k-e) - the silent e makes the "a" long!',
     aiHook: {
-      targetWord: 'wish',
+      targetWord: 'bake',
       intent: 'spelling',
-      baseLine: 'Oli makes a wish on the crystal.',
-      questionLine: 'Listen and spell the word for hoping something will happen.',
-      validationWord: 'wish',
-      imagePrompt: 'Oli holding glowing crystal up to starry sky, making a WISH.'
+      baseLine: 'They bake bread over the geyser fire.',
+      questionLine: 'Listen and spell this CVCe word with a long vowel sound.',
+      validationWord: 'bake',
+      imagePrompt: 'Reese and Oli BAKING bread over glowing geyser heat in Yellowstone wilderness.'
     }
   },
   {
     id: 3,
-    word: 'white',
-    imageUrl: '☁️🌋',
+    word: 'team',
+    imageUrl: '👥✨',
     isSpelling: true,
-    correctAnswer: 'white',
-    explanation: 'Yay! WH makes the sound at the start of white! The steam looks like fluffy clouds!',
+    correctAnswer: 'team',
+    explanation: 'Awesome! "Team" has the vowel team "ea" which makes a long "e" sound!',
     aiHook: {
-      targetWord: 'white',
+      targetWord: 'team',
       intent: 'spelling',
-      baseLine: 'White steam rises from the geyser.',
-      questionLine: 'Listen and spell the word for the color of clouds.',
-      validationWord: 'white',
-      imagePrompt: 'WHITE steam rising from geysers, looking like puffy white clouds.'
+      baseLine: 'Reese and Oli work as a team.',
+      questionLine: 'Listen and spell this word with a vowel team that makes a long sound.',
+      validationWord: 'team',
+      imagePrompt: 'Reese and Oli working together as a TEAM, gathering crystals near geysers.'
     }
   },
   {
     id: 4,
-    word: 'touch',
-    imageUrl: '✋🥚',
+    word: 'sit',
+    imageUrl: '🪑💎',
     isSpelling: true,
-    correctAnswer: 'touch',
-    explanation: 'Awesome! The letters CH make the sound at the end of touch! The magic egg feels warm!',
+    correctAnswer: 'sit',
+    explanation: 'Excellent! "Sit" follows the CVC pattern (s-i-t) which makes the "i" short!',
     aiHook: {
-      targetWord: 'touch',
+      targetWord: 'sit',
       intent: 'spelling',
-      baseLine: 'Reese gently touches the magic egg.',
-      questionLine: 'Listen and spell the word for using your hands to feel something.',
-      validationWord: 'touch',
-      imagePrompt: 'Glowing Geyser Egg with Reese\'s hand gently TOUCHING it.'
+      baseLine: 'Reese sits by the crystal pool.',
+      questionLine: 'Listen and spell this CVC word with a short vowel sound.',
+      validationWord: 'sit',
+      imagePrompt: 'Reese SITTING peacefully beside a sparkling crystal pool in Yellowstone.'
     }
   },
   {
     id: 5,
-    word: 'with',
-    imageUrl: '🤝🐉',
+    word: 'kite',
+    imageUrl: '🪁💨',
     isSpelling: true,
-    correctAnswer: 'with',
-    explanation: 'Perfect! TH makes the sound at the end of with! Friends have more fun together!',
+    correctAnswer: 'kite',
+    explanation: 'Perfect! "Kite" follows the CVCe pattern (k-i-t-e) - the silent e makes the "i" long!',
     aiHook: {
-      targetWord: 'with',
+      targetWord: 'kite',
       intent: 'spelling',
-      baseLine: 'Reese plays with the dragons.',
-      questionLine: 'Listen and spell the word for being together.',
-      validationWord: 'with',
-      imagePrompt: 'Reese playing and laughing WITH cute dragons in a meadow.'
+      baseLine: 'Oli flies a kite over the geysers.',
+      questionLine: 'Listen and spell this CVCe word with a long vowel sound.',
+      validationWord: 'kite',
+      imagePrompt: 'Oli flying a colorful KITE high above Yellowstone geysers on a windy day.'
     }
   },
   {
     id: 6,
-    word: 'watch',
-    imageUrl: '👀👺',
+    word: 'boat',
+    imageUrl: '⛵🌊',
     isSpelling: true,
-    correctAnswer: 'watch',
-    explanation: 'Perfect! CH makes the sound at the end of watch! We caught the sneaky guys!',
+    correctAnswer: 'boat',
+    explanation: 'Amazing! "Boat" has the vowel team "oa" which makes a long "o" sound!',
     aiHook: {
-      targetWord: 'watch',
+      targetWord: 'boat',
       intent: 'spelling',
-      baseLine: 'Oli and Reese watch the sneaky guys.',
-      questionLine: 'Listen and spell the word for looking carefully.',
-      validationWord: 'watch',
-      imagePrompt: 'Reese and Oli hiding behind rocks, WATCHING small figures creeping toward crystals.'
+      baseLine: 'They sail a boat on the crystal lake.',
+      questionLine: 'Listen and spell this word with a vowel team that makes a long sound.',
+      validationWord: 'boat',
+      imagePrompt: 'Reese and Oli sailing a magical BOAT across a crystal-clear lake near geysers.'
     }
   },
   {
     id: 7,
-    word: 'whisper',
-    imageUrl: '🤫🐉',
-    correctAnswer: 3, // wh option (index 3 in ['ch', 'th', 'sh', 'wh', 'ph'])
-    explanation: 'Yay! WH makes the sound at the start of whisper! The dragons love secrets!',
+    word: 'cut',
+    imageUrl: '✂️🌿',
+    correctAnswer: 0, // CVC option (index 0 in pattern sorting)
+    explanation: 'Yes! "Cut" follows the CVC pattern (c-u-t) which makes the "u" short!',
     aiHook: {
-      targetWord: 'whisper',
+      targetWord: 'cut',
       intent: 'sound',
-      baseLine: 'Oli whispers secrets to the dragon.',
-      questionLine: 'Listen and pick the letters that make the sound at the start of ___isper.',
-      validationWord: 'whisper',
-      imagePrompt: 'Oli leaning close to fluffy dragon\'s ear, WHISPERING a secret.'
+      baseLine: 'Oli cuts some plants for the dragons.',
+      questionLine: 'Which pattern does this word follow? Listen: cut.',
+      validationWord: 'cut',
+      imagePrompt: 'Oli carefully CUTTING green plants to feed friendly dragons.'
     }
   },
   {
     id: 8,
-    word: 'rush',
-    imageUrl: '🏃🐉',
-    correctAnswer: 2, // sh option (index 2 in ['ch', 'th', 'sh', 'wh', 'ph'])
-    explanation: 'Great job! SH makes the sound at the end of rush! The dragons are fast helpers!',
+    word: 'cute',
+    imageUrl: '🐉😍',
+    correctAnswer: 1, // CVCe option (index 1 in pattern sorting)
+    explanation: 'Great! "Cute" follows the CVCe pattern (c-u-t-e) - the silent e makes the "u" long!',
     aiHook: {
-      targetWord: 'rush',
+      targetWord: 'cute',
       intent: 'sound',
-      baseLine: 'The dragons rush to help Reese.',
-      questionLine: 'Listen and pick the letters that make the sound at the end of ru___.',
-      validationWord: 'rush',
-      imagePrompt: 'Cute dragons hurrying and RUSHING toward Reese with big smiles.'
+      baseLine: 'The baby dragons are very cute.',
+      questionLine: 'Which pattern does this word follow? Listen: cute.',
+      validationWord: 'cute',
+      imagePrompt: 'Adorable baby dragons being very CUTE, playing around crystal pools.'
     }
   },
 ];
 
-export const options: string[] = ['ch', 'th', 'sh', 'wh', 'ph'];
+export const options: string[] = ['CVC (short vowel)', 'CVCe (long vowel)', 'Vowel Team (long vowel)'];
