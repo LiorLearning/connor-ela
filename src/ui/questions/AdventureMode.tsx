@@ -18,6 +18,8 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
   const { state: storyState, appendMessage: appendStoryMessage, reset: resetStory, consumePendingAdventureChat, setMetadata } = useStory();
   // Use parent-provided messages or default/local persisted
   const getDefaultMessage = () => {
+    // For now, keep these as they provide good initial prompts for each screen type
+    // These are starting prompts that set the context, which is different from response messages
     if (isScreen5) {
       return "🌋⚡ Reese! We've been doing SO well on our quest! I'm pumped up! 💪 Tell me - what happens next in our adventure? Where should we go? What should we do? I'm ready for anything! 🚀🐉";
     } else if (isScreen14) {
@@ -398,6 +400,69 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
     await playAIResponse(messageIndex, text);
   };
 
+  // Helper function to generate dynamic AI follow-up responses
+  const generateDynamicFollowUp = async (userDescription: string, screenType: string) => {
+    const currentMessages = adventureMessages.filter(m => !m.isLoading && !m.isImage);
+    
+    let systemPrompt = '';
+    if (screenType === 'screen1') {
+      systemPrompt = `You are Oli, Reese's excited adventure buddy! Reese just described their adventure idea: "${userDescription}". 
+
+Respond with excitement and ask ONE follow-up question to get more details for creating an amazing image. Be specific to what they described.
+
+RULES:
+- Be SUPER excited about their idea!
+- Ask about what's happening in the scene/action
+- Keep it short (25 words max)
+- Use emojis and exclamation points
+- Ask only ONE specific follow-up question
+
+EXAMPLES:
+If they said "We're in a cave": "WOW! A cave adventure! 🗻 What are you and I doing in the cave? Are we finding treasure or hiding from something?"
+If they said "Fighting dragons": "AMAZING! Dragon fighting! 🐉 How are we fighting them? With magic swords or dragon powers?"`;
+    } else if (screenType === 'screen5') {
+      systemPrompt = `You are Oli, Reese's adventure buddy! Reese just described what happens next in our adventure: "${userDescription}".
+
+Respond with excitement and ask what happens after that moment.
+
+RULES:
+- Be excited about their story continuation
+- Ask what happens next/how it ends
+- Keep it short (25 words max)
+- Use "we" since you're in it together`;
+    } else if (screenType === 'screen14') {
+      systemPrompt = `You are Oli, Reese's adventure buddy! Reese described their final victory picture: "${userDescription}".
+
+Respond with excitement and ask for one more detail to make the victory picture perfect.
+
+RULES:
+- Celebrate the victory with them
+- Ask about how you both look or feel in the picture
+- Keep it short (25 words max)
+- Focus on the celebration/victory moment`;
+    }
+
+    try {
+      const conversationMessages = [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userDescription }
+      ];
+
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: conversationMessages })
+      });
+      
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const data = await response.json();
+      return data.reply || "That sounds amazing! Tell me more details so I can picture it perfectly! 🎨";
+    } catch (error) {
+      console.error('Error generating follow-up:', error);
+      return "That sounds incredible! Tell me more about what's happening! 🌟";
+    }
+  };
+
   const sendAdventureMessage = async () => {
     const text = adventureInput.trim();
     console.log('sendAdventureMessage called with text:', text);
@@ -410,27 +475,23 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
       onAdventureMessage?.(text);
       setAdventureInput('');
       
-      // Different follow-up for different screens
-      let followUpMessage = "WOW Reese! That sounds INCREDIBLE! 🎨 Now tell me - what's the most exciting thing happening right now? Are we fighting something? Finding treasure? Using magic? I can't wait to see! ⚡🔥";
+      // Show loading for AI response
+      updateAdventureMessages(prev => [...prev, { role: 'ai', text: 'Thinking about your adventure...', isLoading: true }]);
       
-      if (isScreen5) {
-        followUpMessage = "YES Reese! That's exactly what I was thinking! 🔥 And then what happens? Do we succeed? Do we face any danger? Tell me how this part of our story ends! ⚡🎯";
-      } else if (isScreen14) {
-        followUpMessage = "PERFECT Reese! This is going to be the BEST victory picture ever! 🏆 Now tell me - how do we look in this final moment? Are we celebrating? Are the dragons with us? Paint the perfect ending! 🎨✨";
-      }
+      // Generate dynamic follow-up based on user's description and screen type
+      const screenType = isScreen5 ? 'screen5' : isScreen14 ? 'screen14' : 'screen1';
+      const dynamicFollowUp = await generateDynamicFollowUp(text, screenType);
       
-      // Ask follow-up question (check for duplicates first)
+      // Replace loading message with dynamic response
       updateAdventureMessages(prev => {
-        const lastMessage = prev[prev.length - 1];
-        // Prevent duplicate follow-up messages
-        if (lastMessage?.role === 'ai' && lastMessage?.text?.includes('exciting thing happening')) {
-          return prev;
+        const newMessages = [...prev];
+        const loadingIndex = newMessages.findIndex(m => m.isLoading);
+        if (loadingIndex !== -1) {
+          newMessages[loadingIndex] = { role: 'ai', text: dynamicFollowUp, isLoading: false };
         }
-        return [...prev, { 
-          role: 'ai', 
-          text: followUpMessage
-        }];
+        return newMessages;
       });
+      
       setAdventureState('follow_up');
       return;
     }
@@ -441,10 +502,15 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
       onAdventureMessage?.(text);
       setAdventureInput('');
       
-      // Get previous description and combine with follow-up
-      const prevMessages = adventureMessages;
-      const descriptionMessage = prevMessages[prevMessages.length - 3]?.text || '';
-      const combinedPrompt = `${descriptionMessage} ${text} - Reese and Oli in Yellowstone National Park adventure scene, photorealistic, bright and engaging for kids`;
+      // Get ALL user messages to build complete story context
+      const userMessages = adventureMessages.filter(msg => msg.role === 'student' && !msg.isImage);
+      const currentUserMessage = text;
+      
+      // Combine all user story elements
+      const allUserInput = [...userMessages.map(msg => msg.text), currentUserMessage].join(' ');
+      
+      // Create rich image prompt using complete context
+      const combinedPrompt = `${allUserInput} - Reese and Oli in Yellowstone National Park adventure scene, photorealistic, bright and engaging for kids, detailed adventure scene`;
       
       updateAdventureMessages(prev => [...prev, { role: 'ai', text: 'Creating your adventure image...', isLoading: true }]);
       
@@ -456,21 +522,68 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
         });
         const data = await response.json();
         if (response.ok && data.imageUrl) {
+          // Generate dynamic success message based on the created image
+          const generateSuccessMessage = async () => {
+            const screenType = isScreen5 ? 'screen5' : isScreen14 ? 'screen14' : 'screen1';
+            let systemPrompt = '';
+            
+            if (screenType === 'screen1') {
+              systemPrompt = `You are Oli, Reese's adventure buddy! You just created an amazing image of the adventure Reese described. React with excitement about the image and ask if they're ready to start the mission.
+
+RULES:
+- Be SUPER excited about the image
+- Keep it short (20 words max)
+- Ask if they're ready to start
+- Use emojis and exclamation points`;
+            } else if (screenType === 'screen5') {
+              systemPrompt = `You are Oli, Reese's adventure buddy! You just created an image showing what happens next in your adventure. React with excitement about continuing the story.
+
+RULES:
+- Be excited about the adventure continuing
+- Keep it short (20 words max)  
+- Express excitement about what's next
+- Use emojis and exclamation points`;
+            } else if (screenType === 'screen14') {
+              systemPrompt = `You are Oli, Reese's adventure buddy! You just created the final victory image of your completed quest. Celebrate your success together!
+
+RULES:
+- Celebrate the completed adventure
+- Keep it short (20 words max)
+- Express how amazing the journey was
+- Use celebration emojis`;
+            }
+
+            try {
+              const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                  messages: [
+                    { role: 'system', content: systemPrompt },
+                    { role: 'user', content: 'The image is created!' }
+                  ]
+                })
+              });
+              
+              if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+              const data = await response.json();
+              return data.reply || "Amazing! Look at our adventure! 🎨✨";
+            } catch (error) {
+              console.error('Error generating success message:', error);
+              return "Incredible! Our adventure image is perfect! 🌟";
+            }
+          };
+
+          // Generate and set the dynamic success message
+          const dynamicSuccessMessage = await generateSuccessMessage();
+          
           updateAdventureMessages(prev => {
             const newMessages = [...prev];
             const loadingIndex = newMessages.findIndex(m => m.isLoading);
             if (loadingIndex !== -1) {
-              let successMessage = "YES! This is AMAZING Reese! Look at our adventure! 🎨 I'm ready to go! Are you ready to start our mission together? Let's do this! 🚀✨";
-              
-              if (isScreen5) {
-                successMessage = "WOW! Look at this part of our adventure! 🔥 This is SO exciting! I can't wait to see what happens next! Let's keep going, Reese! 🚀⚡";
-              } else if (isScreen14) {
-                successMessage = "INCREDIBLE! This is the PERFECT ending to our quest! 🏆 Look how amazing we look! We did it together, Reese! What an adventure! 🎉✨";
-              }
-              
               newMessages[loadingIndex] = {
                 role: 'ai',
-                text: successMessage,
+                text: dynamicSuccessMessage,
                 isImage: true,
                 imageUrl: data.imageUrl,
                 isLoading: false
