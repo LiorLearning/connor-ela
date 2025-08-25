@@ -1365,17 +1365,21 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
     let successMessage = '';
 
     if (currentWord === 'net') {
-      // Looking for CVC words (short vowels)
-      const cvcWords = ['bat', 'cat', 'hat', 'sat', 'mat', 'rat', 'net', 'pet', 'get', 'set', 'wet', 'let', 'sit', 'bit', 'fit', 'hit', 'kit', 'lit', 'dot', 'hot', 'pot', 'got', 'lot', 'not', 'cut', 'but', 'hut', 'nut', 'put'];
-      isValid = cvcWords.some(word => text.toLowerCase().includes(word));
-      successMessage = 'Perfect! I found a CVC word with a short vowel in your sentence!';
-      feedbackMessage = 'Try using a CVC word like "bat", "sit", or "cut" (consonant-vowel-consonant)!';
+      // Looking for CVC words (short vowels) and checking sentence length
+      const cvcWords = ['bat', 'cat', 'hat', 'sat', 'mat', 'rat', 'net', 'pet', 'get', 'set', 'wet', 'let', 'sit', 'bit', 'fit', 'hit', 'kit', 'lit', 'dot', 'hot', 'pot', 'got', 'lot', 'not', 'cut', 'but', 'hut', 'nut', 'put', 'dog', 'run', 'big', 'fun', 'sun', 'cup', 'red', 'bed', 'leg', 'ten'];
+      const hasCvcWord = cvcWords.some(word => text.toLowerCase().includes(word));
+      const isLongEnough = text.split(' ').length >= 5; // At least 5 words
+      isValid = hasCvcWord && isLongEnough;
+      successMessage = isLongEnough ? 'Excellent! I found a CVC word with a short vowel in your longer sentence!' : 'Good CVC word! Can you make your sentence longer (at least 5 words)?';
+      feedbackMessage = 'Try writing a longer sentence (5+ words) using a CVC word like "cat", "dog", "run", or "big"!';
     } else if (currentWord === 'cape') {
-      // Looking for CVCe words (long vowels)
-      const cvceWords = ['cape', 'tape', 'bake', 'cake', 'lake', 'make', 'take', 'wake', 'bike', 'like', 'hike', 'kite', 'bite', 'site', 'bone', 'cone', 'home', 'dome', 'tone', 'cute', 'mute', 'tube', 'cube'];
-      isValid = cvceWords.some(word => text.toLowerCase().includes(word));
-      successMessage = 'Excellent! I found a CVCe word with a long vowel in your sentence!';
-      feedbackMessage = 'Try using a CVCe word like "cake", "bike", or "home" (the silent e makes the vowel long)!';
+      // Looking for CVCe words (long vowels) and checking sentence length
+      const cvceWords = ['cape', 'tape', 'bake', 'cake', 'lake', 'make', 'take', 'wake', 'bike', 'like', 'hike', 'kite', 'bite', 'site', 'bone', 'cone', 'home', 'dome', 'tone', 'cute', 'mute', 'tube', 'cube', 'game', 'name', 'same', 'fame', 'came', 'time', 'line', 'mine', 'fine', 'ride', 'side', 'wide', 'hide'];
+      const hasCvceWord = cvceWords.some(word => text.toLowerCase().includes(word));
+      const isLongEnough = text.split(' ').length >= 5; // At least 5 words
+      isValid = hasCvceWord && isLongEnough;
+      successMessage = isLongEnough ? 'Outstanding! I found a CVCe word with a long vowel in your longer sentence!' : 'Good CVCe word! Can you make your sentence longer (at least 5 words)?';
+      feedbackMessage = 'Try writing a longer sentence (5+ words) using a CVCe word like "cake", "bike", "home", or "cute"!';
     }
 
     if (isValid) {
@@ -3283,7 +3287,7 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
                   marginBottom: '8px',
                   textAlign: 'center'
                 }}>
-                  📖 Which sentence matches the picture?
+                  🔤 Which word pattern matches the picture?
                 </div>
                 <div style={{ 
                   fontSize: '14px', 
@@ -3291,11 +3295,11 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
                   fontWeight: '500',
                   textAlign: 'center'
                 }}>
-                  Look at the picture and pick the right sentence!
+                  Look for CVC (short vowel) or CVCe (long vowel) patterns!
                 </div>
                 {/* Audio button for hearing the question */}
                 <button
-                  onClick={() => playElevenTTS('Which sentence matches the picture? Look at the picture and pick the right sentence!')}
+                  onClick={() => playElevenTTS('Which word pattern matches the picture? Look for CVC patterns with short vowels or CVCe patterns with long vowels!')}
                   title="Hear the question"
                   style={{
                     position: 'absolute',
@@ -3610,31 +3614,29 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
                         e.currentTarget.style.borderColor = '#d1d5db';
                       }}
                     />
-                    {/* Microphone button for follow-up */}
-                    {shortEFollowUpInput.length > 0 && (
-                      <button
-                        onClick={toggleInputMic}
-                        title={isInputMicRecording ? 'Stop recording' : 'Record with microphone'}
-                        style={{
-                          width: '44px',
-                          height: '44px',
-                          borderRadius: '50%',
-                          background: isInputMicRecording 
-                            ? 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)' 
-                            : 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
-                          border: '1px solid rgba(255,255,255,0.6)',
-                          color: 'white',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-                          fontSize: '18px'
-                        }}
-                      >
-                        {isInputMicRecording ? '⏹️' : '🎤'}
-                      </button>
-                    )}
+                    {/* Microphone button for follow-up - always visible */}
+                    <button
+                      onClick={toggleInputMic}
+                      title={isInputMicRecording ? 'Stop recording' : 'Record with microphone'}
+                      style={{
+                        width: '44px',
+                        height: '44px',
+                        borderRadius: '50%',
+                        background: isInputMicRecording 
+                          ? 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)' 
+                          : 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+                        border: '1px solid rgba(255,255,255,0.6)',
+                        color: 'white',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                        fontSize: '18px'
+                      }}
+                    >
+                      {isInputMicRecording ? '⏹️' : '🎤'}
+                    </button>
                     {/* Submit follow-up button */}
                     <button
                       onClick={handleSubmitShortEFollowUp}

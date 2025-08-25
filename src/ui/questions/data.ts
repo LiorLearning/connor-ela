@@ -30,14 +30,14 @@ export const longAQuestions: Question[] = [
     imagePrompt: 'A red fishing net being used to catch something in water, simple and clear, photorealistic',
     correctAnswer: 0,
     options: [
-      'The red net',
-      'The neat cave', 
-      'The team needs'
+      'The red net (CVC - short vowel)',
+      'The neat cave (CVCe - long vowel)', 
+      'The team needs (vowel team - long vowel)'
     ],
     targetWord: 'net',
-    followUpPrompt: 'Great job! Can you make a sentence with another short vowel word?',
-    explanation: 'Yes! "Net" has a short "e" sound like in "pet" and "get"!',
-    incorrectFeedback: 'Look for words with short vowel sounds like "net"!'
+    followUpPrompt: 'Great job! Can you write a longer sentence using another CVC word with a short vowel sound? (Try words like: cat, dog, run, big, etc.)',
+    explanation: 'Perfect! "Net" follows the CVC pattern (consonant-vowel-consonant) which makes the "e" short!',
+    incorrectFeedback: 'Look for the CVC pattern! CVC words have short vowel sounds.'
   },
   {
     id: 2,
@@ -47,14 +47,14 @@ export const longAQuestions: Question[] = [
     imagePrompt: 'A person wearing a bright red cape, simple and clear, photorealistic',
     correctAnswer: 1,
     options: [
-      'Oli wears a red cap',
-      'Oli wears a magic cape',
-      'The team helps Oli'
+      'Oli wears a red cap (CVC - short vowel)',
+      'Oli wears a magic cape (CVCe - long vowel)',
+      'The team helps Oli (vowel team - long vowel)'
     ],
     targetWord: 'cape',
-    followUpPrompt: 'Awesome! Can you make a sentence with another long vowel word?',
-    explanation: 'Perfect! "Cape" has a long "a" sound because of the silent "e" at the end!',
-    incorrectFeedback: 'Look for words with long vowel sounds like "cape"!'
+    followUpPrompt: 'Awesome! Can you write a longer sentence using another CVCe word with a long vowel sound? (Try words like: cake, bike, home, cute, etc.)',
+    explanation: 'Excellent! "Cape" follows the CVCe pattern (consonant-vowel-consonant-e) which makes the "a" long!',
+    incorrectFeedback: 'Look for the CVCe pattern! The silent "e" makes the vowel say its name.'
   },
 ];
 
