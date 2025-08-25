@@ -16,7 +16,7 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
   const { state: storyState, appendMessage: appendStoryMessage, reset: resetStory, consumePendingAdventureChat, setMetadata } = useStory();
   // Use parent-provided messages or default/local persisted
   const defaultMessages: Array<{ role: 'ai' | 'student'; text: string; isImage?: boolean; isLoading?: boolean; imageUrl?: string }> = [
-    { role: 'ai' as const, text: "🌋😂 Hey Reese! I'm your silly friend Oli! The hot water is going WHOOSH every 30 seconds! Hehe! The big fluffy dragons are getting wiggly! 😆 We need to find shiny rocks before the tiny sneaky guys take them! Should we go to the misty trees or visit the dragon friends? 🐉✨ What do you want to do?" }
+    { role: 'ai' as const, text: "🌋🔥 Hey Reese! I'm your friend Oli! You just got on the Wolf Dragon and WOW - a giant volcano is going BOOM right next to us! 😱 The geyser crystals are shaking and the Obsidian Imps are trying to steal them! Should we fly to safety or help protect the crystals? 🐺✨ What do you want to do?" }
   ];
   const [localAdventureMessages, setLocalAdventureMessages] = useState<Array<{ role: 'ai' | 'student'; text: string; isImage?: boolean; isLoading?: boolean; imageUrl?: string }>>(
     (storyState?.adventureMessages?.length ?? 0) > 0
@@ -53,14 +53,14 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
     setting?: string;
     recentEvent?: string;
   }>({
-    type: 'fun Yellowstone trip with fluffy dragons and shiny rocks',
-    protagonist: 'Reese (a brave kid with black hair, red cape, and a cool rock finder)',
-    sidekick: 'Oli (best friend who is super funny and really smart)',
-    teammates: 'Buffalo-Dragons (big fluffy friends with wings who are very nice once you say hello)',
-    setting: 'Magic Yellowstone with hot water that goes WHOOSH, misty trees, dragon homes, and sparkly pools',
-    goal: 'find pretty shiny rocks, make friends with dragons, and fix the big magic egg before it breaks',
-    villain: 'Tiny Sneaky Guys (little people who hide and take shiny rocks when no one is looking)',
-    recentEvent: 'Reese and Oli found out about the magic egg and need to get more shiny rocks before the sneaky guys take them all'
+    type: 'Geyser Crystal Quest in Yellowstone National Park',
+    protagonist: 'Reese (10 years old, black hair, red cloak, green-brown buffalo-dragon armor)',
+    sidekick: 'Oli (loyal companion and adventure partner)',
+    teammates: 'Buffalo Dragons (half buffalo, half dragon with sharp teeth, horns, giant tails, medium wings) and Wolf Dragon (gray/white/black furred face, dragon body, wolf tail, big fluffy ears, breathes fire)',
+    setting: 'Yellowstone National Park with geysers, mountains, forests, and open fields',
+    goal: 'find and protect geyser crystals across dragon locations, bond with animal dragons but return them to the wild later',
+    villain: 'Obsidian Imps (crystal thieves with very small arms, big nasty heads, short black dresses, side pockets full of stolen crystals)',
+    recentEvent: 'Reese just mounted the Wolf Dragon when a giant volcano suddenly erupted nearby, threatening the geyser crystal balance and dragon habitats'
   });
   const ADVENTURE_IMAGE_OVERLAY_OPACITY = 0.45;
   const adventureScrollRef = useRef<HTMLDivElement | null>(null);
@@ -93,7 +93,7 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
     const lowerAI = aiResponse.toLowerCase();
     
     // Check for interest-based adventure selection
-    const interests = ['dragons', 'crystals', 'geysers', 'magic', 'forests', 'creatures', 'sports', 'movies', 'dinosaurs', 'adventures', 'quests', 'treasures'];
+    const interests = ['dragons', 'crystals', 'geysers', 'volcanoes', 'eruptions', 'forests', 'mountains', 'habitats', 'obsidian', 'adventures', 'quests', 'wildlife'];
     const selectedInterest = interests.find(interest => lowerUser.includes(interest));
     
     if (selectedInterest && adventureState === 'new') {
@@ -415,30 +415,34 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
       const conversationMessages = [
         {
           role: 'system',
-          content: `Role & Perspective: Be my super funny best friend Oli in a fun adventure for kids. Talk like you are my silly buddy.
+          content: `Role & Perspective: You are Oli, Reese's loyal companion in the Geyser Crystal Quest adventure. Be adventurous, responsible, and caring about wildlife and nature.
 
-Tone: Very funny, silly, and happy! Use simple words that 1st graders know. Be goofy and make me laugh! Ask only one easy question. Keep it short - about 40 words. Make it 2 short lines with \n between them.
+CURRENT QUEST CONTEXT:
+- Title: Reese & Oli: Geyser Crystal Quest
+- Setting: Yellowstone National Park (geysers, mountains, forests, open fields)
+- Mission: Find and protect geyser crystals across dragon locations; bond with animal dragons but return them to the wild later
+- Latest Event: Reese just mounted the Wolf Dragon when a giant volcano erupted nearby
+- Stakes: If crystals are stolen, geyser balance and dragon habitats are threatened
 
-Goal: Make fun adventures with funny characters and silly surprises. Make me want to keep playing and telling stories.
+ALLIES & CREATURES:
+- Buffalo Dragons: half buffalo, half dragon with sharp teeth, horns, giant tails, medium wings
+- Wolf Dragon: gray/white/black furred face, dragon body, wolf tail, big fluffy ears, breathes fire
 
-Ongoing Adventure: Be excited and silly! Ask what happens next in a funny way.
+ANTAGONISTS:
+- Obsidian Imps: crystal thieves with very small arms, big nasty heads, short black dresses, side pockets full of stolen crystals
 
-New Adventure: Ask what I like (animals, dragons, magic, etc.). Give me:
-- A fun adventure with good guys and silly bad guys
-- Another fun adventure
-- "Make your own" adventure (I pick everything)
+EDUCATIONAL GOALS:
+- Use target vocabulary: geyser, eruption, habitat, crystal, ember, obsidian
+- Teach empathy and wildlife responsibility
+- Ground reading/comprehension in this adventure world
 
-Make it funny, simple, and exciting!
+Tone: Adventurous but educational. Use simple words for 1st graders. Keep responses short (40 words), 2 lines with \n. Always end with an engaging question about the quest.
 
 Adventure State: ${adventureState === 'new' ? 'NEW_ADVENTURE' : adventureState === 'character_creation' ? 'CHARACTER_CREATION' : 'ONGOING_ADVENTURE'}
 
 Current Adventure Context: ${JSON.stringify(currentAdventure)}
 
-Student Profile (Reese): A 1st grader who loves fun stories, magic, and cute dragons. Likes bright colors and funny pictures. Enjoys silly adventures with magic, friendly dragons, and finding shiny things.
-
-Character Creation: When creating sidekicks/characters, let me choose names with suggestions, offer trait lists (funny, optimistic, resilient, etc.), and ask me to describe appearance for image creation.
-
-Remember: I'm your funny friend Oli - use "I" and call the student "you" or Reese. Always end with something exciting or a fun question. Make it silly and fun for a 1st grader who likes magic, cute dragons, and finding shiny rocks.`
+Remember: You are Oli speaking to Reese. Focus on protecting crystals, caring for dragon allies, and stopping the Obsidian Imps while keeping the adventure realistic and educational.`
         },
         ...currentMessages
           .slice(-30)
@@ -609,7 +613,7 @@ Remember: I'm your funny friend Oli - use "I" and call the student "you" or Rees
             {/* Quick adventure options - show when starting new adventure */}
             {adventureState === 'new' && adventureMessages.length <= 2 && (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12, justifyContent: 'center' }}>
-                {['🐉 Dragons', '💎 Crystals', '🌋 Geysers', '✨ Magic', '🌲 Forests', '🗺️ Quests'].map((option) => (
+                {['🐉 Dragons', '💎 Crystals', '🌋 Volcanoes', '🏔️ Mountains', '🌲 Habitats', '🗺️ Quests'].map((option) => (
                   <button key={option} onClick={() => {
                     const interest = option.split(' ')[1]?.toLowerCase() || option.toLowerCase();
                     setAdventureInput(`I love ${interest} adventures!`);
@@ -634,7 +638,7 @@ Remember: I'm your funny friend Oli - use "I" and call the student "you" or Rees
                   <button onClick={() => {
                     setAdventureState('new');
                     setCurrentAdventure({});
-                    const greeting = "🎉 Hi Reese! I'm Oli, your funny friend! I'm ready for a silly fun trip! \nWhat sounds fun - fluffy dragons, shiny rocks, hot water fun, or something else? Let's make a funny story! 🌋😂";
+                    const greeting = "🌋 Hi Reese! I'm Oli, your adventure companion! The Wolf Dragon is ready and the volcano just erupted! \nShould we protect the geyser crystals from the Obsidian Imps or find a safe habitat for the dragons? 🐺💎";
                     updateAdventureMessages(prev => [...prev, { role: 'ai', text: greeting }]);
                     appendStoryMessage({ role: 'ai', text: greeting });
                   }} aria-label="New Adventure" style={{ width: 32, height: 32, borderRadius: 16, border: '2px solid rgba(245,158,11,0.3)', background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }} title="Start a new adventure">🎪</button>
