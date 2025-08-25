@@ -23,7 +23,7 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
     } else if (isScreen14) {
       return "🎉✨ WOW Reese! We did it! We completed our quest together! 🏆 Now let's create one final amazing picture of our adventure! Tell me how you want to remember this epic journey! What should our victory picture show? 🎨🌟";
     } else {
-      return "🌋✨ Hey Reese! It's me, Oli! I'm SO excited to go on this adventure with you! Before we start our quest, I want to see what's in your imagination! Tell me - what amazing place do you picture us starting our adventure? Paint me a picture with your words! 🎨🐉";
+      return "🌋✨ Hey Reese! It's me, Oli, your adventure buddy! Today we're going on an EPIC quest in Yellowstone! 🐉💎 Tell me - what's happening in our story today? Are we exploring? Fighting dragons? Finding treasure? And what amazing picture should we create to show our adventure? 🎨⚡";
     }
   };
 
@@ -181,18 +181,25 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
     };
   }, []);
 
-  // Reset adventure state and messages when screen changes
+  // Reset adventure state when screen changes (but only when needed)
   useEffect(() => {
-    // Reset to appropriate state for each screen type
+    // Only reset state when switching screens, not on every message update
     if (isScreen1 || isScreen5 || isScreen14) {
       const hasImageInMessages = localAdventureMessages.some(msg => msg.isImage);
-      if (!hasImageInMessages) {
-        setAdventureState('image_creation');
-      } else {
+      const hasFollowUpMessage = localAdventureMessages.some(msg => 
+        msg.role === 'ai' && msg.text?.includes('exciting thing happening')
+      );
+      
+      if (hasImageInMessages) {
         setAdventureState('ready_for_mission');
+      } else if (hasFollowUpMessage) {
+        setAdventureState('follow_up');
+      } else if (localAdventureMessages.length > 1) {
+        // If there's user input but no follow-up yet, we should be in follow_up state
+        setAdventureState('image_creation');
       }
     }
-  }, [isScreen1, isScreen5, isScreen14, localAdventureMessages]);
+  }, [isScreen1, isScreen5, isScreen14]); // Removed localAdventureMessages from dependencies
 
   useEffect(() => {
     // If arriving from Step 4 with a pending chat, inject it once
@@ -412,11 +419,18 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
         followUpMessage = "PERFECT Reese! This is going to be the BEST victory picture ever! 🏆 Now tell me - how do we look in this final moment? Are we celebrating? Are the dragons with us? Paint the perfect ending! 🎨✨";
       }
       
-      // Ask follow-up question
-      updateAdventureMessages(prev => [...prev, { 
-        role: 'ai', 
-        text: followUpMessage
-      }]);
+      // Ask follow-up question (check for duplicates first)
+      updateAdventureMessages(prev => {
+        const lastMessage = prev[prev.length - 1];
+        // Prevent duplicate follow-up messages
+        if (lastMessage?.role === 'ai' && lastMessage?.text?.includes('exciting thing happening')) {
+          return prev;
+        }
+        return [...prev, { 
+          role: 'ai', 
+          text: followUpMessage
+        }];
+      });
       setAdventureState('follow_up');
       return;
     }
