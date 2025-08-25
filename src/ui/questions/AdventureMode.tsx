@@ -8,9 +8,11 @@ type Props = {
   onStoryUpdate?: (storyUpdate: string) => void;
   adventureMessages?: Array<{ role: 'ai' | 'student'; text: string; isImage?: boolean; isLoading?: boolean; imageUrl?: string }>;
   onAdventureMessagesUpdate?: (messages: Array<{ role: 'ai' | 'student'; text: string; isImage?: boolean; isLoading?: boolean; imageUrl?: string }>) => void;
+  onStartMission?: () => void;
+  isScreen1?: boolean;
 };
 
-export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMessages: propAdventureMessages, onAdventureMessagesUpdate }: Props): JSX.Element {
+export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMessages: propAdventureMessages, onAdventureMessagesUpdate, onStartMission, isScreen1 }: Props): JSX.Element {
   const { state: storyState, appendMessage: appendStoryMessage, reset: resetStory, consumePendingAdventureChat, setMetadata } = useStory();
   // Use parent-provided messages or default/local persisted
   const defaultMessages: Array<{ role: 'ai' | 'student'; text: string; isImage?: boolean; isLoading?: boolean; imageUrl?: string }> = [
@@ -648,6 +650,53 @@ Remember: I'm your funny friend Oli - use "I" and call the student "you" or Rees
           </div>
         </div>
       </div>
+
+      {/* Start Mission 1 Button - Only on Screen 1 */}
+      {isScreen1 && onStartMission && (
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'center', 
+          marginTop: '24px',
+          paddingBottom: '20px'
+        }}>
+          <button
+            onClick={onStartMission}
+            style={{
+              background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+              color: 'white',
+              border: 'none',
+              borderRadius: '12px',
+              padding: '16px 32px',
+              fontSize: '18px',
+              fontWeight: '700',
+              fontFamily: 'Quicksand, sans-serif',
+              cursor: 'pointer',
+              boxShadow: '0 8px 24px rgba(245, 158, 11, 0.3)',
+              transition: 'all 0.2s ease',
+              textTransform: 'uppercase',
+              letterSpacing: '1px',
+              minWidth: '200px'
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-2px) scale(1.05)';
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 12px 32px rgba(245, 158, 11, 0.4)';
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0) scale(1)';
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 8px 24px rgba(245, 158, 11, 0.3)';
+            }}
+            onMouseDown={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(1px) scale(0.98)';
+            }}
+            onMouseUp={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-2px) scale(1.05)';
+            }}
+            title="Begin your adventure quest"
+          >
+            🚀 Start Mission 1
+          </button>
+        </div>
+      )}
 
       {showFullscreenImage && (
         <div style={{ position: 'fixed', inset: 0 as any, background: 'rgba(0,0,0,0.95)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1001, padding: 20 }}

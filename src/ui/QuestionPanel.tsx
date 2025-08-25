@@ -3350,6 +3350,8 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
         <AdventureMode 
           onAdventureMessage={(userMessage: string) => setStoryContext(prev => [...prev, userMessage])} 
           onStoryUpdate={(storyUpdate: string) => setStoryContext(prev => [...prev, storyUpdate])}
+          onStartMission={handleNext}
+          isScreen1={isAdventureMode1}
         />
       ) : (
         <>
