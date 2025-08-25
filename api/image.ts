@@ -36,7 +36,15 @@ STYLE: Live-action film quality, never childish or cartoony. Cinematic realism w
 
 TECHNICAL: UHD detail, global illumination, subtle film grain, crisp focus. 35mm/50mm lens equivalent. Motivated lighting sources (window light, practical lamps, overcast daylight, soft bounce). Gentle atmospheric haze allowed.
 
-CONTENT: PG school-safe, age-appropriate. Fully clothed characters in modest attire. No gore, graphic injury, drugs, or weapons. CHARACTERS: Show ONLY the specified main characters (typically Reese and Oli), no additional people, children, adults, or extra human figures. Include Yellowstone adventure elements like majestic creatures, geysers, forest landscapes, crystals, natural settings as appropriate. Focus on wonder, discovery, friendship between the main characters only.
+CONTENT: PG school-safe, age-appropriate. Fully clothed characters in modest attire. No gore, graphic injury, drugs, or weapons. CHARACTERS: Show ONLY the specified main characters (typically Reese and Oli), no additional people, children, adults, or extra human figures. 
+
+CHARACTER SPECIFICATIONS:
+- Reese: 10-year-old boy with black hair (hair color), wearing red cloak and green-brown adventure gear
+- Oli: Reese's loyal companion and adventure partner
+- Use consistent character appearances throughout all images
+- Characters should appear as Caucasian unless explicitly specified otherwise
+
+Include Yellowstone adventure elements like majestic creatures, geysers, forest landscapes, crystals, natural settings as appropriate. Focus on wonder, discovery, friendship between the main characters only.
 
 AVOID: Cartoon, anime, chibi, kawaii, sticker, emoji, pixel art, low-poly, cel-shade, vector/flat UI, toy-like gloss, kids-app look. No low-res, blurry, over-sharpened, distorted hands/faces. No text on images.`
 
@@ -92,7 +100,15 @@ STYLE: Live-action film quality, never childish or cartoony. Cinematic realism w
 
 TECHNICAL: UHD detail, global illumination, subtle film grain, crisp focus. 35mm/50mm lens equivalent. Motivated lighting sources (window light, practical lamps, overcast daylight, soft bounce). Gentle atmospheric haze allowed.
 
-CONTENT: PG school-safe, age-appropriate. Fully clothed characters in modest attire. No gore, graphic injury, drugs, or weapons. CHARACTERS: Show ONLY the specified main characters (typically Reese and Oli), no additional people, children, adults, or extra human figures. Include Yellowstone adventure elements like majestic creatures, geysers, forest landscapes, crystals, natural settings as appropriate. Focus on wonder, discovery, friendship between the main characters only.
+CONTENT: PG school-safe, age-appropriate. Fully clothed characters in modest attire. No gore, graphic injury, drugs, or weapons. CHARACTERS: Show ONLY the specified main characters (typically Reese and Oli), no additional people, children, adults, or extra human figures. 
+
+CHARACTER SPECIFICATIONS:
+- Reese: 10-year-old boy with black hair (hair color), wearing red cloak and green-brown adventure gear
+- Oli: Reese's loyal companion and adventure partner
+- Use consistent character appearances throughout all images
+- Characters should appear as Caucasian unless explicitly specified otherwise
+
+Include Yellowstone adventure elements like majestic creatures, geysers, forest landscapes, crystals, natural settings as appropriate. Focus on wonder, discovery, friendship between the main characters only.
 
 AVOID: Cartoon, anime, chibi, kawaii, sticker, emoji, pixel art, low-poly, cel-shade, vector/flat UI, toy-like gloss, kids-app look. No low-res, blurry, over-sharpened, distorted hands/faces. No text on images.`
 

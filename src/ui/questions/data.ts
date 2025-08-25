@@ -27,7 +27,7 @@ export const longAQuestions: Question[] = [
     word: 'net',
     questionType: 'shortE',
     imageUrl: '🌊🕸️',
-    imagePrompt: 'Reese throwing his bright RED fishing net (the net must be clearly red in color) into a geyser pool to catch magical crystals underwater, with Oli watching nearby in Yellowstone, photorealistic adventure scene',
+    imagePrompt: 'Reese (10-year-old Caucasian boy with black hair, red cloak, green-brown armor) throwing his bright RED fishing net (the net must be clearly red in color) into a geyser pool to catch magical crystals underwater, with Oli (his companion) watching nearby in Yellowstone, photorealistic adventure scene',
     correctAnswer: 0,
     options: [
       'Reese throws his red net into the water',
@@ -44,7 +44,7 @@ export const longAQuestions: Question[] = [
     word: 'cape',
     questionType: 'shortE',
     imageUrl: '🧥✨',
-    imagePrompt: 'Oli wearing his magical bright GLOWING cape (cape must be clearly glowing with magical light) while standing next to Reese near geysers in Yellowstone, with dragon friends in the background, photorealistic adventure scene',
+    imagePrompt: 'Oli (Reese\'s companion) wearing his magical bright GLOWING cape (cape must be clearly glowing with magical light) while standing next to Reese (10-year-old Caucasian boy with black hair, red cloak, green-brown armor) near geysers in Yellowstone, with dragon friends in the background, photorealistic adventure scene',
     correctAnswer: 1,
     options: [
       'Oli puts on his red cap for the adventure',
@@ -72,7 +72,7 @@ export const questions: Question[] = [
       baseLine: 'A bat flies over the crystal cave.',
       questionLine: 'Listen and spell this word.',
       validationWord: 'bat',
-      imagePrompt: 'A bat flying over Reese and Oli near the crystal caves at night in Yellowstone, moonlight shining on their adventure, photorealistic'
+      imagePrompt: 'A bat flying over Reese (10-year-old Caucasian boy with black hair, red cloak) and Oli (his companion) near the crystal caves at night in Yellowstone, moonlight shining on their adventure, photorealistic'
     }
   },
   {
@@ -88,7 +88,7 @@ export const questions: Question[] = [
       baseLine: 'They bake bread over the geyser fire.',
       questionLine: 'Listen and spell this word.',
       validationWord: 'bake',
-      imagePrompt: 'Reese and Oli baking bread over a warm geyser in their Yellowstone camp, with dragon friends watching curiously, photorealistic adventure scene'
+      imagePrompt: 'Reese (10-year-old Caucasian boy with black hair, red cloak) and Oli (his companion) baking bread over a warm geyser in their Yellowstone camp, with dragon friends watching curiously, photorealistic adventure scene'
     }
   },
   {
