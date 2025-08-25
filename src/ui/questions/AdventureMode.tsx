@@ -23,7 +23,7 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
     if (isScreen5) {
       return "🌋⚡ Reese! We've been doing SO well on our quest! I'm pumped up! 💪 Tell me - what happens next in our adventure? Where should we go? What should we do? I'm ready for anything! 🚀🐉";
     } else if (isScreen14) {
-      return "🎉✨ WOW Reese! We did it! We completed our quest together! 🏆 Now let's create one final amazing picture of our adventure! Tell me how you want to remember this epic journey! What should our victory picture show? 🎨🌟";
+      return "🌟⚡ Amazing work, Reese! But wait... our adventure isn't over yet! 😮 What happens NEXT in our story? What new challenge or mystery do we face? Tell me what exciting thing happens next! 🚀🔥";
     } else {
       return "🌋✨ Hey Reese! It's me, Oli, your adventure buddy! Today we're going on an EPIC quest in Yellowstone! 🐉💎 Tell me - what's happening in our story today? Are we exploring? Fighting dragons? Finding treasure? And what amazing picture should we create to show our adventure? 🎨⚡";
     }
@@ -74,7 +74,7 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
     return 'image_creation';
   };
   
-  const [adventureState, setAdventureState] = useState<'new' | 'ongoing' | 'character_creation' | 'image_creation' | 'follow_up' | 'ready_for_mission'>(getInitialAdventureState());
+  const [adventureState, setAdventureState] = useState<'new' | 'ongoing' | 'character_creation' | 'image_creation' | 'follow_up_1' | 'follow_up_2' | 'ready_for_mission'>(getInitialAdventureState());
   const [currentAdventure, setCurrentAdventure] = useState<{
     type?: string;
     protagonist?: string;
@@ -188,16 +188,21 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
     // Only reset state when switching screens, not on every message update
     if (isScreen1 || isScreen5 || isScreen14) {
       const hasImageInMessages = localAdventureMessages.some(msg => msg.isImage);
-      const hasFollowUpMessage = localAdventureMessages.some(msg => 
-        msg.role === 'ai' && msg.text?.includes('exciting thing happening')
+      const hasFirstFollowUpMessage = localAdventureMessages.some(msg => 
+        msg.role === 'ai' && (msg.text?.includes('exciting thing happening') || msg.text?.includes('what happens'))
+      );
+      const hasSecondFollowUpMessage = localAdventureMessages.some(msg => 
+        msg.role === 'ai' && (msg.text?.includes('colors') || msg.text?.includes('details') || msg.text?.includes('looks like'))
       );
       
       if (hasImageInMessages) {
         setAdventureState('ready_for_mission');
-      } else if (hasFollowUpMessage) {
-        setAdventureState('follow_up');
+      } else if (hasSecondFollowUpMessage) {
+        setAdventureState('follow_up_2');
+      } else if (hasFirstFollowUpMessage) {
+        setAdventureState('follow_up_1');
       } else if (localAdventureMessages.length > 1) {
-        // If there's user input but no follow-up yet, we should be in follow_up state
+        // If there's user input but no follow-up yet, we should be in image_creation state
         setAdventureState('image_creation');
       }
     }
@@ -401,25 +406,42 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
   };
 
   // Helper function to generate dynamic AI follow-up responses
-  const generateDynamicFollowUp = async (userDescription: string, screenType: string) => {
+  const generateDynamicFollowUp = async (userDescription: string, screenType: string, followUpNumber: 1 | 2 = 1) => {
     const currentMessages = adventureMessages.filter(m => !m.isLoading && !m.isImage);
     
     let systemPrompt = '';
     if (screenType === 'screen1') {
-      systemPrompt = `You are Oli, Reese's excited adventure buddy! Reese just described their adventure idea: "${userDescription}". 
+      if (followUpNumber === 1) {
+        systemPrompt = `You are Oli, Reese's excited adventure buddy! Reese just described their adventure idea: "${userDescription}". 
 
-Respond with excitement and ask ONE follow-up question to get more details for creating an amazing image. Be specific to what they described.
+Respond with excitement and ask ONE follow-up question about the ACTION/STORY happening in the scene.
 
 RULES:
 - Be SUPER excited about their idea!
-- Ask about what's happening in the scene/action
+- Ask about what's happening in the scene/action/story
 - Keep it short (25 words max)
 - Use emojis and exclamation points
-- Ask only ONE specific follow-up question
+- Focus on WHAT is happening, not visual details yet
 
 EXAMPLES:
 If they said "We're in a cave": "WOW! A cave adventure! 🗻 What are you and I doing in the cave? Are we finding treasure or hiding from something?"
-If they said "Fighting dragons": "AMAZING! Dragon fighting! 🐉 How are we fighting them? With magic swords or dragon powers?"`;
+If they said "Fighting dragons": "AMAZING! Dragon fighting! 🐉 How are we fighting them? What happens in the battle?"`;
+      } else {
+        systemPrompt = `You are Oli, Reese's excited adventure buddy! Now you want to get specific visual details for the perfect image.
+
+Respond with excitement and ask about VISUAL DETAILS - colors, objects, materials, how things look.
+
+RULES:
+- Be excited about creating the perfect picture!
+- Ask about colors, objects, materials, visual details
+- Keep it short (25 words max)
+- Use emojis and exclamation points
+- Focus on HOW things look, what colors, what objects
+
+EXAMPLES:
+"YES! Now I need to picture this perfectly! 🎨 What colors should I see? What objects are around us? How does everything look?"
+"PERFECT! 🌟 Tell me the visual details - what colors, what objects, how do we look in this moment?"`;
+      }
     } else if (screenType === 'screen5') {
       systemPrompt = `You are Oli, Reese's adventure buddy! Reese just described what happens next in our adventure: "${userDescription}".
 
@@ -431,15 +453,29 @@ RULES:
 - Keep it short (25 words max)
 - Use "we" since you're in it together`;
     } else if (screenType === 'screen14') {
-      systemPrompt = `You are Oli, Reese's adventure buddy! Reese described their final victory picture: "${userDescription}".
+      if (followUpNumber === 1) {
+        systemPrompt = `You are Oli, Reese's adventure buddy! Reese described what happens next in your story: "${userDescription}".
 
-Respond with excitement and ask for one more detail to make the victory picture perfect.
+Respond with excitement and ask for more details about this new challenge/adventure.
 
 RULES:
-- Celebrate the victory with them
-- Ask about how you both look or feel in the picture
+- Be excited about the continuing adventure  
+- Ask about what makes this challenge exciting or dangerous
 - Keep it short (25 words max)
-- Focus on the celebration/victory moment`;
+- Focus on building suspense for the next chapter
+- Use adventure/suspense emojis`;
+      } else {
+        systemPrompt = `You are Oli, Reese's adventure buddy! Now create a suspenseful ending image.
+
+Ask about visual details to create a suspenseful cliffhanger image.
+
+RULES:
+- Be excited about creating a suspenseful picture
+- Ask about atmosphere, mood, dramatic visual details
+- Keep it short (25 words max)  
+- Focus on suspense and mystery
+- Use dramatic/suspense emojis`;
+      }
     }
 
     try {
@@ -480,7 +516,7 @@ RULES:
       
       // Generate dynamic follow-up based on user's description and screen type
       const screenType = isScreen5 ? 'screen5' : isScreen14 ? 'screen14' : 'screen1';
-      const dynamicFollowUp = await generateDynamicFollowUp(text, screenType);
+      const dynamicFollowUp = await generateDynamicFollowUp(text, screenType, 1);
       
       // Replace loading message with dynamic response
       updateAdventureMessages(prev => {
@@ -492,12 +528,39 @@ RULES:
         return newMessages;
       });
       
-      setAdventureState('follow_up');
+      setAdventureState('follow_up_1');
       return;
     }
 
-    if (adventureState === 'follow_up') {
-      // Student answered follow-up, now create the image
+    if (adventureState === 'follow_up_1') {
+      // Student answered first follow-up, ask second follow-up
+      updateAdventureMessages(prev => [...prev, { role: 'student', text: text }]);
+      onAdventureMessage?.(text);
+      setAdventureInput('');
+      
+      // Show loading for second follow-up
+      updateAdventureMessages(prev => [...prev, { role: 'ai', text: 'Thinking about your adventure...', isLoading: true }]);
+      
+      // Generate second follow-up about visual details
+      const screenType = isScreen5 ? 'screen5' : isScreen14 ? 'screen14' : 'screen1';
+      const secondFollowUp = await generateDynamicFollowUp(text, screenType, 2);
+      
+      // Replace loading message with second follow-up
+      updateAdventureMessages(prev => {
+        const newMessages = [...prev];
+        const loadingIndex = newMessages.findIndex(m => m.isLoading);
+        if (loadingIndex !== -1) {
+          newMessages[loadingIndex] = { role: 'ai', text: secondFollowUp, isLoading: false };
+        }
+        return newMessages;
+      });
+      
+      setAdventureState('follow_up_2');
+      return;
+    }
+
+    if (adventureState === 'follow_up_2') {
+      // Student answered second follow-up, now create the image
       updateAdventureMessages(prev => [...prev, { role: 'student', text: text }]);
       onAdventureMessage?.(text);
       setAdventureInput('');
@@ -510,7 +573,12 @@ RULES:
       const allUserInput = [...userMessages.map(msg => msg.text), currentUserMessage].join(' ');
       
       // Create rich image prompt using complete context with character restrictions and descriptions
-      const combinedPrompt = `${allUserInput} - ONLY Reese (10-year-old Caucasian boy with black hair, red cloak, green-brown adventure gear) and Oli (his loyal companion) in Yellowstone National Park adventure scene, no additional people or characters, photorealistic, bright and engaging for kids, detailed adventure scene featuring just these two friends`;
+      const basePrompt = `${allUserInput} - ONLY Reese (10-year-old Caucasian boy with black hair, red cloak, green-brown adventure gear) and Oli (his loyal companion) in Yellowstone National Park adventure scene, no additional people or characters, photorealistic, detailed adventure scene featuring just these two friends`;
+      
+      // Add suspenseful atmosphere for final screen
+      const combinedPrompt = isScreen14 ? 
+        `${basePrompt}, dramatic lighting, suspenseful atmosphere, cliffhanger moment, mysterious and exciting mood for next chapter` :
+        `${basePrompt}, bright and engaging for kids`;
       
       updateAdventureMessages(prev => [...prev, { role: 'ai', text: 'Creating your adventure image...', isLoading: true }]);
       
@@ -544,13 +612,14 @@ RULES:
 - Express excitement about what's next
 - Use emojis and exclamation points`;
             } else if (screenType === 'screen14') {
-              systemPrompt = `You are Oli, Reese's adventure buddy! You just created the final victory image of your completed quest. Celebrate your success together!
+              systemPrompt = `You are Oli, Reese's adventure buddy! You just created a suspenseful cliffhanger image for the next chapter of your adventure.
 
 RULES:
-- Celebrate the completed adventure
-- Keep it short (20 words max)
-- Express how amazing the journey was
-- Use celebration emojis`;
+- Be excited about the suspenseful image
+- Keep it short (30 words max)
+- Create anticipation for the next chapter
+- Tell them: "Tell Raj that you want to create the next chapter in your story whenever you are ready!"
+- Use suspense/adventure emojis`;
             }
 
             try {
