@@ -31,9 +31,18 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
     { role: 'ai' as const, text: getDefaultMessage() }
   ];
   const [localAdventureMessages, setLocalAdventureMessages] = useState<Array<{ role: 'ai' | 'student'; text: string; isImage?: boolean; isLoading?: boolean; imageUrl?: string }>>(
-    (storyState?.adventureMessages?.length ?? 0) > 0
-      ? (storyState.adventureMessages as any)
-      : defaultMessages
+    () => {
+      // For different screens, we might want to start fresh or use persisted messages
+      if (isScreen5 || isScreen14) {
+        // These screens should always start fresh with their specific prompts
+        return defaultMessages;
+      }
+      
+      // For Screen 1, use persisted messages if available, otherwise start fresh
+      return (storyState?.adventureMessages?.length ?? 0) > 0
+        ? (storyState.adventureMessages as any)
+        : defaultMessages;
+    }
   );
   const adventureMessages = propAdventureMessages || localAdventureMessages;
   
@@ -53,8 +62,17 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
   const adventureAccumulatedRef = useRef<string>('');
   const adventureRecordingRef = useRef<boolean>(false);
   
-  // Adventure state management
-  const [adventureState, setAdventureState] = useState<'new' | 'ongoing' | 'character_creation' | 'image_creation' | 'follow_up' | 'ready_for_mission'>('image_creation');
+  // Adventure state management - different initial states for different screens
+  const getInitialAdventureState = () => {
+    if (isScreen5 || isScreen14) {
+      return 'image_creation'; // These screens should create images
+    } else if (isScreen1) {
+      return 'image_creation'; // Screen 1 should also create initial image
+    }
+    return 'image_creation';
+  };
+  
+  const [adventureState, setAdventureState] = useState<'new' | 'ongoing' | 'character_creation' | 'image_creation' | 'follow_up' | 'ready_for_mission'>(getInitialAdventureState());
   const [currentAdventure, setCurrentAdventure] = useState<{
     type?: string;
     protagonist?: string;
@@ -162,6 +180,19 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
       try { audioManager.stopAll(); } catch {}
     };
   }, []);
+
+  // Reset adventure state and messages when screen changes
+  useEffect(() => {
+    // Reset to appropriate state for each screen type
+    if (isScreen1 || isScreen5 || isScreen14) {
+      const hasImageInMessages = localAdventureMessages.some(msg => msg.isImage);
+      if (!hasImageInMessages) {
+        setAdventureState('image_creation');
+      } else {
+        setAdventureState('ready_for_mission');
+      }
+    }
+  }, [isScreen1, isScreen5, isScreen14, localAdventureMessages]);
 
   useEffect(() => {
     // If arriving from Step 4 with a pending chat, inject it once
@@ -749,7 +780,7 @@ Remember: You're Oli talking TO Reese as his adventure buddy. Be excited, brave,
       </div>
 
       {/* Start Mission 1 Button - Only on Screen 1 and when ready */}
-      {isScreen1 && onStartMission && adventureState === 'ready_for_mission' && (
+      {isScreen1 && onStartMission && (adventureState === 'ready_for_mission' || adventureMessages.some(msg => msg.isImage)) && (
         <div style={{ 
           display: 'flex', 
           justifyContent: 'center', 
