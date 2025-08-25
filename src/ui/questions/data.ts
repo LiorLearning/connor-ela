@@ -14,10 +14,10 @@ export const speechQuestions: SpeechQuestion[] = [
   {
     id: 1,
     text:
-      "Wow! Reese and Oli found a big magic egg in fun Yellowstone! Cute fluffy dragons with wings play near the hot water that goes whoosh. The ground shakes under Reese's feet as they walk to the shiny pools. A dragon wags its big tail, ready to help, while another comes out of the misty trees. 'We need to get those shiny rocks!' says Reese. Oh no! Tiny sneaky people creep toward the pretty gems...",
+      "Reese and Oli had to sit by the crystal pool in Yellowstone. They wanted to bake some bread for their team of dragon friends. A big bat flew over their heads as they started their quest. 'Let's sail our boat across the lake!' said Oli. Reese flew his kite high above the geysers while Oli watched. Together, this brave team found all the magical crystals they needed for their adventure.",
     imageUrl: '🌋⚡🐉💎🌲',
-    expectedWords: ['red', 'net', 'get'],
-    explanation: 'Great job reading! You found all the words with silent e in our fun Yellowstone story.',
+    expectedWords: ['sit', 'bake', 'team', 'bat', 'boat', 'kite'],
+    explanation: 'Amazing job reading! You found all the phonics words from our adventure - CVC, CVCe, and vowel team patterns!',
   },
 ];
 

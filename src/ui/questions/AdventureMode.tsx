@@ -509,8 +509,8 @@ RULES:
       // Combine all user story elements
       const allUserInput = [...userMessages.map(msg => msg.text), currentUserMessage].join(' ');
       
-      // Create rich image prompt using complete context
-      const combinedPrompt = `${allUserInput} - Reese and Oli in Yellowstone National Park adventure scene, photorealistic, bright and engaging for kids, detailed adventure scene`;
+      // Create rich image prompt using complete context with character restrictions
+      const combinedPrompt = `${allUserInput} - ONLY Reese and Oli (two main characters) in Yellowstone National Park adventure scene, no additional people or characters, photorealistic, bright and engaging for kids, detailed adventure scene featuring just these two friends`;
       
       updateAdventureMessages(prev => [...prev, { role: 'ai', text: 'Creating your adventure image...', isLoading: true }]);
       
