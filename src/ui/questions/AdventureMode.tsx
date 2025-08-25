@@ -16,7 +16,7 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
   const { state: storyState, appendMessage: appendStoryMessage, reset: resetStory, consumePendingAdventureChat, setMetadata } = useStory();
   // Use parent-provided messages or default/local persisted
   const defaultMessages: Array<{ role: 'ai' | 'student'; text: string; isImage?: boolean; isLoading?: boolean; imageUrl?: string }> = [
-    { role: 'ai' as const, text: "🌋🔥 Hey Reese! I'm your friend Oli! You just got on the Wolf Dragon and WOW - a giant volcano is going BOOM right next to us! 😱 The geyser crystals are shaking and the Obsidian Imps are trying to steal them! Should we fly to safety or help protect the crystals? 🐺✨ What do you want to do?" }
+    { role: 'ai' as const, text: "🌋🔥 Hey Reese! I'm your friend Oli! You just got on the Wolf Dragon and WOW - a giant volcano is going BOOM right next to us! 😱 The geyser crystals are shaking and the Midgets are trying to steal them! Should we fly to safety or help protect the crystals? 🐺✨ What do you want to do?" }
   ];
   const [localAdventureMessages, setLocalAdventureMessages] = useState<Array<{ role: 'ai' | 'student'; text: string; isImage?: boolean; isLoading?: boolean; imageUrl?: string }>>(
     (storyState?.adventureMessages?.length ?? 0) > 0
@@ -59,7 +59,7 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
     teammates: 'Buffalo Dragons (half buffalo, half dragon with sharp teeth, horns, giant tails, medium wings) and Wolf Dragon (gray/white/black furred face, dragon body, wolf tail, big fluffy ears, breathes fire)',
     setting: 'Yellowstone National Park with geysers, mountains, forests, and open fields',
     goal: 'find and protect geyser crystals across dragon locations, bond with animal dragons but return them to the wild later',
-    villain: 'Obsidian Imps (crystal thieves with very small arms, big nasty heads, short black dresses, side pockets full of stolen crystals)',
+    villain: 'Midgets (crystal thieves with very small arms, big nasty heads, short black dresses, side pockets full of stolen crystals)',
     recentEvent: 'Reese just mounted the Wolf Dragon when a giant volcano suddenly erupted nearby, threatening the geyser crystal balance and dragon habitats'
   });
   const ADVENTURE_IMAGE_OVERLAY_OPACITY = 0.45;
@@ -429,7 +429,7 @@ ALLIES & CREATURES:
 - Wolf Dragon: gray/white/black furred face, dragon body, wolf tail, big fluffy ears, breathes fire
 
 ANTAGONISTS:
-- Obsidian Imps: crystal thieves with very small arms, big nasty heads, short black dresses, side pockets full of stolen crystals
+- Midgets: crystal thieves with very small arms, big nasty heads, short black dresses, side pockets full of stolen crystals
 
 EDUCATIONAL GOALS:
 - Use target vocabulary: geyser, eruption, habitat, crystal, ember, obsidian
@@ -442,7 +442,7 @@ Adventure State: ${adventureState === 'new' ? 'NEW_ADVENTURE' : adventureState =
 
 Current Adventure Context: ${JSON.stringify(currentAdventure)}
 
-Remember: You are Oli speaking to Reese. Focus on protecting crystals, caring for dragon allies, and stopping the Obsidian Imps while keeping the adventure realistic and educational.`
+Remember: You are Oli speaking to Reese. Focus on protecting crystals, caring for dragon allies, and stopping the Midgets while keeping the adventure realistic and educational.`
         },
         ...currentMessages
           .slice(-30)
@@ -638,7 +638,7 @@ Remember: You are Oli speaking to Reese. Focus on protecting crystals, caring fo
                   <button onClick={() => {
                     setAdventureState('new');
                     setCurrentAdventure({});
-                    const greeting = "🌋 Hi Reese! I'm Oli, your adventure companion! The Wolf Dragon is ready and the volcano just erupted! \nShould we protect the geyser crystals from the Obsidian Imps or find a safe habitat for the dragons? 🐺💎";
+                    const greeting = "🌋 Hi Reese! I'm Oli, your adventure companion! The Wolf Dragon is ready and the volcano just erupted! \nShould we protect the geyser crystals from the Midgets or find a safe habitat for the dragons? 🐺💎";
                     updateAdventureMessages(prev => [...prev, { role: 'ai', text: greeting }]);
                     appendStoryMessage({ role: 'ai', text: greeting });
                   }} aria-label="New Adventure" style={{ width: 32, height: 32, borderRadius: 16, border: '2px solid rgba(245,158,11,0.3)', background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }} title="Start a new adventure">🎪</button>
