@@ -16,7 +16,7 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
   const { state: storyState, appendMessage: appendStoryMessage, reset: resetStory, consumePendingAdventureChat, setMetadata } = useStory();
   // Use parent-provided messages or default/local persisted
   const defaultMessages: Array<{ role: 'ai' | 'student'; text: string; isImage?: boolean; isLoading?: boolean; imageUrl?: string }> = [
-    { role: 'ai' as const, text: "🌋🔥 Hey Reese! I'm your friend Oli! You just got on the Wolf Dragon and WOW - a giant volcano is going BOOM right next to us! 😱 The geyser crystals are shaking and the Midgets are trying to steal them! Should we fly to safety or help protect the crystals? 🐺✨ What do you want to do?" }
+    { role: 'ai' as const, text: "🌋✨ Hi Reese! I'm Oli, your adventure buddy! Before we start our quest in Yellowstone, let's make a picture of our adventure! Can you tell me what you see in your mind? Describe the magical place where we'll start our journey! 🎨🐉" }
   ];
   const [localAdventureMessages, setLocalAdventureMessages] = useState<Array<{ role: 'ai' | 'student'; text: string; isImage?: boolean; isLoading?: boolean; imageUrl?: string }>>(
     (storyState?.adventureMessages?.length ?? 0) > 0
@@ -42,7 +42,7 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
   const adventureRecordingRef = useRef<boolean>(false);
   
   // Adventure state management
-  const [adventureState, setAdventureState] = useState<'new' | 'ongoing' | 'character_creation'>('ongoing');
+  const [adventureState, setAdventureState] = useState<'new' | 'ongoing' | 'character_creation' | 'image_creation' | 'follow_up' | 'ready_for_mission'>('image_creation');
   const [currentAdventure, setCurrentAdventure] = useState<{
     type?: string;
     protagonist?: string;
@@ -352,6 +352,83 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
     const text = adventureInput.trim();
     console.log('sendAdventureMessage called with text:', text);
     if (!text) return;
+
+    // Handle the image creation flow
+    if (adventureState === 'image_creation') {
+      // Student described their visual scenario
+      updateAdventureMessages(prev => [...prev, { role: 'student', text: text }]);
+      onAdventureMessage?.(text);
+      setAdventureInput('');
+      
+      // Ask follow-up question
+      updateAdventureMessages(prev => [...prev, { 
+        role: 'ai', 
+        text: "That sounds amazing! 🎨 Now, what's the most exciting thing happening in your picture? Is there action, magic, or something special?" 
+      }]);
+      setAdventureState('follow_up');
+      return;
+    }
+
+    if (adventureState === 'follow_up') {
+      // Student answered follow-up, now create the image
+      updateAdventureMessages(prev => [...prev, { role: 'student', text: text }]);
+      onAdventureMessage?.(text);
+      setAdventureInput('');
+      
+      // Get previous description and combine with follow-up
+      const prevMessages = adventureMessages;
+      const descriptionMessage = prevMessages[prevMessages.length - 3]?.text || '';
+      const combinedPrompt = `${descriptionMessage} ${text} - Reese and Oli in Yellowstone National Park adventure scene, photorealistic, bright and engaging for kids`;
+      
+      updateAdventureMessages(prev => [...prev, { role: 'ai', text: 'Creating your adventure image...', isLoading: true }]);
+      
+      try {
+        const response = await fetch('/api/image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt: combinedPrompt })
+        });
+        const data = await response.json();
+        if (response.ok && data.imageUrl) {
+          updateAdventureMessages(prev => {
+            const newMessages = [...prev];
+            const loadingIndex = newMessages.findIndex(m => m.isLoading);
+            if (loadingIndex !== -1) {
+              newMessages[loadingIndex] = {
+                role: 'ai',
+                text: "Perfect! Here's your adventure scene! 🎨 Ready to start the mission?",
+                isImage: true,
+                imageUrl: data.imageUrl,
+                isLoading: false
+              };
+            }
+            return newMessages;
+          });
+          setFullscreenImageUrl(data.imageUrl);
+          setShowFullscreenImage(true);
+          setAdventureState('ready_for_mission');
+        } else {
+          throw new Error(data.error || 'Failed to generate image');
+        }
+      } catch (error) {
+        console.error('Error creating image:', error);
+        updateAdventureMessages(prev => {
+          const newMessages = [...prev];
+          const loadingIndex = newMessages.findIndex(m => m.isLoading);
+          if (loadingIndex !== -1) {
+            newMessages[loadingIndex] = {
+              role: 'ai',
+              text: "Sorry, I couldn't create that image. Let's try again! Describe your adventure scene! 🎨",
+              isLoading: false
+            };
+          }
+          return newMessages;
+        });
+        setAdventureState('image_creation');
+      }
+      return;
+    }
+
     if (text.toLowerCase() === 'image' || text.toLowerCase() === 'create image' || text.toLowerCase().startsWith('create image')) {
               const imagePrompt = text.toLowerCase() === 'image' || text.toLowerCase() === 'create image'
         ? 'Reese in red cape with Oli exploring fun Yellowstone with hot water going whoosh, misty trees, and cute fluffy dragons with wings, bright happy colors'
@@ -647,8 +724,8 @@ Remember: You are Oli speaking to Reese. Focus on protecting crystals, caring fo
         </div>
       </div>
 
-      {/* Start Mission 1 Button - Only on Screen 1 */}
-      {isScreen1 && onStartMission && (
+      {/* Start Mission 1 Button - Only on Screen 1 and when ready */}
+      {isScreen1 && onStartMission && adventureState === 'ready_for_mission' && (
         <div style={{ 
           display: 'flex', 
           justifyContent: 'center', 

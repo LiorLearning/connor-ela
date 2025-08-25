@@ -27,34 +27,34 @@ export const longAQuestions: Question[] = [
     word: 'net',
     questionType: 'shortE',
     imageUrl: '🌊🕸️',
-    imagePrompt: 'Reese throwing a bright red fishing net into a crystal-clear geyser pool to catch sparkling magical gems underwater in Yellowstone, photorealistic adventure scene',
+    imagePrompt: 'A red fishing net being used to catch something in water, simple and clear, photorealistic',
     correctAnswer: 0,
     options: [
-      'The red net (CVC - short vowel)',
-      'The neat cave (CVCe - long vowel)', 
-      'The team needs (vowel team - long vowel)'
+      'The red net',
+      'The neat cave', 
+      'The team needs'
     ],
     targetWord: 'net',
-    followUpPrompt: 'Awesome! Now write a sentence using another CVC word (short vowel)!',
-    explanation: 'Perfect! "Net" follows the CVC pattern (consonant-vowel-consonant) which makes the "e" short!',
-    incorrectFeedback: 'Look for the CVC pattern! Net = n-e-t (consonant-vowel-consonant) = short vowel sound.'
+    followUpPrompt: 'Great job! Can you make a sentence with another short vowel word?',
+    explanation: 'Yes! "Net" has a short "e" sound like in "pet" and "get"!',
+    incorrectFeedback: 'Look for words with short vowel sounds like "net"!'
   },
   {
     id: 2,
     word: 'cape',
     questionType: 'shortE',
     imageUrl: '🧥✨',
-    imagePrompt: 'Oli wearing a magical red cape that glows with crystal energy, standing proudly next to a geyser in Yellowstone, photorealistic adventure scene',
+    imagePrompt: 'A person wearing a bright red cape, simple and clear, photorealistic',
     correctAnswer: 1,
     options: [
-      'Oli wears a red cap (CVC - short vowel)',
-      'Oli wears a magic cape (CVCe - long vowel)',
-      'The team helps Oli (vowel team - long vowel)'
+      'Oli wears a red cap',
+      'Oli wears a magic cape',
+      'The team helps Oli'
     ],
     targetWord: 'cape',
-    followUpPrompt: 'Excellent! Now write a sentence using another CVCe word (long vowel)!',
-    explanation: 'Yes! "Cape" follows the CVCe pattern (consonant-vowel-consonant-e) which makes the "a" long!',
-    incorrectFeedback: 'Look for the CVCe pattern! Cape = c-a-p-e (the silent e makes the a say its name).'
+    followUpPrompt: 'Awesome! Can you make a sentence with another long vowel word?',
+    explanation: 'Perfect! "Cape" has a long "a" sound because of the silent "e" at the end!',
+    incorrectFeedback: 'Look for words with long vowel sounds like "cape"!'
   },
 ];
 
@@ -65,14 +65,14 @@ export const questions: Question[] = [
     imageUrl: '🦇🌙',
     isSpelling: true,
     correctAnswer: 'bat',
-    explanation: 'Perfect! "Bat" follows the CVC pattern (b-a-t) which makes the "a" short!',
+    explanation: 'Great job! "Bat" has a short "a" sound!',
     aiHook: {
       targetWord: 'bat',
       intent: 'spelling',
       baseLine: 'A bat flies over the crystal cave.',
-      questionLine: 'Listen and spell this CVC word with a short vowel sound.',
+      questionLine: 'Listen and spell this word.',
       validationWord: 'bat',
-      imagePrompt: 'A BAT flying over crystal caves at night in Yellowstone, moonlight illuminating the scene.'
+      imagePrompt: 'A bat flying at night, simple and clear, photorealistic'
     }
   },
   {
@@ -81,14 +81,14 @@ export const questions: Question[] = [
     imageUrl: '🔥🍞',
     isSpelling: true,
     correctAnswer: 'bake',
-    explanation: 'Great job! "Bake" follows the CVCe pattern (b-a-k-e) - the silent e makes the "a" long!',
+    explanation: 'Awesome! "Bake" has a long "a" sound!',
     aiHook: {
       targetWord: 'bake',
       intent: 'spelling',
       baseLine: 'They bake bread over the geyser fire.',
-      questionLine: 'Listen and spell this CVCe word with a long vowel sound.',
+      questionLine: 'Listen and spell this word.',
       validationWord: 'bake',
-      imagePrompt: 'Reese and Oli BAKING bread over glowing geyser heat in Yellowstone wilderness.'
+      imagePrompt: 'Someone baking bread in an oven, simple and clear, photorealistic'
     }
   },
   {
@@ -97,14 +97,14 @@ export const questions: Question[] = [
     imageUrl: '👥✨',
     isSpelling: true,
     correctAnswer: 'team',
-    explanation: 'Awesome! "Team" has the vowel team "ea" which makes a long "e" sound!',
+    explanation: 'Perfect! "Team" has a long "e" sound!',
     aiHook: {
       targetWord: 'team',
       intent: 'spelling',
       baseLine: 'Reese and Oli work as a team.',
-      questionLine: 'Listen and spell this word with a vowel team that makes a long sound.',
+      questionLine: 'Listen and spell this word.',
       validationWord: 'team',
-      imagePrompt: 'Reese and Oli working together as a TEAM, gathering crystals near geysers.'
+      imagePrompt: 'Two friends working together as a team, simple and clear, photorealistic'
     }
   },
   {
@@ -113,14 +113,14 @@ export const questions: Question[] = [
     imageUrl: '🪑💎',
     isSpelling: true,
     correctAnswer: 'sit',
-    explanation: 'Excellent! "Sit" follows the CVC pattern (s-i-t) which makes the "i" short!',
+    explanation: 'Great! "Sit" has a short "i" sound!',
     aiHook: {
       targetWord: 'sit',
       intent: 'spelling',
       baseLine: 'Reese sits by the crystal pool.',
-      questionLine: 'Listen and spell this CVC word with a short vowel sound.',
+      questionLine: 'Listen and spell this word.',
       validationWord: 'sit',
-      imagePrompt: 'Reese SITTING peacefully beside a sparkling crystal pool in Yellowstone.'
+      imagePrompt: 'A person sitting on a chair, simple and clear, photorealistic'
     }
   },
   {
@@ -129,14 +129,14 @@ export const questions: Question[] = [
     imageUrl: '🪁💨',
     isSpelling: true,
     correctAnswer: 'kite',
-    explanation: 'Perfect! "Kite" follows the CVCe pattern (k-i-t-e) - the silent e makes the "i" long!',
+    explanation: 'Super! "Kite" has a long "i" sound!',
     aiHook: {
       targetWord: 'kite',
       intent: 'spelling',
       baseLine: 'Oli flies a kite over the geysers.',
-      questionLine: 'Listen and spell this CVCe word with a long vowel sound.',
+      questionLine: 'Listen and spell this word.',
       validationWord: 'kite',
-      imagePrompt: 'Oli flying a colorful KITE high above Yellowstone geysers on a windy day.'
+      imagePrompt: 'A colorful kite flying in the sky, simple and clear, photorealistic'
     }
   },
   {
@@ -145,14 +145,14 @@ export const questions: Question[] = [
     imageUrl: '⛵🌊',
     isSpelling: true,
     correctAnswer: 'boat',
-    explanation: 'Amazing! "Boat" has the vowel team "oa" which makes a long "o" sound!',
+    explanation: 'Awesome! "Boat" has a long "o" sound!',
     aiHook: {
       targetWord: 'boat',
       intent: 'spelling',
       baseLine: 'They sail a boat on the crystal lake.',
-      questionLine: 'Listen and spell this word with a vowel team that makes a long sound.',
+      questionLine: 'Listen and spell this word.',
       validationWord: 'boat',
-      imagePrompt: 'Reese and Oli sailing a magical BOAT across a crystal-clear lake near geysers.'
+      imagePrompt: 'A boat sailing on water, simple and clear, photorealistic'
     }
   },
   {
@@ -160,14 +160,14 @@ export const questions: Question[] = [
     word: 'cut',
     imageUrl: '✂️🌿',
     correctAnswer: 0, // CVC option (index 0 in pattern sorting)
-    explanation: 'Yes! "Cut" follows the CVC pattern (c-u-t) which makes the "u" short!',
+    explanation: 'Good job! "Cut" has a short "u" sound!',
     aiHook: {
       targetWord: 'cut',
       intent: 'sound',
       baseLine: 'Oli cuts some plants for the dragons.',
-      questionLine: 'Which pattern does this word follow? Listen: cut.',
+      questionLine: 'What kind of word is this? Listen: cut.',
       validationWord: 'cut',
-      imagePrompt: 'Oli carefully CUTTING green plants to feed friendly dragons.'
+      imagePrompt: 'Scissors cutting paper, simple and clear, photorealistic'
     }
   },
   {
@@ -175,14 +175,14 @@ export const questions: Question[] = [
     word: 'cute',
     imageUrl: '🐉😍',
     correctAnswer: 1, // CVCe option (index 1 in pattern sorting)
-    explanation: 'Great! "Cute" follows the CVCe pattern (c-u-t-e) - the silent e makes the "u" long!',
+    explanation: 'Perfect! "Cute" has a long "u" sound!',
     aiHook: {
       targetWord: 'cute',
       intent: 'sound',
       baseLine: 'The baby dragons are very cute.',
-      questionLine: 'Which pattern does this word follow? Listen: cute.',
+      questionLine: 'What kind of word is this? Listen: cute.',
       validationWord: 'cute',
-      imagePrompt: 'Adorable baby dragons being very CUTE, playing around crystal pools.'
+      imagePrompt: 'A cute puppy or kitten, simple and clear, photorealistic'
     }
   },
 ];

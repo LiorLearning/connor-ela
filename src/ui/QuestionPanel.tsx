@@ -3283,7 +3283,7 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
                   marginBottom: '8px',
                   textAlign: 'center'
                 }}>
-                  🔤 Which vowel pattern do you see?
+                  📖 Which sentence matches the picture?
                 </div>
                 <div style={{ 
                   fontSize: '14px', 
@@ -3291,11 +3291,11 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
                   fontWeight: '500',
                   textAlign: 'center'
                 }}>
-                  Look for CVC (short), CVCe (long), or vowel teams (long)!
+                  Look at the picture and pick the right sentence!
                 </div>
                 {/* Audio button for hearing the question */}
                 <button
-                  onClick={() => playElevenTTS('Which vowel pattern do you see? Look for CVC with short vowels, CVCe with long vowels, or vowel teams with long vowels!')}
+                  onClick={() => playElevenTTS('Which sentence matches the picture? Look at the picture and pick the right sentence!')}
                   title="Hear the question"
                   style={{
                     position: 'absolute',
@@ -3664,76 +3664,76 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
             </div>
           ) : (
             /* Traditional spelling input interface for long A questions */
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '20px',
+            marginTop: '12px'
+          }}>
+            <div style={{
+              fontSize: '20px',
+              fontWeight: '600',
+              color: '#374151',
+              textAlign: 'center'
+            }}>
+              🎯 Type the word you hear:
+            </div>
             <div style={{
               display: 'flex',
-              flexDirection: 'column',
+              gap: '8px',
               alignItems: 'center',
-              gap: '20px',
-              marginTop: '12px'
+              flexWrap: 'wrap',
+              justifyContent: 'center'
             }}>
-              <div style={{
-                fontSize: '20px',
-                fontWeight: '600',
-                color: '#374151',
-                textAlign: 'center'
-              }}>
-                🎯 Type the word you hear:
-              </div>
-              <div style={{
-                display: 'flex',
-                gap: '8px',
-                alignItems: 'center',
-                flexWrap: 'wrap',
-                justifyContent: 'center'
-              }}>
-                {Array.from({ length: (currentLongAQuestion.correctAnswer as string).length }).map((_, index) => (
-                  <input
-                    key={index}
-                    type="text"
-                    aria-label={`Letter ${index + 1}`}
-                    maxLength={1}
-                    value={spellingInput[index] || ''}
-                    onChange={(e) => {
-                      const newInput = spellingInput.split('');
-                      newInput[index] = e.target.value.toLowerCase();
-                      setSpellingInput(newInput.join(''));
-                      // Auto-focus next input
-                      if (e.target.value && index < (currentLongAQuestion.correctAnswer as string).length - 1) {
-                        const nextInput = e.currentTarget.parentElement?.children[index + 1] as HTMLInputElement;
-                        nextInput?.focus();
-                      }
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Backspace' && !e.currentTarget.value && index > 0) {
-                        const prevInput = e.currentTarget.parentElement?.children[index - 1] as HTMLInputElement;
-                        prevInput?.focus();
-                      }
-                    }}
-                    style={{
-                      width: '48px',
-                      height: '56px',
-                      fontSize: '22px',
-                      fontWeight: '700',
-                      textAlign: 'center',
-                      border: '3px solid #e0e0e0',
-                      borderRadius: '10px',
-                      background: 'white',
-                      color: '#374151',
-                      outline: 'none',
-                      transition: 'all 0.2s ease'
-                    }}
-                    onFocus={(e) => {
-                      e.currentTarget.style.border = '3px solid #8b5cf6';
-                      e.currentTarget.style.boxShadow = '0 0 0 3px rgba(139, 92, 246, 0.1)';
-                    }}
-                    onBlur={(e) => {
-                      e.currentTarget.style.border = '3px solid #e0e0e0';
-                      e.currentTarget.style.boxShadow = 'none';
-                    }}
-                  />
-                ))}
-              </div>
+              {Array.from({ length: (currentLongAQuestion.correctAnswer as string).length }).map((_, index) => (
+                <input
+                  key={index}
+                  type="text"
+                  aria-label={`Letter ${index + 1}`}
+                  maxLength={1}
+                  value={spellingInput[index] || ''}
+                  onChange={(e) => {
+                    const newInput = spellingInput.split('');
+                    newInput[index] = e.target.value.toLowerCase();
+                    setSpellingInput(newInput.join(''));
+                    // Auto-focus next input
+                    if (e.target.value && index < (currentLongAQuestion.correctAnswer as string).length - 1) {
+                      const nextInput = e.currentTarget.parentElement?.children[index + 1] as HTMLInputElement;
+                      nextInput?.focus();
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Backspace' && !e.currentTarget.value && index > 0) {
+                      const prevInput = e.currentTarget.parentElement?.children[index - 1] as HTMLInputElement;
+                      prevInput?.focus();
+                    }
+                  }}
+                  style={{
+                    width: '48px',
+                    height: '56px',
+                    fontSize: '22px',
+                    fontWeight: '700',
+                    textAlign: 'center',
+                    border: '3px solid #e0e0e0',
+                    borderRadius: '10px',
+                    background: 'white',
+                    color: '#374151',
+                    outline: 'none',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.border = '3px solid #8b5cf6';
+                    e.currentTarget.style.boxShadow = '0 0 0 3px rgba(139, 92, 246, 0.1)';
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.border = '3px solid #e0e0e0';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
+                />
+              ))}
             </div>
+          </div>
           )}
         </>
       ) : isAdventureMode ? (
