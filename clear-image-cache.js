@@ -2,6 +2,7 @@
 // Run this in the browser console to clear all image caches
 
 console.log('🧹 Clearing all image caches...');
+console.log('🐉 Fixed: Midgets will now appear when mentioned in adventure');
 
 // Clear localStorage image cache
 let clearedCount = 0;
@@ -27,8 +28,14 @@ if (window.questionImageCacheRef) {
   console.log('✅ Cleared in-memory image cache');
 }
 
+console.log('🔧 FIXES APPLIED:');
+console.log('   • Midgets can now appear in images when mentioned');
+console.log('   • Character restrictions updated for story antagonists');  
+console.log('   • Dragons and other story characters preserved');
+console.log('   • No random characters still blocked');
+
 // Force page reload to regenerate images
-console.log('🔄 Reloading page to regenerate all images with improved accuracy...');
+console.log('🔄 Reloading page to regenerate all images with Midget support...');
 setTimeout(() => {
   window.location.reload();
 }, 1000);

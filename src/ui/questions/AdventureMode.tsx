@@ -588,7 +588,7 @@ CRITICAL RULES:
       const allUserInput = [...userMessages.map(msg => msg.text), currentUserMessage].join(' ');
       
       // Create rich image prompt using complete context with character restrictions and descriptions
-      const basePrompt = `${allUserInput} - ONLY Reese (10-year-old Caucasian boy with black hair, red cloak, green-brown adventure gear) and Oli (his loyal companion) in Yellowstone National Park adventure scene, no additional people or characters, photorealistic, detailed adventure scene featuring just these two friends`;
+      const basePrompt = `${allUserInput} - Main characters: Reese (10-year-old Caucasian boy with black hair, red cloak, green-brown adventure gear) and Oli (his loyal companion) in Yellowstone National Park adventure scene. Include any story characters mentioned (Midgets, Dragons, etc.). Photorealistic, detailed adventure scene`;
       
       // Add suspenseful atmosphere for final screen
       const combinedPrompt = isScreen14 ? 
