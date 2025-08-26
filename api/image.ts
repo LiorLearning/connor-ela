@@ -46,7 +46,9 @@ CHARACTER SPECIFICATIONS:
 
 Include Yellowstone adventure elements like majestic creatures, geysers, forest landscapes, crystals, natural settings as appropriate. Focus on wonder, discovery, friendship between the main characters only.
 
-AVOID: Cartoon, anime, chibi, kawaii, sticker, emoji, pixel art, low-poly, cel-shade, vector/flat UI, toy-like gloss, kids-app look. No low-res, blurry, over-sharpened, distorted hands/faces. No text on images.`
+AVOID: Cartoon, anime, chibi, kawaii, sticker, emoji, pixel art, low-poly, cel-shade, vector/flat UI, toy-like gloss, kids-app look. No low-res, blurry, over-sharpened, distorted hands/faces. 
+
+ABSOLUTELY NO TEXT: No text, words, letters, signs, writing, captions, speech bubbles, or any readable text elements anywhere in the image. Pure visual scene only.`
 
     // First, try the original prompt
     try {
@@ -110,7 +112,9 @@ CHARACTER SPECIFICATIONS:
 
 Include Yellowstone adventure elements like majestic creatures, geysers, forest landscapes, crystals, natural settings as appropriate. Focus on wonder, discovery, friendship between the main characters only.
 
-AVOID: Cartoon, anime, chibi, kawaii, sticker, emoji, pixel art, low-poly, cel-shade, vector/flat UI, toy-like gloss, kids-app look. No low-res, blurry, over-sharpened, distorted hands/faces. No text on images.`
+AVOID: Cartoon, anime, chibi, kawaii, sticker, emoji, pixel art, low-poly, cel-shade, vector/flat UI, toy-like gloss, kids-app look. No low-res, blurry, over-sharpened, distorted hands/faces. 
+
+ABSOLUTELY NO TEXT: No text, words, letters, signs, writing, captions, speech bubbles, or any readable text elements anywhere in the image. Pure visual scene only.`
 
         // Try again with sanitized prompt
         const retryResponse = await openai.images.generate({

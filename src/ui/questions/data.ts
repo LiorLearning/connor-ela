@@ -14,9 +14,9 @@ export const speechQuestions: SpeechQuestion[] = [
   {
     id: 1,
     text:
-      "Reese and Oli had to sit by the crystal pool in Yellowstone. They wanted to bake some bread for their team of dragon friends. A big bat flew over their heads as they started their quest. 'Let's sail our boat across the lake!' said Oli. Reese flew his kite high above the geysers while Oli watched. Together, this brave team found all the magical crystals they needed for their adventure.",
+      "Reese and Oli wanted to bake some bread for their team of dragon friends in Yellowstone. A big bat flew over their heads as they started their magical quest. Together, this brave team searched for crystals near the geysers and hot springs. The bat guided them to a special cave where magical crystals sparkled in the darkness.",
     imageUrl: '🌋⚡🐉💎🌲',
-    expectedWords: ['sit', 'bake', 'team', 'bat', 'boat', 'kite'],
+    expectedWords: ['bake', 'team', 'bat'],
     explanation: 'Amazing job reading! You found all the phonics words from our adventure - CVC, CVCe, and vowel team patterns!',
   },
 ];
@@ -107,54 +107,7 @@ export const questions: Question[] = [
       imagePrompt: 'Reese and Oli working together as a team gathering magical crystals near geysers, with their dragon allies helping them, photorealistic Yellowstone adventure'
     }
   },
-  {
-    id: 4,
-    word: 'sit',
-    imageUrl: '🪑💎',
-    isSpelling: true,
-    correctAnswer: 'sit',
-    explanation: 'Great! "Sit" has a short "i" sound!',
-    aiHook: {
-      targetWord: 'sit',
-      intent: 'spelling',
-      baseLine: 'Reese sits by the crystal pool.',
-      questionLine: 'Listen and spell this word.',
-      validationWord: 'sit',
-      imagePrompt: 'Reese sitting peacefully by a crystal pool in Yellowstone while Oli and dragon friends rest nearby after their adventure, photorealistic scene'
-    }
-  },
-  {
-    id: 5,
-    word: 'kite',
-    imageUrl: '🪁💨',
-    isSpelling: true,
-    correctAnswer: 'kite',
-    explanation: 'Super! "Kite" has a long "i" sound!',
-    aiHook: {
-      targetWord: 'kite',
-      intent: 'spelling',
-      baseLine: 'Oli flies a kite over the geysers.',
-      questionLine: 'Listen and spell this word.',
-      validationWord: 'kite',
-      imagePrompt: 'Oli flying a magical colorful kite high above Yellowstone geysers while Reese and dragon friends watch from below, windy adventure day, photorealistic'
-    }
-  },
-  {
-    id: 6,
-    word: 'boat',
-    imageUrl: '⛵🌊',
-    isSpelling: true,
-    correctAnswer: 'boat',
-    explanation: 'Awesome! "Boat" has a long "o" sound!',
-    aiHook: {
-      targetWord: 'boat',
-      intent: 'spelling',
-      baseLine: 'They sail a boat on the crystal lake.',
-      questionLine: 'Listen and spell this word.',
-      validationWord: 'boat',
-      imagePrompt: 'Reese and Oli sailing a magical wooden boat across a crystal-clear lake in Yellowstone, with friendly dragons flying overhead, photorealistic adventure'
-    }
-  },
+
 
 ];
 
