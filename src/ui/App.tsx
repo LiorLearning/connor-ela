@@ -36,13 +36,13 @@ export function App(): JSX.Element {
   const questions = useMemo(() => {
     if (chapter === 1) {
       return [
-        { id: 'q1', type: 'mc', prompt: 'Where are Reese and Oli?', options: ['On a snowy hill', 'Fun Yellowstone with hot water and pretty trees', 'Under the water'], correct: 1 },
+        { id: 'q1', type: 'mc', prompt: 'Where are Connor and his alien friends?', options: ['On a snowy hill', 'Planet Austin with brown grass and green dirt', 'Under the water'], correct: 1 },
         { id: 'q2', type: 'spelling', prompt: 'Fix the word from the story:', target: 'portal', options: ['portel', 'portal', 'protale'], correct: 1 },
-        { id: 'bonus', type: 'micro', prompt: 'Who is Reese\'s best friend?', options: ['Oli', 'Sneaky Guys'], correct: 0 }
+        { id: 'bonus', type: 'micro', prompt: 'Who is Connor\'s floating skeleton friend?', options: ['Skeletron', 'Robot Guards'], correct: 0 }
       ] as const;
     }
     return [
-      { id: 'q1', type: 'mc', prompt: 'Why does Reese need the rock finder?', options: ['To find shiny rocks', 'To build a house', 'To plant trees'], correct: 0 },
+      { id: 'q1', type: 'mc', prompt: 'Why does Connor need to rescue the animals?', options: ['To save them from robots', 'To build a house', 'To plant trees'], correct: 0 },
       { id: 'q2', type: 'order', prompt: 'Arrange the sentence:', fragments: ['Shracker scans', 'the portal', 'for clues'], order: [0,1,2] },
       { id: 'bonus', type: 'micro', prompt: 'Which bird-like sidekick helps scan?', options: ['Shracker', 'Clay'], correct: 0 }
     ] as const;
@@ -95,7 +95,7 @@ export function App(): JSX.Element {
       setVideoLoading(true);
       void (async () => {
         try {
-          const res = await fetch('/api/video', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt: 'Reese\'s quest through magical Yellowstone: approaching crystal pools, buffalo-dragons stand guard, team searches for geyser crystals.', durationSeconds: 8, aspectRatio: '16:9' }) });
+          const res = await fetch('/api/video', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt: 'Connor\'s quest through Planet Austin: approaching robot fortress, alien friends stand guard, team searches for captured animals.', durationSeconds: 8, aspectRatio: '16:9' }) });
           const data = await res.json();
           setVideoUrl(data?.url ?? null);
         } catch {

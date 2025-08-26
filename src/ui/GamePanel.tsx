@@ -22,9 +22,9 @@ export function GamePanel(): JSX.Element {
             <div style={{ fontSize: 40, fontWeight: 800, color: '#4338CA' }}>Find the Shiny Rocks!</div>
           </div>
           <div style={{ background: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: 24, padding: 32, boxShadow: '0 10px 30px rgba(17,24,39,0.06)' }}>
-            <div style={{ textAlign: 'center', color: '#6B7280', marginBottom: 16 }}>Come play with Reese and Oli!</div>
-            <div style={{ textAlign: 'center', fontSize: 44, fontWeight: 800, color: '#1F2937', marginBottom: 8 }}>🌋 Magic Egg Fun 🐉</div>
-            <div style={{ textAlign: 'center', color: '#6B7280', marginBottom: 28 }}>Find shiny rocks, play with fluffy dragons, save the day!</div>
+            <div style={{ textAlign: 'center', color: '#6B7280', marginBottom: 16 }}>Come play with Connor and his alien friends!</div>
+            <div style={{ textAlign: 'center', fontSize: 44, fontWeight: 800, color: '#1F2937', marginBottom: 8 }}>🚀 Robot Battle Quest 🤖</div>
+            <div style={{ textAlign: 'center', color: '#6B7280', marginBottom: 28 }}>Fight robots, rescue animals, explore Planet Austin!</div>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
               <button onClick={() => setStarted(true)} style={{
                 background: '#4F46E5', color: '#fff', border: 'none', borderRadius: 12, padding: '14px 22px',

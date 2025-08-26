@@ -21,11 +21,11 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
     // For now, keep these as they provide good initial prompts for each screen type
     // These are starting prompts that set the context, which is different from response messages
     if (isScreen5) {
-      return "🌋⚡ Reese! We've been doing SO well on our quest! I'm pumped up! 💪 Tell me - what happens next in our adventure? Where should we go? What should we do? I'm ready for anything! 🚀🐉";
+      return "🚀⚡ Connor! We've been doing SO well on our quest! I'm pumped up! 💪 Tell me - what happens next in our adventure? Where should we go? What should we do? I'm ready for anything! 🤖🔥";
     } else if (isScreen14) {
-      return "🌟⚡ Amazing work, Reese! But wait... our adventure isn't over yet! 😮 What happens NEXT in our story? What new challenge or mystery do we face? Tell me what exciting thing happens next! 🚀🔥";
+      return "🌟⚡ Amazing work, Connor! But wait... our adventure isn't over yet! 😮 What happens NEXT in our story? What new challenge or mystery do we face? Tell me what exciting thing happens next! 🚀🔥";
     } else {
-      return "🌋✨ Hey Reese! It's me, Oli, your adventure buddy! Today we're going on an EPIC quest in Yellowstone! 🐉💎 Tell me - what's happening in our story today? Are we exploring? Fighting dragons? Finding treasure? And what amazing picture should we create to show our adventure? 🎨⚡";
+      return "🚀✨ Hey Connor! It's me, your adventure buddy! Today we're going on an EPIC quest on Planet Austin! 🤖💎 Tell me - what's happening in our story today? Are we exploring? Fighting robots? Rescuing captured animals? And what amazing picture should we create to show our adventure? 🎨⚡";
     }
   };
 
@@ -65,7 +65,7 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
   const adventureRecordingRef = useRef<boolean>(false);
   
   // Adventure state management - different initial states for different screens
-  const getInitialAdventureState = () => {
+  const getInitialAdventureState = (): 'new' | 'ongoing' | 'character_creation' | 'image_creation' | 'follow_up_1' | 'follow_up_2' | 'ready_for_mission' => {
     if (isScreen5 || isScreen14) {
       return 'image_creation'; // These screens should create images
     } else if (isScreen1) {
@@ -85,14 +85,14 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
     setting?: string;
     recentEvent?: string;
   }>({
-    type: 'Geyser Crystal Quest in Yellowstone National Park',
-    protagonist: 'Reese (10 years old, black hair, red cloak, green-brown buffalo-dragon armor)',
-    sidekick: 'Oli (loyal companion and adventure partner)',
-    teammates: 'Buffalo Dragons (half buffalo, half dragon with sharp teeth, horns, giant tails, medium wings) and Wolf Dragon (gray/white/black furred face, dragon body, wolf tail, big fluffy ears, breathes fire)',
-    setting: 'Yellowstone National Park with geysers, mountains, forests, and open fields',
-    goal: 'find and protect geyser crystals across dragon locations, bond with animal dragons but return them to the wild later',
-    villain: 'Midgets (crystal thieves with very small arms, big nasty heads, short black dresses, side pockets full of stolen crystals)',
-    recentEvent: 'Reese just mounted the Wolf Dragon when a giant volcano suddenly erupted nearby, threatening the geyser crystal balance and dragon habitats'
+    type: 'sci-fi alien world adventure with robot battles',
+    protagonist: 'Connor (young adventurer with a brave heart, wearing futuristic gear)',
+    sidekick: 'Skeletron (floating skeleton with a head and arms), Eye of Cthulhu (giant green eye with minion eyes)',
+    teammates: 'Brain of Cthulhu (red brain with tentacles), Eater of Worlds (huge purple worm with millions of eyes)',
+    setting: 'Planet Austin, a unique world with brown grass, green dirt, and a dark orange beach',
+    goal: 'rescue captured animals and people from Ronark\'s robot army and stop his villainous plans',
+    villain: 'Ronark (half human, half robot with molten black armor, red and green glowing eyes) whose objective is to capture animals and turn them into robots',
+    recentEvent: 'Connor discovers Ronark\'s lair guarded by robot minions and plans to rescue the captured person; conflict arises as Connor strategizes to infiltrate the lair with the help of his side-kicks'
   });
   const ADVENTURE_IMAGE_OVERLAY_OPACITY = 0.45;
   const adventureScrollRef = useRef<HTMLDivElement | null>(null);
@@ -125,7 +125,7 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
     const lowerAI = aiResponse.toLowerCase();
     
     // Check for interest-based adventure selection
-    const interests = ['dragons', 'crystals', 'geysers', 'volcanoes', 'eruptions', 'forests', 'mountains', 'habitats', 'obsidian', 'adventures', 'quests', 'wildlife'];
+    const interests = ['robots', 'aliens', 'planets', 'battles', 'science', 'space', 'creatures', 'adventures', 'quests', 'rescue', 'technology', 'futuristic'];
     const selectedInterest = interests.find(interest => lowerUser.includes(interest));
     
     if (selectedInterest && adventureState === 'new') {
@@ -412,7 +412,7 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
     let systemPrompt = '';
     if (screenType === 'screen1') {
       if (followUpNumber === 1) {
-        systemPrompt = `You are Oli, Reese's excited adventure buddy! Reese just described: "${userDescription}". 
+        systemPrompt = `You are Connor's excited adventure buddy! Connor just described: "${userDescription}". 
 
 Respond with excitement about EXACTLY what they described and ask ONE specific follow-up question about THEIR story.
 
@@ -428,7 +428,7 @@ EXAMPLES:
 If they said "We're exploring a cave": "WOW! Exploring a cave sounds amazing! 🗻 What do we discover when we go deeper into YOUR cave?"
 If they said "We find crystals": "INCREDIBLE! Finding crystals! 💎 What happens when we try to pick up YOUR crystals?"`;
       } else {
-        systemPrompt = `You are Oli, Reese's excited adventure buddy! Now ask about visual details for EXACTLY what Reese described.
+        systemPrompt = `You are Connor's excited adventure buddy! Now ask about visual details for EXACTLY what Connor described.
 
 CRITICAL RULES:
 - Ask about visual details for THEIR specific story only
@@ -443,7 +443,7 @@ If they described finding something: "Amazing! 🌟 What colors are the things w
       }
     } else if (screenType === 'screen5') {
       if (followUpNumber === 1) {
-        systemPrompt = `You are Oli, Reese's adventure buddy! Reese just described: "${userDescription}".
+        systemPrompt = `You are Connor's adventure buddy! Connor just described: "${userDescription}".
 
 Respond with excitement about EXACTLY what they described and ask what happens next in THEIR story.
 
@@ -454,7 +454,7 @@ CRITICAL RULES:
 - Keep it short (25 words max)
 - Use "we" since you're in it together`;
       } else {
-        systemPrompt = `You are Oli, Reese's adventure buddy! Ask about visual details for THEIR story continuation.
+        systemPrompt = `You are Connor's adventure buddy! Ask about visual details for THEIR story continuation.
 
 CRITICAL RULES:
 - Ask about visual details for what they actually described
@@ -464,7 +464,7 @@ CRITICAL RULES:
       }
     } else if (screenType === 'screen14') {
       if (followUpNumber === 1) {
-        systemPrompt = `You are Oli, Reese's adventure buddy! Reese described: "${userDescription}".
+        systemPrompt = `You are Connor's adventure buddy! Connor described: "${userDescription}".
 
 Respond with excitement about EXACTLY what they described and ask for more details about THEIR next chapter.
 
@@ -475,7 +475,7 @@ CRITICAL RULES:
 - Keep it short (25 words max)
 - Focus on THEIR story, not generic adventure stuff`;
       } else {
-        systemPrompt = `You are Oli, Reese's adventure buddy! Ask about visual details for the suspenseful scene THEY described.
+        systemPrompt = `You are Connor's adventure buddy! Ask about visual details for the suspenseful scene THEY described.
 
 CRITICAL RULES:
 - Ask about visual details for what they actually described
@@ -588,7 +588,7 @@ CRITICAL RULES:
       const allUserInput = [...userMessages.map(msg => msg.text), currentUserMessage].join(' ');
       
       // Create rich image prompt using complete context with character restrictions and descriptions
-      const basePrompt = `${allUserInput} - Main characters: Reese (10-year-old Caucasian boy with black hair, red cloak, green-brown adventure gear) and Oli (his loyal companion) in Yellowstone National Park adventure scene. Include any story characters mentioned (Midgets, Dragons, etc.). Photorealistic, detailed adventure scene`;
+      const basePrompt = `${allUserInput} - Main characters: Connor (young adventurer with brave heart, wearing futuristic gear), Skeletron (floating skeleton), Eye of Cthulhu (giant green eye), Brain of Cthulhu (red brain with tentacles), Eater of Worlds (huge purple worm) on Planet Austin with brown grass, green dirt, dark orange beach. Include any story characters mentioned (Ronark, robots, etc.). Photorealistic, detailed sci-fi adventure scene`;
       
       // Add suspenseful atmosphere for final screen
       const combinedPrompt = isScreen14 ? 
@@ -611,7 +611,7 @@ CRITICAL RULES:
             let systemPrompt = '';
             
             if (screenType === 'screen1') {
-              systemPrompt = `You are Oli, Reese's adventure buddy! You just created an amazing image of the adventure Reese described. React with excitement about the image and ask if they're ready to start the mission.
+              systemPrompt = `You are Connor's adventure buddy! You just created an amazing image of the adventure Connor described. React with excitement about the image and ask if they're ready to start the mission.
 
 RULES:
 - Be SUPER excited about the image
@@ -619,7 +619,7 @@ RULES:
 - Ask if they're ready to start
 - Use emojis and exclamation points`;
             } else if (screenType === 'screen5') {
-              systemPrompt = `You are Oli, Reese's adventure buddy! You just created an image showing what happens next in your adventure. React with excitement about continuing the story.
+              systemPrompt = `You are Connor's adventure buddy! You just created an image showing what happens next in your adventure. React with excitement about continuing the story.
 
 RULES:
 - Be excited about the adventure continuing
@@ -627,7 +627,7 @@ RULES:
 - Express excitement about what's next
 - Use emojis and exclamation points`;
             } else if (screenType === 'screen14') {
-              systemPrompt = `You are Oli, Reese's adventure buddy! You just created a suspenseful cliffhanger image for the next chapter of your adventure.
+              systemPrompt = `You are Connor's adventure buddy! You just created a suspenseful cliffhanger image for the next chapter of your adventure.
 
 RULES:
 - Be excited about the suspenseful image
@@ -702,8 +702,8 @@ RULES:
 
     if (text.toLowerCase() === 'image' || text.toLowerCase() === 'create image' || text.toLowerCase().startsWith('create image')) {
               const imagePrompt = text.toLowerCase() === 'image' || text.toLowerCase() === 'create image'
-        ? 'Reese in red cape with Oli exploring fun Yellowstone with hot water going whoosh, misty trees, and cute fluffy dragons with wings, bright happy colors'
-        : text.replace(/^create image\s*/i, '').trim() || 'Reese in red cape with Oli exploring fun Yellowstone with hot water going whoosh, misty trees, and cute fluffy dragons with wings, bright happy colors';
+        ? 'Connor in futuristic gear with Skeletron, Eye of Cthulhu, Brain of Cthulhu exploring Planet Austin with brown grass, green dirt, robot battles, bright vibrant colors'
+        : text.replace(/^create image\s*/i, '').trim() || 'Connor in futuristic gear with Skeletron, Eye of Cthulhu, Brain of Cthulhu exploring Planet Austin with brown grass, green dirt, robot battles, bright vibrant colors';
       updateAdventureMessages(prev => [...prev, { role: 'student', text: `🌄 ${text}` }]);
       onAdventureMessage?.(text);
       setAdventureInput('');
@@ -763,29 +763,29 @@ RULES:
       const conversationMessages = [
         {
           role: 'system',
-          content: `You are Oli, Reese's best friend and adventure partner! You're super excited and talk directly to Reese in first person. You're brave, fun, and love exploring!
+          content: `You are Connor's best friend and adventure partner! You're super excited and talk directly to Connor in first person. You're brave, fun, and love exploring!
 
 OUR ADVENTURE:
-- We're on the Geyser Crystal Quest in Yellowstone!
-- We need to find magical crystals and protect dragon friends
-- Bad guys called Midgets are trying to steal OUR crystals!
-- We have dragon allies: Buffalo Dragons and our Wolf Dragon friend
+- We're on a sci-fi quest on Planet Austin!
+- We need to rescue captured animals from Ronark's robot army
+- Bad guys called robots are trying to capture animals and people!
+- We have alien allies: Skeletron, Eye of Cthulhu, Brain of Cthulhu, and Eater of Worlds
 
 PERSONALITY:
-- Talk TO Reese directly (use "you" and "we")
+- Talk TO Connor directly (use "you" and "we")
 - Be EXCITED and use exclamation points!
 - Keep it short (30 words max), 2 lines
-- Always ask Reese what he wants to do next
+- Always ask Connor what he wants to do next
 - Use simple words like a 2nd grader would
 
 EXAMPLES:
-"Reese! I see crystals over there! 💎
-What should we do - grab them fast or sneak up quietly?"
+"Connor! I see robots over there! 🤖
+What should we do - sneak past them or fight them with our alien friends?"
 
-"The dragons look scared! 🐉
-Should we help them fight the Midgets or find a safe place to hide?"
+"The captured animals look scared! 🐾
+Should we rescue them now or find Ronark's weakness first?"
 
-Remember: You're Oli talking TO Reese as his adventure buddy. Be excited, brave, and always ask what he wants to do next!`
+Remember: You're Connor's adventure buddy talking TO Connor. Be excited, brave, and always ask what he wants to do next!`
         },
         ...currentMessages
           .slice(-30)
@@ -822,13 +822,13 @@ Remember: You're Oli talking TO Reese as his adventure buddy. Be excited, brave,
         if (loadingIndex !== -1) {
           newMessages[loadingIndex] = {
             role: 'ai',
-            text: 'Haha! That sounds super fun! 🌋 Tell me what silly thing Reese should do next!',
+            text: 'Haha! That sounds super fun! 🚀 Tell me what exciting thing Connor should do next!',
             isLoading: false
           } as any;
         }
         return newMessages;
       });
-      appendStoryMessage({ role: 'ai', text: 'Haha! That sounds super fun! 🌋 Tell me what silly thing Reese should do next!' });
+      appendStoryMessage({ role: 'ai', text: 'Haha! That sounds super fun! 🚀 Tell me what exciting thing Connor should do next!' });
     }
   };
 

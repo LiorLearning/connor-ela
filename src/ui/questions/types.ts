@@ -17,7 +17,7 @@ export type Question = {
   correctAnswer: number | string; // index of correct option or correct spelling
   explanation: string;
   isSpelling?: boolean; // Optional flag for spelling questions
-  questionType?: 'shortE'; // Optional type for Short E sentence matching
+  questionType?: 'shortE' | 'digraph'; // Optional type for Short E sentence matching or consonant digraphs
   imagePrompt?: string; // For DALL-E image generation
   options?: string[]; // Multiple choice options for sentence matching
   targetWord?: string; // Target word for follow-up activity

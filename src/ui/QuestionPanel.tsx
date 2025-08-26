@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ImagePanel } from './ImagePanel';
 import bg1Url from '../../bg1.png';
 import { Question, BlendingQuestion, SpeechQuestion } from './questions/types';
-import { blendingQuestions as blendingQuestionsData, speechQuestions as speechQuestionsData, longAQuestions as longAQuestionsData, questions as regularQuestionsData, options } from './questions/data';
+import { blendingQuestions as blendingQuestionsData, speechQuestions as speechQuestionsData, consonantDigraphQuestions as consonantDigraphQuestionsData, questions as regularQuestionsData, options } from './questions/data';
 import { AdventureMode } from './questions/AdventureMode';
 import { useStory } from './story/StoryStore';
 import { audioManager } from './audioManager';
@@ -21,14 +21,14 @@ export function QuestionPanel({ onComplete }: Props): JSX.Element {
   // Speech question data
   const speechQuestions: SpeechQuestion[] = speechQuestionsData;
 
-  // Long A question data  
-  const longAQuestions: Question[] = longAQuestionsData;
+  // Consonant digraph question data  
+  const consonantDigraphQuestions: Question[] = consonantDigraphQuestionsData;
 
   // Question data
   const questions: Question[] = regularQuestionsData;
   
-  // Flow order: adventure mode (step 1) -> long A questions -> speech -> adventure mode -> regular questions -> adventure mode (blending step removed)
-  const totalSteps = 1 + blendingQuestions.length + longAQuestions.length + speechQuestions.length + 1 + questions.length + 1;
+  // Flow order: adventure mode (step 1) -> consonant digraph questions -> speech -> adventure mode -> regular questions -> adventure mode (blending step removed)
+  const totalSteps = 1 + blendingQuestions.length + consonantDigraphQuestions.length + speechQuestions.length + 1 + questions.length + 1;
   
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
@@ -76,10 +76,10 @@ export function QuestionPanel({ onComplete }: Props): JSX.Element {
   const [hasAutoplayedSummary, setHasAutoplayedSummary] = useState<boolean>(false);
   const [hasGeneratedSummary, setHasGeneratedSummary] = useState<boolean>(false);
   // Long A specific passage state
-  const [longAPassage, setLongAPassage] = useState<string>('');
-  const [hasGeneratedLongAPassage, setHasGeneratedLongAPassage] = useState<boolean>(false);
-  const [hasAutoplayedLongAPassage, setHasAutoplayedLongAPassage] = useState<boolean>(false);
-  const [isLongAPassageLoading, setIsLongAPassageLoading] = useState<boolean>(false);
+  const [consonantDigraphPassage, setConsonantDigraphPassage] = useState<string>('');
+  const [hasGeneratedConsonantDigraphPassage, setHasGeneratedConsonantDigraphPassage] = useState<boolean>(false);
+  const [hasAutoplayedConsonantDigraphPassage, setHasAutoplayedConsonantDigraphPassage] = useState<boolean>(false);
+  const [isConsonantDigraphPassageLoading, setIsConsonantDigraphPassageLoading] = useState<boolean>(false);
   const [summaryRefreshCount, setSummaryRefreshCount] = useState<number>(0);
   const [continuationInput, setContinuationInput] = useState<string>('');
   const [validationMessage, setValidationMessage] = useState<string>(''); // AI 1-2 word reply
@@ -252,31 +252,31 @@ Give a brief, friendly response that nudges them without giving the answer.`;
   // Determine current step type
   const isAdventureMode1 = currentQuestionIndex === 0;
   const isBlendingQuestion = currentQuestionIndex >= 1 && currentQuestionIndex < 1 + blendingQuestions.length;
-  const isLongAQuestion = currentQuestionIndex >= 1 + blendingQuestions.length && currentQuestionIndex < 1 + blendingQuestions.length + longAQuestions.length;
-  const isSpeechQuestion = currentQuestionIndex >= 1 + blendingQuestions.length + longAQuestions.length && currentQuestionIndex < 1 + blendingQuestions.length + longAQuestions.length + speechQuestions.length;
-  const isAdventureMode4 = currentQuestionIndex === (1 + blendingQuestions.length + longAQuestions.length + speechQuestions.length);
-  const isAdventureMode9 = currentQuestionIndex === (1 + blendingQuestions.length + longAQuestions.length + speechQuestions.length + 1 + questions.length);
+  const isConsonantDigraphQuestion = currentQuestionIndex >= 1 + blendingQuestions.length && currentQuestionIndex < 1 + blendingQuestions.length + consonantDigraphQuestions.length;
+  const isSpeechQuestion = currentQuestionIndex >= 1 + blendingQuestions.length + consonantDigraphQuestions.length && currentQuestionIndex < 1 + blendingQuestions.length + consonantDigraphQuestions.length + speechQuestions.length;
+  const isAdventureMode4 = currentQuestionIndex === (1 + blendingQuestions.length + consonantDigraphQuestions.length + speechQuestions.length);
+  const isAdventureMode9 = currentQuestionIndex === (1 + blendingQuestions.length + consonantDigraphQuestions.length + speechQuestions.length + 1 + questions.length);
   const isAdventureMode = isAdventureMode1 || isAdventureMode4 || isAdventureMode9;
   const currentBlendingQuestion = isBlendingQuestion ? blendingQuestions[currentQuestionIndex - 1] : null;
-  const currentLongAQuestion = isLongAQuestion ? longAQuestions[currentQuestionIndex - 1 - blendingQuestions.length] : null;
-  const currentSpeechQuestion = isSpeechQuestion ? speechQuestions[currentQuestionIndex - 1 - blendingQuestions.length - longAQuestions.length] : null;
-  const currentRegularQuestion = (!isBlendingQuestion && !isSpeechQuestion && !isLongAQuestion && !isAdventureMode)
-    ? questions[currentQuestionIndex - 1 - blendingQuestions.length - longAQuestions.length - speechQuestions.length - 1]
+  const currentConsonantDigraphQuestion = isConsonantDigraphQuestion ? consonantDigraphQuestions[currentQuestionIndex - 1 - blendingQuestions.length] : null;
+  const currentSpeechQuestion = isSpeechQuestion ? speechQuestions[currentQuestionIndex - 1 - blendingQuestions.length - consonantDigraphQuestions.length] : null;
+  const currentRegularQuestion = (!isBlendingQuestion && !isSpeechQuestion && !isConsonantDigraphQuestion && !isAdventureMode)
+    ? questions[currentQuestionIndex - 1 - blendingQuestions.length - consonantDigraphQuestions.length - speechQuestions.length - 1]
     : null;
   // Continuation experiment flags (now data-driven via aiHook)
-  const isFirstRegularStep = (!isBlendingQuestion && !isSpeechQuestion && !isLongAQuestion && !isAdventureMode && currentRegularQuestion?.id === 1);
-  const isSecondRegularStep = (!isBlendingQuestion && !isSpeechQuestion && !isLongAQuestion && !isAdventureMode && currentRegularQuestion?.id === 2);
-  const isAiHookStep = !!(currentRegularQuestion?.aiHook || currentLongAQuestion?.aiHook);
+  const isFirstRegularStep = (!isBlendingQuestion && !isSpeechQuestion && !isConsonantDigraphQuestion && !isAdventureMode && currentRegularQuestion?.id === 1);
+  const isSecondRegularStep = (!isBlendingQuestion && !isSpeechQuestion && !isConsonantDigraphQuestion && !isAdventureMode && currentRegularQuestion?.id === 2);
+  const isAiHookStep = !!(currentRegularQuestion?.aiHook || currentConsonantDigraphQuestion?.aiHook);
   const isContinuationStep = isAiHookStep;
 
   // AI hook config (data-driven) with safe fallbacks to preserve current behavior
-  const aiCfg = currentRegularQuestion?.aiHook || currentLongAQuestion?.aiHook;
+  const aiCfg = currentRegularQuestion?.aiHook || currentConsonantDigraphQuestion?.aiHook;
 
   // Helper to determine if microphone should be shown for input
   const shouldShowInputMic = (): boolean => {
-    // Screen 2,3: Long A questions - show if there's any spelling input OR Short E questions
-    if (isLongAQuestion && currentLongAQuestion?.isSpelling && spellingInput.length > 0) return true;
-    if (isLongAQuestion && currentLongAQuestion?.questionType === 'shortE' && selectedOption !== null) return true;
+    // Screen 2,3: Consonant digraph questions - show if there's any spelling input OR digraph questions
+    if (isConsonantDigraphQuestion && currentConsonantDigraphQuestion?.isSpelling && spellingInput.length > 0) return true;
+    if (isConsonantDigraphQuestion && currentConsonantDigraphQuestion?.questionType === 'digraph' && selectedOption !== null) return true;
     
     // Screen 6,7,8,9: Regular questions - show if there's any spelling input
     if (currentRegularQuestion?.isSpelling && spellingInput.length > 0) return true;
@@ -287,16 +287,16 @@ Give a brief, friendly response that nudges them without giving the answer.`;
     return false;
   };
 
-  // Helper to check if current question is Short E type
-  const isShortEQuestion = (): boolean => {
-    return isLongAQuestion && currentLongAQuestion?.questionType === 'shortE';
+  // Helper to check if current question is digraph type
+  const isDigraphQuestion = (): boolean => {
+    return isConsonantDigraphQuestion && currentConsonantDigraphQuestion?.questionType === 'digraph';
   };
-  const hookTargetWord = aiCfg?.targetWord || (isSecondRegularStep ? 'cave' : (isFirstRegularStep ? 'crystal' : (currentRegularQuestion?.word || currentLongAQuestion?.word || '')));
+  const hookTargetWord = aiCfg?.targetWord || (isSecondRegularStep ? 'lair' : (isFirstRegularStep ? 'robot' : (currentRegularQuestion?.word || currentConsonantDigraphQuestion?.word || '')));
   const hookQuestionLine = aiCfg?.questionLine || (isFirstRegularStep ? 'Listen and type the word' : 'Listen and type the word');
   const hookBaseLine = aiCfg?.baseLine || (isFirstRegularStep
-    ? 'With Yellowstone getting better, they walk through misty trees toward the shiny pools.'
+    ? 'With Planet Austin getting safer, they walk through alien landscapes toward the robot fortress.'
     : 'The caves are quiet as they keep going on their fun trip.');
-  const hookValidationWord = aiCfg?.validationWord || (isSecondRegularStep ? 'cave' : (isFirstRegularStep ? 'crystal' : (currentLongAQuestion?.word || 'word')));
+  const hookValidationWord = aiCfg?.validationWord || (isSecondRegularStep ? 'lair' : (isFirstRegularStep ? 'robot' : (currentConsonantDigraphQuestion?.word || 'word')));
   const hookIntent = aiCfg?.intent || (isFirstRegularStep ? 'spelling' : 'spelling');
 
   // Context helpers (centralized, but preserving existing behavior)
@@ -332,12 +332,12 @@ Give a brief, friendly response that nudges them without giving the answer.`;
   // Force-regenerate the current question image using most recent story context
   const regenerateQuestionImage = async (): Promise<void> => {
     const studentId = String(storyState?.metadata?.protagonist || 'student').toLowerCase().replace(/\s+/g, '-') || 'student';
-    const stepKey = isLongAQuestion ? 'longA' : (!isBlendingQuestion && !isSpeechQuestion && !isAdventureMode ? 'regular' : '');
-    const questionId = isLongAQuestion ? currentLongAQuestion?.id : currentRegularQuestion?.id;
+    const stepKey = isConsonantDigraphQuestion ? 'digraph' : (!isBlendingQuestion && !isSpeechQuestion && !isAdventureMode ? 'regular' : '');
+    const questionId = isConsonantDigraphQuestion ? currentConsonantDigraphQuestion?.id : currentRegularQuestion?.id;
     if (!stepKey || !questionId) return;
     const key = `${studentId}:${stepKey}:${questionId}`;
     const explicitPrompt = aiCfg?.imagePrompt;
-    const targetWord = hookTargetWord || currentRegularQuestion?.word || currentLongAQuestion?.word || '';
+    const targetWord = hookTargetWord || currentRegularQuestion?.word || currentConsonantDigraphQuestion?.word || '';
     const basePrompt = buildQuestionImagePrompt({
       targetWord,
       baseLine: hookBaseLine,
@@ -379,7 +379,7 @@ Give a brief, friendly response that nudges them without giving the answer.`;
     const base = params.baseLine || '';
     const ask = params.questionLine || '';
     // Keep short; /api/image will wrap with kid-safe epic style
-    return `Clear, unmistakable depiction of the word "${word}" inside our epic magical Yellowstone buffalo-dragon adventure. Context: ${context || base}. Hint from tutor: ${ask}. Ensure the subject visually communicates "${word}" at a glance.`;
+    return `Clear, unmistakable depiction of the word "${word}" inside our epic sci-fi Planet Austin robot adventure. Context: ${context || base}. Hint from tutor: ${ask}. Ensure the subject visually communicates "${word}" at a glance.`;
   };
 
   const ensureQuestionImage = async (key: string, explicitPrompt?: string) => {
@@ -397,7 +397,7 @@ Give a brief, friendly response that nudges them without giving the answer.`;
         return;
       }
     } catch {}
-    const targetWord = hookTargetWord || currentRegularQuestion?.word || currentLongAQuestion?.word || '';
+    const targetWord = hookTargetWord || currentRegularQuestion?.word || currentConsonantDigraphQuestion?.word || '';
     const prompt = buildQuestionImagePrompt({
       targetWord,
       baseLine: hookBaseLine,
@@ -430,10 +430,10 @@ Give a brief, friendly response that nudges them without giving the answer.`;
     setQuestionImageUrl(null);
     setQuestionImageLoading(false);
     const studentId = String(storyState?.metadata?.protagonist || 'student').toLowerCase().replace(/\s+/g, '-') || 'student';
-    const stepKey = isSpeechQuestion ? 'speech' : isLongAQuestion ? 'longA' : (!isBlendingQuestion && !isAdventureMode ? 'regular' : '');
-    const questionId = isSpeechQuestion ? currentSpeechQuestion?.id : isLongAQuestion ? currentLongAQuestion?.id : currentRegularQuestion?.id;
-    const aiImagePrompt = aiCfg?.imagePrompt || (isLongAQuestion ? currentLongAQuestion?.imagePrompt : undefined);
-    const display = isSpeechQuestion ? currentSpeechQuestion?.imageUrl : isLongAQuestion ? currentLongAQuestion?.imageUrl : currentRegularQuestion?.imageUrl;
+    const stepKey = isSpeechQuestion ? 'speech' : isConsonantDigraphQuestion ? 'digraph' : (!isBlendingQuestion && !isAdventureMode ? 'regular' : '');
+    const questionId = isSpeechQuestion ? currentSpeechQuestion?.id : isConsonantDigraphQuestion ? currentConsonantDigraphQuestion?.id : currentRegularQuestion?.id;
+    const aiImagePrompt = aiCfg?.imagePrompt || (isConsonantDigraphQuestion ? currentConsonantDigraphQuestion?.imagePrompt : undefined);
+    const display = isSpeechQuestion ? currentSpeechQuestion?.imageUrl : isConsonantDigraphQuestion ? currentConsonantDigraphQuestion?.imageUrl : currentRegularQuestion?.imageUrl;
     const isEmoji = !!display && !String(display).startsWith('http');
     if (!stepKey || !questionId || !isEmoji) return;
     const key = `${studentId}:${stepKey}:${questionId}`;
@@ -447,11 +447,11 @@ Give a brief, friendly response that nudges them without giving the answer.`;
     const studentId = String(storyState?.metadata?.protagonist || 'student').toLowerCase().replace(/\s+/g, '-') || 'student';
     const pregen = async () => {
       const items: Array<{ key: string; hook?: any; explicit?: string }> = [];
-      // Priority 1: Long A (first image steps the student sees)
-      for (const q of longAQuestions) {
+      // Priority 1: Consonant digraphs (first image steps the student sees)
+      for (const q of consonantDigraphQuestions) {
         const isEmoji = !!q.imageUrl && !String(q.imageUrl).startsWith('http');
         if (!isEmoji) continue;
-        const key = `${studentId}:longA:${q.id}`;
+        const key = `${studentId}:digraph:${q.id}`;
         try { if (window.localStorage.getItem(`images:v1:${key}`)) continue; } catch {}
         items.push({ key, hook: q.aiHook, explicit: q.aiHook?.imagePrompt || q.imagePrompt });
       }
@@ -464,8 +464,8 @@ Give a brief, friendly response that nudges them without giving the answer.`;
         items.push({ key, hook: q.aiHook, explicit: q.aiHook?.imagePrompt });
       }
 
-      // Generate all Long A immediately plus the first two regular questions
-      const IMMEDIATE_BATCH_SIZE = Math.max(longAQuestions.length + 2, 3);
+      // Generate all consonant digraphs immediately plus the first two regular questions
+      const IMMEDIATE_BATCH_SIZE = Math.max(consonantDigraphQuestions.length + 2, 3);
       const immediate = items.slice(0, IMMEDIATE_BATCH_SIZE);
       const background = items.slice(IMMEDIATE_BATCH_SIZE);
 
@@ -687,7 +687,7 @@ Inputs you may reference:
 - Story snippets: the recent adventure turns below
 - Most recent event: the event provided below
 - Use simple aliases for complex names:
-  Sir Whiskerfluff → cat; treehouse/platform → deck; crystal cave → den; buffalo-dragon → mount; crystal/treasure → gem
+  Skeletron → skeleton; robot fortress → base; robot lair → den; alien friend → ally; captured animal → pet
 
 Strict rules:
 0) Event anchoring: Build directly on the most recent event; include at least one concrete detail from it. Do not change the location/scene or introduce unrelated new objects.
@@ -695,7 +695,7 @@ Strict rules:
 2) Length: EXACTLY 5 lines; each line 5–6 words; total 25–30 words.
 4) Include these target words exactly: "red", "net", "get".
 5) Keep it lively.
-6) Name usage: You may use "Reese," "Oli," "buffalo-dragon," and "geyser." Avoid other proper names.
+6) Name usage: You may use "Connor," "Skeletron," "robot," and "alien." Avoid other proper names.
 8) Clarity: Very short sentences; vary stems (do not repeat the same opening more than twice).
 9) Ending: Finish with a tiny hook / cliffhanger or next step (≤ 6 words), preferably a question.
 10) Output format: Return ONLY the 5 lines separated by newline characters. No titles, labels, or extra text.`
@@ -740,17 +740,17 @@ Strict rules:
 
   // Generate Long A specific passage for step 3 (gate question)
   useEffect(() => {
-    if (!isLongAQuestion || !currentLongAQuestion || hasGeneratedLongAPassage) return;
+    if (!isConsonantDigraphQuestion || !currentConsonantDigraphQuestion || hasGeneratedConsonantDigraphPassage) return;
     if (!storyContext.length) return;
 
     let cancelled = false;
-    const generateLongAPassage = async () => {
+    const generateConsonantDigraphPassage = async () => {
       try {
-        setIsLongAPassageLoading(true);
+        setIsConsonantDigraphPassageLoading(true);
         const contextText = storyContext.join('\n');
         const lastEvent = getLastEvent();
-        const targetWord = currentLongAQuestion.word; // "gate"
-        const baseLine = currentLongAQuestion.aiHook?.baseLine || 'A shimmering starlight doorway appears in the cavern wall.';
+        const targetWord = currentConsonantDigraphQuestion.word; // "ship" or "thick"
+        const baseLine = currentConsonantDigraphQuestion.aiHook?.baseLine || 'A shimmering starlight doorway appears in the cavern wall.';
         
         const messages = [
           {
@@ -774,36 +774,36 @@ Strict rules:
         
         if (!cancelled) {
           const passage = data.reply || baseLine;
-          setLongAPassage(passage);
-          setHasGeneratedLongAPassage(true);
-          setIsLongAPassageLoading(false);
+          setConsonantDigraphPassage(passage);
+          setHasGeneratedConsonantDigraphPassage(true);
+          setIsConsonantDigraphPassageLoading(false);
         }
       } catch (error) {
         console.error('Error generating Long A passage:', error);
-        if (!cancelled && currentLongAQuestion) {
+        if (!cancelled && currentConsonantDigraphQuestion) {
           // Fallback to base line
-          const fallback = currentLongAQuestion.aiHook?.baseLine || 'A pretty shiny door appears in the cave wall. The young fluffy dragon points to the glowing door.';
-          setLongAPassage(fallback);
-          setHasGeneratedLongAPassage(true);
-          setIsLongAPassageLoading(false);
+          const fallback = currentConsonantDigraphQuestion.aiHook?.baseLine || 'A bright metal door appears in the robot fortress wall. Skeletron points to the glowing entrance.';
+          setConsonantDigraphPassage(fallback);
+          setHasGeneratedConsonantDigraphPassage(true);
+          setIsConsonantDigraphPassageLoading(false);
         }
       }
     };
 
-    void generateLongAPassage();
+    void generateConsonantDigraphPassage();
     return () => { cancelled = true; };
-  }, [isLongAQuestion, currentLongAQuestion, hasGeneratedLongAPassage, storyContext]);
+  }, [isConsonantDigraphQuestion, currentConsonantDigraphQuestion, hasGeneratedConsonantDigraphPassage, storyContext]);
 
-  // Autoplay the Long A passage once it becomes available
+  // Autoplay the consonant digraph passage once it becomes available
   useEffect(() => {
-    if (!isLongAQuestion || !hasGeneratedLongAPassage || hasAutoplayedLongAPassage) return;
-    const passage = longAPassage?.trim();
+    if (!isConsonantDigraphQuestion || !hasGeneratedConsonantDigraphPassage || hasAutoplayedConsonantDigraphPassage) return;
+    const passage = consonantDigraphPassage?.trim();
     if (!passage) return;
     
     try { audioManager.stopAll(); } catch {}
-    setHasAutoplayedLongAPassage(true);
+    setHasAutoplayedConsonantDigraphPassage(true);
     setTimeout(() => { void playElevenTTS(passage); }, 300);
-  }, [isLongAQuestion, hasGeneratedLongAPassage, hasAutoplayedLongAPassage, longAPassage]);
+  }, [isConsonantDigraphQuestion, hasGeneratedConsonantDigraphPassage, hasAutoplayedConsonantDigraphPassage, consonantDigraphPassage]);
 
   // Note: Speech question (step 2) does not autoplay - student needs to read it themselves
 
@@ -895,8 +895,8 @@ Strict rules:
         const data = await res.json();
         if (!cancelled) {
           const summary = (data.reply || '').trim() || (isFirstRegularStep
-            ? '"Alert! The midgets are stealing crystals everywhere," whispers Oli. "Here\'s a clue, Reese: listen and type what we need for our quest," growls the buffalo-dragon.'
-            : '"The geysers echo with magic," says Oli. "Here\'s a clue, Reese: listen and type the mystical word," growls the buffalo-dragon.');
+            ? '"Alert! The robots are capturing animals everywhere," whispers Skeletron. "Here\'s a clue, Connor: listen and type what we need for our quest," says Eye of Cthulhu.'
+            : '"The alien world calls for heroes," says Skeletron. "Here\'s a clue, Connor: listen and type the heroic word," says Eye of Cthulhu.');
           setAiSummary(summary);
           try { setHookForStep('3', summary); } catch {}
           setHasGeneratedSummary(true);
@@ -904,8 +904,8 @@ Strict rules:
       } catch {
         if (!cancelled) {
           setAiSummary(isFirstRegularStep
-            ? '"Alert! The midgets are stealing crystals everywhere," whispers Oli. "Here\'s a clue, Reese: listen and type what we need for our quest," growls the buffalo-dragon.'
-            : '"The geysers echo with magic," says Oli. "Here\'s a clue, Reese: listen and type the mystical word," growls the buffalo-dragon.');
+            ? '"Alert! The robots are capturing animals everywhere," whispers Skeletron. "Here\'s a clue, Connor: listen and type what we need for our quest," says Eye of Cthulhu.'
+            : '"The alien world calls for heroes," says Skeletron. "Here\'s a clue, Connor: listen and type the heroic word," says Eye of Cthulhu.');
           setHasGeneratedSummary(true);
         }
       } finally {
@@ -952,8 +952,8 @@ Strict rules:
 
   const handleSummaryAudio = async () => {
     // For Long A questions, use Long A passage instead of aiSummary
-    if (isLongAQuestion) {
-      if (!longAPassage) return;
+    if (isConsonantDigraphQuestion) {
+      if (!consonantDigraphPassage) return;
       // Toggle: stop existing audio
       if (summaryAudioRef.current && !summaryAudioRef.current.paused) {
         try { summaryAudioRef.current.pause(); summaryAudioRef.current.currentTime = 0; } catch {}
@@ -962,7 +962,7 @@ Strict rules:
       }
       // Preempt any other audio before playing
       audioManager.stopAll();
-      const textToSpeak = longAPassage.trim();
+      const textToSpeak = consonantDigraphPassage.trim();
       setIsSummarySpeaking(true);
       const audio = await playElevenTTS(textToSpeak);
       if (audio) {
@@ -1080,7 +1080,7 @@ Strict rules:
     try {
       const targetWord = hookValidationWord;
       const messages = [
-        { role: 'system', content: `You are Reese's funny friend Oli helping kids write their fun Yellowstone dragon story. Check if they used the word "${targetWord}" in their sentence and respond like a silly, happy friend. 
+        { role: 'system', content: `You are Connor's funny friend Skeletron helping kids write their fun Planet Austin robot adventure story. Check if they used the word "${targetWord}" in their sentence and respond like a silly, happy friend. 
 
 Respond as minified JSON: {"status":"valid|invalid|help","message":"<your response>"}
 
@@ -1090,7 +1090,7 @@ RULES:
 - "help": If they need help, give a fun idea about what ${targetWord} could do.
 
 Be silly and fun. Use simple words. Keep responses under 15 words.` },
-        { role: 'user', content: `Sentence: ${text}\n\nCurrent story: ${storyContext.join(' ')}\n\nHelp the child continue Reese's fun Yellowstone dragon story using the word "${targetWord}".` }
+        { role: 'user', content: `Sentence: ${text}\n\nCurrent story: ${storyContext.join(' ')}\n\nHelp the child continue Connor's fun Planet Austin robot adventure story using the word "${targetWord}".` }
       ];
       const res = await fetch('/api/chat', {
         method: 'POST',
@@ -1107,7 +1107,7 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
         return { status: 'valid', message: 'Great!' };
       }
       if (/help|hint|example|idk|don\'?t know/i.test(text)) {
-        return { status: 'help', message: `No worries! What if Reese's ${targetWord} could help find shiny rocks? How?` };
+        return { status: 'help', message: `No worries! What if Connor's ${targetWord} could help fight robots? How?` };
       }
       return { status: 'invalid', message: `Use the word "${targetWord}" in your sentence.` };
     } catch {
@@ -1154,7 +1154,7 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
       setValidationMessage(result.message || 'Try again');
       void playElevenTTS(result.message || 'Try again');
     } else {
-      const msg = result.message || `No worries! What if Reese\'s ${hookTargetWord} could help find shiny rocks? How?`;
+      const msg = result.message || `No worries! What if Connor\'s ${hookTargetWord} could help fight robots? How?`;
       setValidationMessage(msg);
       setContinuationHeader(msg);
       void playElevenTTS(msg);
@@ -1359,7 +1359,7 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
     if (!text) return;
 
     // Validate based on current question's target pattern
-    const currentWord = currentLongAQuestion?.targetWord;
+    const currentWord = currentConsonantDigraphQuestion?.targetWord;
     let isValid = false;
     let feedbackMessage = '';
     let successMessage = '';
@@ -1385,7 +1385,7 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
     if (isValid) {
       // Success - advance to next question
       setValidationMessage(successMessage);
-      setStoryContext(prev => [...prev, `Reese's sentence: ${text}`]);
+      setStoryContext(prev => [...prev, `Connor's sentence: ${text}`]);
       setTimeout(() => {
         handleNextQuestion();
       }, 2000);
@@ -1514,7 +1514,7 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
           } else if (showShortEFollowUp) {
             // For Short E follow-up input, replace the follow-up text
             setShortEFollowUpInput(finalText);
-          } else if ((isLongAQuestion || currentRegularQuestion) && finalText) {
+          } else if ((isConsonantDigraphQuestion || currentRegularQuestion) && finalText) {
             // For spelling questions, replace the spelling input
             setSpellingInput(finalText);
           }
@@ -1927,11 +1927,11 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
     if (isBlendingQuestion) {
       // For blending questions, always advance (no right/wrong)
       handleNextQuestion();
-    } else if (currentLongAQuestion) {
-      if (currentLongAQuestion.questionType === 'shortE') {
+    } else if (currentConsonantDigraphQuestion) {
+      if (currentConsonantDigraphQuestion.questionType === 'shortE') {
         // For Short E sentence matching questions
         if (selectedOption !== null) {
-          const correct = selectedOption === currentLongAQuestion.correctAnswer;
+          const correct = selectedOption === currentConsonantDigraphQuestion.correctAnswer;
           setIsCorrect(correct);
           setShowFeedback(true);
           
@@ -1941,20 +1941,20 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
             setIncorrectHint('');
           } else {
             // Show Short E specific feedback
-            setIncorrectHint(currentLongAQuestion.incorrectFeedback || 'Listen for the "eh" sound. Try again!');
+            setIncorrectHint(currentConsonantDigraphQuestion.incorrectFeedback || 'Listen for the "eh" sound. Try again!');
           }
           
           // Ensure feedback is visible
           try { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); } catch {}
         }
-      } else if (currentLongAQuestion.isSpelling) {
+      } else if (currentConsonantDigraphQuestion.isSpelling) {
         // For long A spelling questions, check the input text
-        const correct = spellingInput.toLowerCase().trim() === (currentLongAQuestion.correctAnswer as string).toLowerCase();
+        const correct = spellingInput.toLowerCase().trim() === (currentConsonantDigraphQuestion.correctAnswer as string).toLowerCase();
         setIsCorrect(correct);
         setShowFeedback(true);
         if (!correct) {
           void generateIncorrectHint({
-            targetWord: String(currentLongAQuestion.correctAnswer || currentLongAQuestion.word || ''),
+            targetWord: String(currentConsonantDigraphQuestion.correctAnswer || currentConsonantDigraphQuestion.word || ''),
             studentAnswer: spellingInput,
             theme: 'adventure'
           });
@@ -1963,14 +1963,14 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
         }
       } else if (selectedOption !== null) {
         // For long A multiple choice questions, check the selected option
-        const correct = selectedOption === currentLongAQuestion.correctAnswer;
+        const correct = selectedOption === currentConsonantDigraphQuestion.correctAnswer;
         setIsCorrect(correct);
         setShowFeedback(true);
         // Ensure feedback is visible
         try { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); } catch {}
         if (!correct) {
           void generateIncorrectHint({
-            targetWord: String(currentLongAQuestion.correctAnswer || currentLongAQuestion.word || ''),
+            targetWord: String(currentConsonantDigraphQuestion.correctAnswer || currentConsonantDigraphQuestion.word || ''),
             studentAnswer: spellingInput || String(selectedOption),
             theme: 'adventure'
           });
@@ -2015,8 +2015,8 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
 
   // Audible confirmation on feedback for regular MCQ
   useEffect(() => {
-    if (!showFeedback || (!currentRegularQuestion && !currentLongAQuestion)) return;
-    if ((currentRegularQuestion && currentRegularQuestion.isSpelling) || (currentLongAQuestion && currentLongAQuestion.isSpelling)) return;
+    if (!showFeedback || (!currentRegularQuestion && !currentConsonantDigraphQuestion)) return;
+    if ((currentRegularQuestion && currentRegularQuestion.isSpelling) || (currentConsonantDigraphQuestion && currentConsonantDigraphQuestion.isSpelling)) return;
     // For AI hook steps, we already autoplay the continuation prompt; avoid duplicate audio
     if (isAiHookStep) return;
     const speak = async () => {
@@ -2028,7 +2028,7 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
       }
     };
     void speak();
-  }, [showFeedback, isCorrect, currentRegularQuestion, currentLongAQuestion, isAiHookStep]);
+  }, [showFeedback, isCorrect, currentRegularQuestion, currentConsonantDigraphQuestion, isAiHookStep]);
 
   const handleTryAgain = () => {
     setSelectedOption(null);
@@ -2064,10 +2064,10 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
     } catch {}
     setIsSummarySpeaking(false);
     currentElevenLabelRef.current = null;
-    setHasAutoplayedLongAPassage(false);
-    setHasGeneratedLongAPassage(false);
-    setLongAPassage('');
-    setIsLongAPassageLoading(false);
+    setHasAutoplayedConsonantDigraphPassage(false);
+    setHasGeneratedConsonantDigraphPassage(false);
+    setConsonantDigraphPassage('');
+    setIsConsonantDigraphPassageLoading(false);
     setShowFeedback(false);
     setIsCorrect(false);
     setSelectedOption(null);
@@ -2183,16 +2183,16 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
       textToSpeak = currentBlendingQuestion.word;
     } else if (isSpeechQuestion && currentSpeechQuestion) {
       textToSpeak = hasDynamicPassage && dynamicSpeechPassage ? dynamicSpeechPassage : '';
-    } else if (isLongAQuestion && currentLongAQuestion) {
-      textToSpeak = currentLongAQuestion.word;
-    } else if (!isSpeechQuestion && !isBlendingQuestion && !isLongAQuestion && currentRegularQuestion) {
+    } else if (isConsonantDigraphQuestion && currentConsonantDigraphQuestion) {
+      textToSpeak = currentConsonantDigraphQuestion.word;
+    } else if (!isSpeechQuestion && !isBlendingQuestion && !isConsonantDigraphQuestion && currentRegularQuestion) {
       textToSpeak = currentRegularQuestion.word;
     }
 
     if (textToSpeak.trim()) {
       setIsSpeaking(true);
       // Use slower speed (75%) for CVC word pronunciation to help Kindergarten students hear clearly
-      const isWordQuestion = (isLongAQuestion && currentLongAQuestion) || (!isSpeechQuestion && !isBlendingQuestion && !isLongAQuestion && currentRegularQuestion);
+      const isWordQuestion = (isConsonantDigraphQuestion && currentConsonantDigraphQuestion) || (!isSpeechQuestion && !isBlendingQuestion && !isConsonantDigraphQuestion && currentRegularQuestion);
       const speed = isWordQuestion ? 0.75 : 1.0; // Slower for CVC words, normal for passages
       
       const audio = await playElevenTTS(textToSpeak, undefined, speed);
@@ -3167,7 +3167,7 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
                     <textarea
                       value={speechContinuationInput}
                       onChange={(e) => setSpeechContinuationInput(e.target.value)}
-                      placeholder="What happens next in Reese's fun trip?"
+                      placeholder="What happens next in Connor's robot adventure?"
                       rows={2}
                       style={{
                         width: '100%',
@@ -3265,7 +3265,7 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
             </div>
           </div>
         </>
-      ) : isLongAQuestion && currentLongAQuestion ? (
+      ) : isConsonantDigraphQuestion && currentConsonantDigraphQuestion ? (
         <>
           {/* Question prompt - different for Short E vs traditional Long A questions */}
           <div style={{
@@ -3278,7 +3278,7 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
             margin: '0 auto 28.8px',
             position: 'relative'
           }}>
-            {currentLongAQuestion.questionType === 'shortE' ? (
+            {currentConsonantDigraphQuestion.questionType === 'digraph' ? (
               <>
                 <div style={{
                   fontSize: '18px',
@@ -3287,7 +3287,7 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
                   marginBottom: '8px',
                   textAlign: 'center'
                 }}>
-                  📖 Which sentence matches what Reese is doing?
+                  🎧 Listen to the word. Which consonant digraph sound do you hear?
                 </div>
                 <div style={{ 
                   fontSize: '14px', 
@@ -3295,11 +3295,11 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
                   fontWeight: '500',
                   textAlign: 'center'
                 }}>
-                  Look at the picture and pick the sentence that tells the story!
+                  Listen carefully and select which digraph sound (ch, th, sh, wh, ph) you hear!
                 </div>
                 {/* Audio button for hearing the question */}
                 <button
-                  onClick={() => playElevenTTS('Which sentence matches what Reese is doing? Look at the picture and pick the sentence that tells the story!')}
+                  onClick={() => playElevenTTS('Listen to the word. Which consonant digraph sound do you hear? Listen carefully and select which digraph sound you hear!')}
                   title="Hear the question"
                   style={{
                     position: 'absolute',
@@ -3328,7 +3328,7 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
                   textAlign: 'center',
                   fontFamily: 'Quicksand, sans-serif'
                 }}>
-                  {isLongAPassageLoading ? 'Creating…' : longAPassage}
+                  {isConsonantDigraphPassageLoading ? 'Creating…' : consonantDigraphPassage}
                 </div>
                 {/* Audio button anchored bottom-right without affecting height */}
                 <button
@@ -3359,7 +3359,7 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
                   color: '#1f2937',
                   marginBottom: '4.8px'
                 }}>
-                  🎧 Listen to Reese's word!
+                  🎧 Listen to Connor's word!
                 </div>
                 <div style={{ fontSize: '13px', color: '#6b7280', fontWeight: '500' }}>
                   Type the word you hear.
@@ -3485,7 +3485,7 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
                   ) : questionImageUrl ? (
                     <img src={questionImageUrl} alt="Generated scene" style={{ maxWidth: '100%', maxHeight: '404px', width: 'auto', height: 'auto', objectFit: 'contain', objectPosition: 'center', display: 'block', borderRadius: 12 }} />
                   ) : (
-                    currentLongAQuestion.imageUrl
+                    currentConsonantDigraphQuestion.imageUrl
                   )}
                 </div>
                 {questionImageRegenerating && (
@@ -3501,8 +3501,8 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
             </div>
           </div>
 
-          {/* Answer interface - Short E multiple choice or traditional spelling */}
-          {currentLongAQuestion.questionType === 'shortE' ? (
+          {/* Answer interface - digraph multiple choice or traditional spelling */}
+          {currentConsonantDigraphQuestion.questionType === 'digraph' ? (
             /* Short E multiple choice interface */
             <div style={{
               display: 'flex',
@@ -3514,12 +3514,14 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
               {/* Multiple choice options */}
               <div style={{
                 display: 'flex',
-                flexDirection: 'column',
+                flexDirection: 'row',
                 gap: '16px',
                 width: '100%',
-                maxWidth: '600px'
+                maxWidth: '800px',
+                flexWrap: 'wrap',
+                justifyContent: 'center'
               }}>
-                {currentLongAQuestion.options?.map((option, index) => (
+                {currentConsonantDigraphQuestion.options?.map((option, index) => (
                   <button
                     key={index}
                     onClick={() => {
@@ -3527,10 +3529,11 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
                       setShowFeedback(false);
                     }}
                     style={{
-                      padding: '16px 20px',
-                      fontSize: '18px',
-                      fontWeight: '500',
-                      textAlign: 'left',
+                      padding: '20px 24px',
+                      fontSize: '20px',
+                      fontWeight: '600',
+                      textAlign: 'center',
+                      minWidth: '80px',
                       background: selectedOption === index 
                         ? 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)' 
                         : 'rgba(255, 255, 255, 0.95)',
@@ -3538,7 +3541,7 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
                       border: selectedOption === index 
                         ? '2px solid #8b5cf6' 
                         : '2px solid #e5e7eb',
-                      borderRadius: '12px',
+                      borderRadius: '16px',
                       cursor: 'pointer',
                       transition: 'all 0.2s ease',
                       boxShadow: selectedOption === index 
@@ -3585,7 +3588,7 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
                     marginBottom: '12px',
                     textAlign: 'center'
                   }}>
-                    {currentLongAQuestion.followUpPrompt}
+                    {currentConsonantDigraphQuestion.followUpPrompt}
                   </div>
                   <div style={{
                     display: 'grid',
@@ -3688,7 +3691,7 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
               flexWrap: 'wrap',
               justifyContent: 'center'
             }}>
-              {Array.from({ length: (currentLongAQuestion.correctAnswer as string).length }).map((_, index) => (
+              {Array.from({ length: (currentConsonantDigraphQuestion.correctAnswer as string).length }).map((_, index) => (
                 <input
                   key={index}
                   type="text"
@@ -3700,7 +3703,7 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
                     newInput[index] = e.target.value.toLowerCase();
                     setSpellingInput(newInput.join(''));
                     // Auto-focus next input
-                    if (e.target.value && index < (currentLongAQuestion.correctAnswer as string).length - 1) {
+                    if (e.target.value && index < (currentConsonantDigraphQuestion.correctAnswer as string).length - 1) {
                       const nextInput = e.currentTarget.parentElement?.children[index + 1] as HTMLInputElement;
                       nextInput?.focus();
                     }
@@ -3750,7 +3753,7 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
       ) : (
         <>
           {/* Regular Question Prompt - moved above image; for step 4, show AI hook here */}
-          {!isBlendingQuestion && !isSpeechQuestion && !isLongAQuestion && (
+          {!isBlendingQuestion && !isSpeechQuestion && !isConsonantDigraphQuestion && (
             <div style={{
               marginBottom: '28.8px',
               padding: '16px 20px',
@@ -3802,7 +3805,7 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
                     color: '#1f2937',
                     marginBottom: '4.8px'
                   }}>
-                    🎧 Listen to Reese's word!
+                    🎧 Listen to Connor's word!
                   </div>
                   <div style={{ fontSize: '14.4px', color: '#6b7280', fontWeight: '500' }}>
                     What sound does it start with?
@@ -3948,7 +3951,7 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
           </div>
 
           {/* Answer interface for regular questions */}
-          {!isBlendingQuestion && !isSpeechQuestion && !isLongAQuestion && currentRegularQuestion && (
+          {!isBlendingQuestion && !isSpeechQuestion && !isConsonantDigraphQuestion && currentRegularQuestion && (
             <div style={{ marginTop: '12px' }}>
               {currentRegularQuestion.isSpelling ? (
                 /* Spelling input interface (dynamic length) */
@@ -4076,9 +4079,9 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
       {/* Removed duplicate prompt (now shown above image) */}
 
       {/* Submit button - only for regular and long A questions */}
-      {!isSpeechQuestion && !isBlendingQuestion && !showFeedback && (currentRegularQuestion || currentLongAQuestion) && (
-        ((currentRegularQuestion && currentRegularQuestion.isSpelling) || (currentLongAQuestion && currentLongAQuestion.isSpelling)
-          ? spellingInput.length >= Math.min(3, ((currentRegularQuestion?.correctAnswer || currentLongAQuestion?.correctAnswer) as string).length)
+      {!isSpeechQuestion && !isBlendingQuestion && !showFeedback && (currentRegularQuestion || currentConsonantDigraphQuestion) && (
+        ((currentRegularQuestion && currentRegularQuestion.isSpelling) || (currentConsonantDigraphQuestion && currentConsonantDigraphQuestion.isSpelling)
+          ? spellingInput.length >= Math.min(3, ((currentRegularQuestion?.correctAnswer || currentConsonantDigraphQuestion?.correctAnswer) as string).length)
           : selectedOption !== null)
       ) && (
         <div style={{
@@ -4243,15 +4246,29 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
                   >🔊</button>
                 </span>
               ) : isCorrect && !isContinuationStep ? (
-                (currentRegularQuestion?.explanation || currentLongAQuestion?.explanation) || 'Great job!'
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+                  <div>{(currentRegularQuestion?.explanation || currentConsonantDigraphQuestion?.explanation) || 'Great job!'}</div>
+                  {isConsonantDigraphQuestion && currentConsonantDigraphQuestion && (
+                    <div style={{ 
+                      fontSize: '16px', 
+                      fontWeight: '500',
+                      textAlign: 'center',
+                      opacity: 0.9
+                    }}>
+                      Now use "{currentConsonantDigraphQuestion.word}" in Connor's adventure story!
+                    </div>
+                  )}
+                </div>
               ) : !isCorrect ? (
                 isIncorrectHintLoading
                   ? 'Thinking of a hint…'
                   : (
                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-                      <span>{incorrectHint || ((currentRegularQuestion?.isSpelling || currentLongAQuestion?.isSpelling)
+                      <span>{incorrectHint || (isConsonantDigraphQuestion && currentConsonantDigraphQuestion
+                        ? currentConsonantDigraphQuestion.incorrectFeedback || `Listen to "${currentConsonantDigraphQuestion.word}" again. Which digraph sound do you hear?`
+                        : (currentRegularQuestion?.isSpelling || currentConsonantDigraphQuestion?.isSpelling)
                         ? 'Listen again and try your best.'
-                        : `Listen to the word "${(currentRegularQuestion?.word || currentLongAQuestion?.word) || 'this word'}" again. What sound do you hear at the beginning?`)}</span>
+                        : `Listen to the word "${(currentRegularQuestion?.word || currentConsonantDigraphQuestion?.word) || 'this word'}" again. What sound do you hear at the beginning?`)}</span>
                       {incorrectHint && (
                         <button
                           onClick={async () => {
@@ -4394,6 +4411,82 @@ Be silly and fun. Use simple words. Keep responses under 15 words.` },
 
             {/* Removed separate white card - user response now shows inside green container */}
           </div>
+
+          {/* Story input section for correct consonant digraph answers */}
+          {isCorrect && isConsonantDigraphQuestion && currentConsonantDigraphQuestion && (
+            <div style={{
+              marginTop: '20px',
+              padding: '20px',
+              borderRadius: '16px',
+              background: 'rgba(255, 255, 255, 0.95)',
+              boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
+              maxWidth: '720px',
+              margin: '20px auto 0'
+            }}>
+              <div style={{
+                fontSize: '16px',
+                fontWeight: '600',
+                color: '#374151',
+                marginBottom: '12px',
+                textAlign: 'center'
+              }}>
+                🎤 Tell us how Connor uses "{currentConsonantDigraphQuestion.word}" in his adventure!
+              </div>
+              <div style={{
+                display: 'flex',
+                gap: '12px',
+                alignItems: 'center'
+              }}>
+                <input
+                  type="text"
+                  placeholder={`Example: "Connor needs to ${currentConsonantDigraphQuestion.word} the alien creature..."`}
+                  style={{
+                    flex: 1,
+                    padding: '12px 16px',
+                    borderRadius: '12px',
+                    border: '2px solid #e5e7eb',
+                    fontSize: '16px',
+                    outline: 'none',
+                    transition: 'border-color 0.2s ease'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = '#8b5cf6';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = '#e5e7eb';
+                  }}
+                />
+                <button
+                  style={{
+                    width: '48px',
+                    height: '48px',
+                    borderRadius: '12px',
+                    border: 'none',
+                    background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                    color: 'white',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)',
+                    transition: 'all 0.2s ease'
+                  }}
+                  title="Record your story"
+                  onMouseDown={(e) => {
+                    e.currentTarget.style.transform = 'scale(0.95)';
+                  }}
+                  onMouseUp={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)';
+                  }}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" fill="white"/>
+                    <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" fill="white"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Action buttons (no Next button when correct) */}
           <div style={{ display: 'flex', gap: '16px' }}>
