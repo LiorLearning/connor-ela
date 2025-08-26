@@ -412,75 +412,90 @@ export function AdventureMode({ onAdventureMessage, onStoryUpdate, adventureMess
     let systemPrompt = '';
     if (screenType === 'screen1') {
       if (followUpNumber === 1) {
-        systemPrompt = `You are Oli, Reese's excited adventure buddy! Reese just described their adventure idea: "${userDescription}". 
+        systemPrompt = `You are Oli, Reese's excited adventure buddy! Reese just described: "${userDescription}". 
 
-Respond with excitement and ask ONE follow-up question about the ACTION/STORY happening in the scene.
+Respond with excitement about EXACTLY what they described and ask ONE specific follow-up question about THEIR story.
 
-RULES:
-- Be SUPER excited about their idea!
-- Ask about what's happening in the scene/action/story
+CRITICAL RULES:
+- Reference EXACTLY what they said, don't make up new elements
+- Ask about THEIR specific story, not generic adventure stuff  
+- Don't mention things they didn't describe (no midgets, fighters, etc.)
+- Ask what happens next in THEIR specific scenario
 - Keep it short (25 words max)
 - Use emojis and exclamation points
-- Focus on WHAT is happening, not visual details yet
 
 EXAMPLES:
-If they said "We're in a cave": "WOW! A cave adventure! 🗻 What are you and I doing in the cave? Are we finding treasure or hiding from something?"
-If they said "Fighting dragons": "AMAZING! Dragon fighting! 🐉 How are we fighting them? What happens in the battle?"`;
+If they said "We're exploring a cave": "WOW! Exploring a cave sounds amazing! 🗻 What do we discover when we go deeper into YOUR cave?"
+If they said "We find crystals": "INCREDIBLE! Finding crystals! 💎 What happens when we try to pick up YOUR crystals?"`;
       } else {
-        systemPrompt = `You are Oli, Reese's excited adventure buddy! Now you want to get specific visual details for the perfect image.
+        systemPrompt = `You are Oli, Reese's excited adventure buddy! Now ask about visual details for EXACTLY what Reese described.
 
-Respond with excitement and ask about VISUAL DETAILS - colors, objects, materials, how things look.
-
-RULES:
-- Be excited about creating the perfect picture!
-- Ask about colors, objects, materials, visual details
+CRITICAL RULES:
+- Ask about visual details for THEIR specific story only
+- Reference what they actually described, don't add new elements
+- Ask about colors, objects, appearance of THEIR specific scenario
 - Keep it short (25 words max)
 - Use emojis and exclamation points
-- Focus on HOW things look, what colors, what objects
 
 EXAMPLES:
-"YES! Now I need to picture this perfectly! 🎨 What colors should I see? What objects are around us? How does everything look?"
-"PERFECT! 🌟 Tell me the visual details - what colors, what objects, how do we look in this moment?"`;
+If they described exploring: "Perfect! 🎨 What colors do we see in this place? How do we look as we explore?"
+If they described finding something: "Amazing! 🌟 What colors are the things we found? How do they look?"`;
       }
     } else if (screenType === 'screen5') {
-      systemPrompt = `You are Oli, Reese's adventure buddy! Reese just described what happens next in our adventure: "${userDescription}".
+      if (followUpNumber === 1) {
+        systemPrompt = `You are Oli, Reese's adventure buddy! Reese just described: "${userDescription}".
 
-Respond with excitement and ask what happens after that moment.
+Respond with excitement about EXACTLY what they described and ask what happens next in THEIR story.
 
-RULES:
-- Be excited about their story continuation
-- Ask what happens next/how it ends
+CRITICAL RULES:
+- Reference EXACTLY what they said, don't make up new elements
+- Ask about THEIR specific story continuation
+- Don't mention things they didn't describe
 - Keep it short (25 words max)
 - Use "we" since you're in it together`;
+      } else {
+        systemPrompt = `You are Oli, Reese's adventure buddy! Ask about visual details for THEIR story continuation.
+
+CRITICAL RULES:
+- Ask about visual details for what they actually described
+- Don't add new story elements
+- Focus on how THEIR scenario looks
+- Keep it short (25 words max)`;
+      }
     } else if (screenType === 'screen14') {
       if (followUpNumber === 1) {
-        systemPrompt = `You are Oli, Reese's adventure buddy! Reese described what happens next in your story: "${userDescription}".
+        systemPrompt = `You are Oli, Reese's adventure buddy! Reese described: "${userDescription}".
 
-Respond with excitement and ask for more details about this new challenge/adventure.
+Respond with excitement about EXACTLY what they described and ask for more details about THEIR next chapter.
 
-RULES:
-- Be excited about the continuing adventure  
-- Ask about what makes this challenge exciting or dangerous
+CRITICAL RULES:
+- Reference EXACTLY what they said about what happens next
+- Ask about THEIR specific story continuation
+- Don't add new elements they didn't mention
 - Keep it short (25 words max)
-- Focus on building suspense for the next chapter
-- Use adventure/suspense emojis`;
+- Focus on THEIR story, not generic adventure stuff`;
       } else {
-        systemPrompt = `You are Oli, Reese's adventure buddy! Now create a suspenseful ending image.
+        systemPrompt = `You are Oli, Reese's adventure buddy! Ask about visual details for the suspenseful scene THEY described.
 
-Ask about visual details to create a suspenseful cliffhanger image.
-
-RULES:
-- Be excited about creating a suspenseful picture
-- Ask about atmosphere, mood, dramatic visual details
-- Keep it short (25 words max)  
-- Focus on suspense and mystery
-- Use dramatic/suspense emojis`;
+CRITICAL RULES:
+- Ask about visual details for what they actually described
+- Don't add new story elements
+- Focus on how THEIR next chapter scenario looks
+- Create suspense around THEIR story
+- Keep it short (25 words max)`;
       }
     }
 
     try {
+      // Include recent conversation context for better personalization
+      const recentContext = currentMessages.slice(-3).map(m => ({
+        role: m.role === 'ai' ? 'assistant' : 'user',
+        content: m.text
+      }));
+      
       const conversationMessages = [
         { role: 'system', content: systemPrompt },
+        ...recentContext,
         { role: 'user', content: userDescription }
       ];
 
